@@ -27,7 +27,7 @@ ResourceManager::ResourceManager() {
 
 	loadTexture_vector_ptr(bk, ".\\galaxy_fighter\\assets\\img\\bk", renderer);
 	loadTexture_vector_ptr(game_logo, ".\\galaxy_fighter\\assets\\img\\gameLogo", renderer);
-
+	loadTexture_vector_ptr(spriteSheet_player, ".\\galaxy_fighter\\assets\\img\\player\\spriteSheet",renderer);
 }
 
 
@@ -54,7 +54,6 @@ void loadTexture_vector_ptr(vector<texturePtr>& vt, string path,SDL_Renderer* re
 
 
 
-
 SDL_Texture* ResourceManager::getDefault() { return defaultImage.get(); }
 SDL_Texture* ResourceManager::getPromptBoxImage() { return promptBoxImage.get(); }
 vector<texturePtr>& ResourceManager::get_hero() { return hero; }
@@ -71,7 +70,7 @@ vector<texturePtr>& ResourceManager::get_enemy_bullet_destroy() { return enemy_b
 vector<texturePtr>& ResourceManager::getPilot() { return pilot; }
 
 vector<texturePtr>& ResourceManager::get_game_logo() { return game_logo; }
-
+vector<texturePtr>& ResourceManager::get_sprite_sheet_player() { return spriteSheet_player; }
 
 
 TTF_Font* ResourceManager::get_font(const std::string& type, int size) {

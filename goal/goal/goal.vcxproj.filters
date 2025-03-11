@@ -123,6 +123,9 @@
     <ClCompile Include="galaxy_fighter\objects\playerObject\PlayerState.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="galaxy_fighter\objects\playerObject\SpritePlayer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="galaxy_fighter\core\inputManager.h">
@@ -234,6 +237,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="galaxy_fighter\objects\playerObject\PlayerState.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\objects\playerObject\SpritePlayer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

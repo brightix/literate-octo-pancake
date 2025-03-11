@@ -3,6 +3,7 @@
 #include "../../BehaviorTree/BTNode.h"
 #include "../BaseObject.h"
 #include "PlayerState.h"
+#include "SpritePlayer.h"
 
 constexpr short player_attrs_count = 4;
 
@@ -26,9 +27,12 @@ public:
 	void setPlayerState(PlayerState playerState);
 	void removePlayerState(PlayerState playerState);
 
+	virtual void refreshAnimationTime();
+
 protected:
 	std::array<float, player_attrs_count> attrs;
 	std::unique_ptr<ParalleNode> root;
 	std::unique_ptr<BTNode> renderNode;
 	PlayerState playerState;
+	SpritePlayer sprite;
 };

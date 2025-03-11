@@ -57,11 +57,11 @@ display_anime_at_center::display_anime_at_center(SDL_Texture* texture, SDL_FRect
 	Camera& camera = Camera::getInstance();
 	windowRect = &Resolution::getInstance().getWindowRect();
 	rect_show = { 0,0,parentRect->w,parentRect->h };
-	this->srcRect = srcRect;
+	this->spriteFrameRect = srcRect;
 	this->parentRect = parentRect;
 	this->texture = texture;
 	this->angle = angle;
-	double anime_play_time = 0.0;
+	this->anime_play_time = 0.0;
 }
 
 bool display_anime_at_center::execute() {
@@ -74,7 +74,7 @@ bool display_anime_at_center::execute() {
 		rect_show.y = parentRect->y - Camera::getInstance().getViewport()->y;
 	}
 	else rect_show.y = windowRect->h / 2 - parentRect->h / 2;
-	if (SDL_RenderTextureRotated(RendererManager::getInstance().getRenderer(), texture, srcRect, &rect_show, angle, nullptr, SDL_FLIP_NONE)) {
+	if (SDL_RenderTextureRotated(RendererManager::getInstance().getRenderer(), texture, spriteFrameRect, &rect_show, angle, nullptr, SDL_FLIP_NONE)) {
 		return true;
 	}
 	else {
@@ -150,13 +150,16 @@ bool player_move_sprite::execute() {
 		if (dy < 0) {
 			player.setPlayerState(PlayerState::Down);
 		}
-		else if (dy) {
+		else if (dy > 0) {
 			player.setPlayerState(PlayerState::Jump);
 		}
 	}
 	else {
+		player.setPlayerState(PlayerState::Idle);
 		return false;
 	}
+	player.refreshAnimationTime();
+
 	auto move_speed = player.getAttrs()[player_move_speed];
 	auto [limit_w, limit_h] = Camera::getInstance().getCameraRange();
 	attrs[player_x] += move_speed * dx;

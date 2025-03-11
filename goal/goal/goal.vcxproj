@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -189,6 +189,7 @@
     <ClCompile Include="galaxy_fighter\objects\playerObject\Player_lion.cpp" />
     <ClCompile Include="galaxy_fighter\objects\playerObject\Player_GreenTofu.cpp" />
     <ClCompile Include="galaxy_fighter\objects\playerObject\PlayerState.cpp" />
+    <ClCompile Include="galaxy_fighter\objects\playerObject\SpritePlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="galaxy_fighter\objects\BaseObject.h" />
@@ -228,6 +229,7 @@
     <ClInclude Include="galaxy_fighter\objects\playerObject\Player_lion.h" />
     <ClInclude Include="galaxy_fighter\objects\playerObject\Player_GreenTofu.h" />
     <ClInclude Include="galaxy_fighter\objects\playerObject\PlayerState.h" />
+    <ClInclude Include="galaxy_fighter\objects\playerObject\SpritePlayer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

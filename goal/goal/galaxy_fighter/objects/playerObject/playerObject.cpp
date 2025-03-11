@@ -25,7 +25,8 @@ void PlayerObject::update() {
 
 void PlayerObject::render()
 {
-	renderNode->execute();
+	sprite.update();
+	//renderNode->execute();
 }
 
 ObjectState PlayerObject::getBaseState()
@@ -51,4 +52,8 @@ void PlayerObject::setPlayerState(PlayerState playerState)
 void PlayerObject::removePlayerState(PlayerState playerState)
 {
 	this->playerState |= playerState;
+}
+
+void PlayerObject::refreshAnimationTime() {
+
 }

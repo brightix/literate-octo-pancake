@@ -43,7 +43,7 @@ namespace BTAction_player {
     {
         SDL_Texture* texture;
         
-        SDL_FRect* srcRect;//精灵表矩形坐标
+        SDL_FRect* spriteFrameRect;//精灵表矩形坐标
         SDL_FRect* parentRect;
         
         SDL_FRect rect_show;

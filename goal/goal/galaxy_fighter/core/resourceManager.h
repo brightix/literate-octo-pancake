@@ -2,6 +2,8 @@
 #include <graphics.h>
 #include <vector>
 #include <SDL3/SDL.h>
+#include "../objects/playerObject/SpritePlayer.h"
+
 using namespace std;
 
 using texturePtr = std::unique_ptr<SDL_Texture, function<void(SDL_Texture*)>>;
@@ -18,6 +20,9 @@ enum TTF_Type {
 class ResourceManager {
 public:
 	static ResourceManager& getInstance();
+
+
+
 
 
 	//图片类
@@ -39,6 +44,8 @@ public:
 	//字体类
 	TTF_Font* get_font(const string& type, int size);
 
+	//精灵
+	vector<texturePtr>& get_sprite_sheet_player();
 
 	ResourceManager(const ResourceManager&) = delete;
 	ResourceManager& operator=(const ResourceManager&) = delete;
@@ -68,5 +75,6 @@ private:
 	//字体
 	unordered_map<string,unordered_map<int,fontPtr>> fonts;
 	
-
+	//精灵
+	vector<texturePtr> spriteSheet_player;
 };
