@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{4686c4c1-e001-4a24-86ae-5309d4179c06}</ProjectGuid>
+    <RootNamespace>goal</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\Program tools\SDL3_image-3.2.4\include;C:\Program tools\SDL3-3.2.6\include;C:\Program tools\SDL3_ttf-3.2.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program tools\SDL3-3.2.6\lib\x64;C:\Program tools\SDL3_ttf-3.2.0\lib\x64;C:\Program tools\SDL3_image-3.2.4\lib\x64;$(LibraryPath)</LibraryPath>
+    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\Program tools\SDL3_image-3.2.4\include;C:\Program tools\SDL3-3.2.6\include;C:\Program tools\SDL3_ttf-3.2.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program tools\SDL3-3.2.6\lib\x64;C:\Program tools\SDL3_ttf-3.2.0\lib\x64;C:\Program tools\SDL3_image-3.2.4\lib\x64;$(LibraryPath)</LibraryPath>
+    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\21811\Desktop\literate-octo-pancake\goal\goal\galaxy_fighter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\21811\Desktop\literate-octo-pancake\goal\goal\galaxy_fighter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="galaxy_fighter\objects\BaseObject.cpp" />
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_player\BTAction_player.cpp" />
+    <ClCompile Include="galaxy_fighter\objects\camera\Camera.cpp" />
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BTNodeFactory.cpp" />
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BehaviorRegistry.cpp" />
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BehaviorTable.cpp" />
+    <ClCompile Include="galaxy_fighter\BehaviorTree\Decorator\Decorator.cpp" />
+    <ClCompile Include="galaxy_fighter\BehaviorTree\utils\BTMath.cpp" />
+    <ClCompile Include="galaxy_fighter\BehaviorTree\Decorator\condition_decorator.cpp" />
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_image.cpp" />
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BehaviorTree.cpp" />
+    <ClCompile Include="galaxy_fighter\core\inputManager.cpp" />
+    <ClCompile Include="galaxy_fighter\core\rendererManager.cpp" />
+    <ClCompile Include="galaxy_fighter\core\resourceManager.cpp" />
+    <ClCompile Include="galaxy_fighter\core\statistics.cpp" />
+    <ClCompile Include="galaxy_fighter\core\timer.cpp" />
+    <ClCompile Include="galaxy_fighter\game\galaxy_fighter.cpp" />
+    <ClCompile Include="galaxy_fighter\game\gameWorld.cpp" />
+    <ClCompile Include="galaxy_fighter\core\textRenderer.cpp" />
+    <ClCompile Include="galaxy_fighter\objects\playerObject\playerObject.cpp" />
+    <ClCompile Include="galaxy_fighter\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\utils\random_utils.cpp" />
+    <ClCompile Include="gameObject\gameObject.cpp" />
+    <ClCompile Include="main.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\objects\environmentAssets\mapObject\MapObject.cpp" />
+    <ClCompile Include="menu.cpp" />
+    <ClCompile Include="galaxy_fighter\objects\MainMenuObject\MenuText.cpp" />
+    <ClCompile Include="galaxy_fighter\objects\MainMenuObject\MenuImage.cpp" />
+    <ClCompile Include="galaxy_fighter\objects\MainMenuObject\MenuSound.cpp" />
+    <ClCompile Include="galaxy_fighter\core\Resolution.cpp" />
+    <ClCompile Include="galaxy_fighter\BehaviorTree\Composite\Selector.cpp" />
+    <ClCompile Include="galaxy_fighter\BehaviorTree\Composite\Sequence.cpp" />
+    <ClCompile Include="galaxy_fighter\BehaviorTree\paralle\ParalleNode.cpp" />
+    <ClCompile Include="galaxy_fighter\objects\playerObject\Player_lion.cpp" />
+    <ClCompile Include="galaxy_fighter\objects\playerObject\Player_GreenTofu.cpp" />
+    <ClCompile Include="galaxy_fighter\objects\playerObject\PlayerState.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="galaxy_fighter\objects\BaseObject.h" />
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_player\BTAction_player.h" />
+    <ClInclude Include="galaxy_fighter\objects\camera\Camera.h" />
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BTNodeFactory.h" />
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BehaviorRegistry.h" />
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BehaviorTable.h" />
+    <ClInclude Include="galaxy_fighter\BehaviorTree\Decorator\Decorator.h" />
+    <ClInclude Include="galaxy_fighter\BehaviorTree\utils\BTMath.h" />
+    <ClInclude Include="galaxy_fighter\BehaviorTree\Decorator\condition_decorator.h" />
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_image.h" />
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BehaviorTree.h" />
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BTNode.h" />
+    <ClInclude Include="galaxy_fighter\config.h" />
+    <ClInclude Include="galaxy_fighter\core\inputManager.h" />
+    <ClInclude Include="galaxy_fighter\core\rendererManager.h" />
+    <ClInclude Include="galaxy_fighter\core\resourceManager.h" />
+    <ClInclude Include="galaxy_fighter\core\statistics.h" />
+    <ClInclude Include="galaxy_fighter\core\timer.h" />
+    <ClInclude Include="galaxy_fighter\game\galaxy_fighter.h" />
+    <ClInclude Include="galaxy_fighter\game\gameWorld.h" />
+    <ClInclude Include="galaxy_fighter\core\textRenderer.h" />
+    <ClInclude Include="galaxy_fighter\objects\playerObject\playerObject.h" />
+    <ClInclude Include="galaxy_fighter\pch.h" />
+    <ClInclude Include="galaxy_fighter\utils\random_utils.h" />
+    <ClInclude Include="gameObject\gameObject.h" />
+    <ClInclude Include="galaxy_fighter\objects\environmentAssets\mapObject\MapObject.h" />
+    <ClInclude Include="menu.h" />
+    <ClInclude Include="galaxy_fighter\objects\MainMenuObject\MenuText.h" />
+    <ClInclude Include="galaxy_fighter\objects\MainMenuObject\MenuImage.h" />
+    <ClInclude Include="galaxy_fighter\objects\MainMenuObject\MenuSound.h" />
+    <ClInclude Include="galaxy_fighter\core\Resolution.h" />
+    <ClInclude Include="galaxy_fighter\BehaviorTree\Composite\Selector.h" />
+    <ClInclude Include="galaxy_fighter\BehaviorTree\Composite\Sequence.h" />
+    <ClInclude Include="galaxy_fighter\BehaviorTree\paralle\ParalleNode.h" />
+    <ClInclude Include="galaxy_fighter\objects\playerObject\Player_lion.h" />
+    <ClInclude Include="galaxy_fighter\objects\playerObject\Player_GreenTofu.h" />
+    <ClInclude Include="galaxy_fighter\objects\playerObject\PlayerState.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
