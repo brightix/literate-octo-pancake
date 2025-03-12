@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "BTAction_image.h"
-#include "utils/BTMath.h"
-#include "BehaviorRegistry.h"
+#include "../utils/BTMath.h"
+#include "../BehaviorRegistry.h"
 
 using namespace BTAction_image;
 

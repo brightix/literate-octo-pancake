@@ -12,7 +12,7 @@ PlayerObject::PlayerObject(){
 	attrs[player_move_speed] = 10;
 }
 
-std::array<float,player_attrs_count> & PlayerObject::getAttrs() { return attrs; }
+std::array<float,player_attrs_count>& PlayerObject::getAttrs() { return attrs; }
 
 void PlayerObject::setMove(float nx,float ny) {
 	rect.x = nx;
@@ -25,8 +25,7 @@ void PlayerObject::update() {
 
 void PlayerObject::render()
 {
-	sprite.update();
-	//renderNode->execute();
+	sprite->update();
 }
 
 ObjectState PlayerObject::getBaseState()
@@ -52,6 +51,10 @@ void PlayerObject::setPlayerState(PlayerState playerState)
 void PlayerObject::removePlayerState(PlayerState playerState)
 {
 	this->playerState |= playerState;
+}
+
+void PlayerObject::resetState() {
+	this->playerState = PlayerState::Idle;
 }
 
 void PlayerObject::refreshAnimationTime() {

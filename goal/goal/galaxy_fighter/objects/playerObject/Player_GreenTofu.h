@@ -7,12 +7,14 @@ class Player_GreenTofu :
 {
     double animationtime;
     bool isFacingLeft;
-    SDL_FRect srcRect;
     SDL_Texture* texture;
+
+    std::unordered_map<PlayerState, SpriteSheet> spriteSheet;
+    std::unordered_map<PlayerState, double> actionFrameDelay;
+    void init();
 public:
     Player_GreenTofu();
-    void update();
 
-    void refreshAnimationTime() override;
+    void update();
 };
 

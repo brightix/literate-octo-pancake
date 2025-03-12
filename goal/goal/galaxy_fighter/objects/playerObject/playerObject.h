@@ -5,19 +5,26 @@
 #include "PlayerState.h"
 #include "SpritePlayer.h"
 
-constexpr short player_attrs_count = 4;
+constexpr short player_attrs_count = 9;
 
-enum ObjectAttr {
+enum PlayerAttr {
 	player_x,
 	player_y,
 	player_health,
 	player_move_speed,
+
+	player_render_width,
+	player_render_height,
+
+	player_sprite_texture_width,
+	player_sprite_texture_height,
+	player_sprite_frame
 };
 
 class PlayerObject : public BaseObject{
 public:
 	PlayerObject();
-	std::array<float,4>& getAttrs();
+	std::array<float,player_attrs_count>& getAttrs();
 	void setMove(float nx, float ny);
 	void update();
 	void render();
@@ -27,6 +34,8 @@ public:
 	void setPlayerState(PlayerState playerState);
 	void removePlayerState(PlayerState playerState);
 
+	void resetState();
+
 	virtual void refreshAnimationTime();
 
 protected:
@@ -34,5 +43,5 @@ protected:
 	std::unique_ptr<ParalleNode> root;
 	std::unique_ptr<BTNode> renderNode;
 	PlayerState playerState;
-	SpritePlayer sprite;
+	std::unique_ptr<SpritePlayer> sprite;
 };

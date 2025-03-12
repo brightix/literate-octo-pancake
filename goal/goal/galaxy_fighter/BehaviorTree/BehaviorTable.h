@@ -1,6 +1,5 @@
 #pragma once
 #include "BTNode.h"
-#include "BTAction_image.h"
 
 class BehaviorTable :
     public BTNode

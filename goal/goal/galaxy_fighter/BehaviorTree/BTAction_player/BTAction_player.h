@@ -43,16 +43,15 @@ namespace BTAction_player {
     {
         SDL_Texture* texture;
         
-        SDL_FRect* spriteFrameRect;//精灵表矩形坐标
+        SDL_FRect& spriteFrameRect;//精灵表矩形坐标
         SDL_FRect* parentRect;
         
         SDL_FRect rect_show;
 
         SDL_FRect* windowRect;
         double angle;
-        double anime_play_time;
     public:
-        display_anime_at_center(SDL_Texture* texture, SDL_FRect* srcRect ,SDL_FRect* parentRect, double angle);
+        display_anime_at_center(SDL_Texture* texture, SDL_FRect& spriteFrameRect ,SDL_FRect* parentRect, double angle);
         bool execute();
 
     };

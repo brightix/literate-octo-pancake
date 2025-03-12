@@ -52,32 +52,32 @@ bool display_at_center::execute()
 }
 
 
-display_anime_at_center::display_anime_at_center(SDL_Texture* texture, SDL_FRect* srcRect,SDL_FRect* parentRect, double angle)
+display_anime_at_center::display_anime_at_center(SDL_Texture* texture, SDL_FRect& spriteFrameRect,SDL_FRect* parentRect, double angle) : spriteFrameRect(spriteFrameRect)
 {
-	Camera& camera = Camera::getInstance();
+	Camera& camera = Camera::getInstance();	
 	windowRect = &Resolution::getInstance().getWindowRect();
 	rect_show = { 0,0,parentRect->w,parentRect->h };
-	this->spriteFrameRect = srcRect;
 	this->parentRect = parentRect;
 	this->texture = texture;
 	this->angle = angle;
-	this->anime_play_time = 0.0;
+	//this->spriteFrameRect = spriteFrameRect;
 }
 
 bool display_anime_at_center::execute() {
 	auto isCrashed = Camera::getInstance().ownerxyCrashedState();
 	if (isCrashed.first) {
 		rect_show.x = parentRect->x - Camera::getInstance().getViewport()->x;
-	}
-	else rect_show.x = windowRect->w / 2 - parentRect->w / 2;
+	} else {
+		rect_show.x = windowRect->w / 2 - parentRect->w / 2;
+	} 
 	if (isCrashed.second) {
 		rect_show.y = parentRect->y - Camera::getInstance().getViewport()->y;
+	} else {
+		rect_show.y = windowRect->h / 2 - parentRect->h / 2;
 	}
-	else rect_show.y = windowRect->h / 2 - parentRect->h / 2;
-	if (SDL_RenderTextureRotated(RendererManager::getInstance().getRenderer(), texture, spriteFrameRect, &rect_show, angle, nullptr, SDL_FLIP_NONE)) {
+	if (SDL_RenderTextureRotated(RendererManager::getInstance().getRenderer(), texture, &spriteFrameRect, &rect_show, angle, nullptr, SDL_FLIP_NONE)) {
 		return true;
-	}
-	else {
+	} else {
 		SDL_Log("äÖÈ¾ÎÆÀíÊ§°Ü");
 		return false;
 	}
@@ -155,10 +155,12 @@ bool player_move_sprite::execute() {
 		}
 	}
 	else {
-		player.setPlayerState(PlayerState::Idle);
+		int a = to_underLying(player.getState()) >> 5;
+		if (a == 0) {
+			player.resetState();
+		}
 		return false;
 	}
-	player.refreshAnimationTime();
 
 	auto move_speed = player.getAttrs()[player_move_speed];
 	auto [limit_w, limit_h] = Camera::getInstance().getCameraRange();

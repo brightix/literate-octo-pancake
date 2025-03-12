@@ -1,6 +1,6 @@
 #pragma once
-#include "BTNode.h"
-#include "../objects/camera/Camera.h"
+#include "../BTNode.h"
+#include "../../objects/camera/Camera.h"
 namespace BTAction_image {
 	class BTAction_image : public BTNode
 	{

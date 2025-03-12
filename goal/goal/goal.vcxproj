@@ -156,7 +156,7 @@
     <ClCompile Include="galaxy_fighter\BehaviorTree\Decorator\Decorator.cpp" />
     <ClCompile Include="galaxy_fighter\BehaviorTree\utils\BTMath.cpp" />
     <ClCompile Include="galaxy_fighter\BehaviorTree\Decorator\condition_decorator.cpp" />
-    <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_image.cpp" />
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_scene\BTAction_image.cpp" />
     <ClCompile Include="galaxy_fighter\BehaviorTree\BehaviorTree.cpp" />
     <ClCompile Include="galaxy_fighter\core\inputManager.cpp" />
     <ClCompile Include="galaxy_fighter\core\rendererManager.cpp" />
@@ -173,6 +173,7 @@
     </ClCompile>
     <ClCompile Include="galaxy_fighter\utils\random_utils.cpp" />
     <ClCompile Include="gameObject\gameObject.cpp" />
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_physics\gravity_heavy.cpp" />
     <ClCompile Include="main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
@@ -201,7 +202,7 @@
     <ClInclude Include="galaxy_fighter\BehaviorTree\Decorator\Decorator.h" />
     <ClInclude Include="galaxy_fighter\BehaviorTree\utils\BTMath.h" />
     <ClInclude Include="galaxy_fighter\BehaviorTree\Decorator\condition_decorator.h" />
-    <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_image.h" />
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_scene\BTAction_image.h" />
     <ClInclude Include="galaxy_fighter\BehaviorTree\BehaviorTree.h" />
     <ClInclude Include="galaxy_fighter\BehaviorTree\BTNode.h" />
     <ClInclude Include="galaxy_fighter\config.h" />
@@ -218,6 +219,7 @@
     <ClInclude Include="galaxy_fighter\utils\random_utils.h" />
     <ClInclude Include="gameObject\gameObject.h" />
     <ClInclude Include="galaxy_fighter\objects\environmentAssets\mapObject\MapObject.h" />
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_physics\gravity_heavy.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="galaxy_fighter\objects\MainMenuObject\MenuText.h" />
     <ClInclude Include="galaxy_fighter\objects\MainMenuObject\MenuImage.h" />

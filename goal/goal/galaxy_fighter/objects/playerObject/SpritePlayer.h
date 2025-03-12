@@ -2,36 +2,54 @@
 #include "pch.h"
 #include "PlayerObject.h"
 #include "../../BehaviorTree/paralle/ParalleNode.h"
-class SpritePlayer
-{
-	SDL_Texture* texture;
-	std::vector<SDL_FRect> frames;
-	SDL_FRect* spriteFrameRect;
-	SDL_FRect* viewportRect;
-	int textureWidth;
-	int frameWidth, frameHeight, framesCount;
-	float elapsed;
+
+typedef struct SpriteSheet {
+	int startFrame;
+	int endFrame;
+}SpriteSheet;
+
+	class SpritePlayer
+	{
+		SDL_Texture* texture;
+		SDL_FRect* viewportRect;
+		std::unordered_map<PlayerState, SpriteSheet>* spriteSheet;
+		std::unordered_map<PlayerState, double>* actionFrameDelay;
+		PlayerState* playerState;
+		PlayerState localState;
+
+
+		std::vector<SDL_FRect> frames;
+		SDL_FRect spriteFrameRect;
+	
+		int textureWidth;
+		int frameWidth, frameHeight, framesCount;
+		float elapsed;
 
 
 
-	PlayerState playerState;
-	PlayerState localState;
+	
+	
 	std::unique_ptr<ParalleNode> root;
 
-	std::unordered_map<short, double> ActionFrameDelay;
+	
 	short curAction;//等同于 PlayerState
 
 
 	void refreshTime();
 	void initAction();
 public:
-	//防止出现此类不存在默认构造函数
-	SpritePlayer() = default;
-	
 	//初始化
-	SpritePlayer(SDL_Texture* texture, SDL_FRect* viewport, PlayerState playerState,int frameWidth,int frameHeight,int framesCount);
+	SpritePlayer(
+		SDL_Texture* texture,
+		SDL_FRect* viewport,
+		std::unordered_map<PlayerState, SpriteSheet>* spriteSheet,
+		std::unordered_map<PlayerState, double>* actionFrameDelay,
+		PlayerState* playerState,
+		float frameWidth,
+		float frameHeight,
+		int framesCount);
 
-	void setSpriteFrameRect(PlayerState state, float elapsed);
+	void setSpriteFrameRect(PlayerState* state, float elapsed);
 
 
 

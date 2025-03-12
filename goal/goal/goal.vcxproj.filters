@@ -72,7 +72,7 @@
     <ClCompile Include="galaxy_fighter\BehaviorTree\BehaviorTree.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_image.cpp">
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_scene\BTAction_image.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="galaxy_fighter\BehaviorTree\Composite\Selector.cpp">
@@ -124,6 +124,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="galaxy_fighter\objects\playerObject\SpritePlayer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_physics\gravity_heavy.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -188,7 +191,7 @@
     <ClInclude Include="galaxy_fighter\BehaviorTree\BTNode.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_image.h">
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_scene\BTAction_image.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="galaxy_fighter\BehaviorTree\Composite\Selector.h">
@@ -240,6 +243,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="galaxy_fighter\objects\playerObject\SpritePlayer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_physics\gravity_heavy.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

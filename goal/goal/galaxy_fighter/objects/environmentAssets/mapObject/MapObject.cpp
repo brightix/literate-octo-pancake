@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "MapObject.h"
-#include "../../../BehaviorTree/BTAction_image.h"
+#include "../../../BehaviorTree/BTAction_scene/BTAction_image.h"
 #include "../../camera/Camera.h"
 
 MapObject::MapObject(SDL_Texture* texture){

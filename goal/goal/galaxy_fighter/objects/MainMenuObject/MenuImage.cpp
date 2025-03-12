@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "MenuImage.h"
-#include "../../BehaviorTree/BTAction_image.h"
+#include "../../BehaviorTree/BTAction_scene/BTAction_image.h"
 
 using namespace BTAction_image;
 MenuButton::MenuButton(SDL_Texture* texture,float scale, float x, float y) {
