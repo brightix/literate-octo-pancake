@@ -29,7 +29,7 @@ void Galaxy_fighter::update() {
 	background->update();
 
 	background->render();
-	RendererManager::getInstance().renderTexture("player","girl_1_normal.png");
+	RendererManager::getInstance().renderTexture("player","girl_1_normal.png",1);
 	player->render();
 
 }
@@ -82,7 +82,7 @@ void Galaxy_fighter::play(){
 		update();
 
 
-		
+		gw.show_log_on_screen();
 		SDL_RenderPresent(renderer);
 
 		//ÈÕÖ¾Êä³ö

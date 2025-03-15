@@ -23,7 +23,7 @@ public:
 		if (it != data.end()) {
 			return std::static_pointer_cast<T>(it->second);
 		}
-		std::cout << "没有 " << key << "的数据" << std::endl;
+		std::cout << "There is no such keys named \"" << key << "\"" << std::endl;
 		return nullptr;
 	}
 };

@@ -8,7 +8,7 @@ SpritePlayer::SpritePlayer(std::shared_ptr<Context> context) : context(context)
 	this->texture = context->getData<SDL_Texture>("texture").get();
 	this->viewportRect = context->getData<SDL_FRect>("rect").get();
 	this->spriteSheet = context->getData<unordered_map<PlayerState,SpriteSheet>>("spriteSheet").get();
-	this->actionFrameDelay = context->getData<unordered_map<PlayerState, double>>("actionFrameDelay").get();;
+	this->actionFrameDelay = context->getData<vector<float>>("actionFrameDelay");
 	this->localState = PlayerState::Idle;
 
 	//初始化调用
@@ -28,6 +28,7 @@ SpritePlayer::SpritePlayer(std::shared_ptr<Context> context) : context(context)
 	}
 
 	this->spriteFrameRect = { 1,1,frameWidth,frameHeight };
+	this->curFrame = 0;
 	initAction();
 	root->addChild(make_unique<BTAction_player::display_anime_at_center>(texture,spriteFrameRect,viewportRect,0.0,&context->getData<PlayerAttrs>("playerAttrs")->player_orientation));
 }
@@ -41,34 +42,64 @@ bool SpritePlayer::update() {				//就是update
 	return root->execute();
 }
 
-void SpritePlayer::setSpriteFrameRect(PlayerState* state, float elapsed) {//设置精灵当前帧矩形
-	if (localState != *state) {//出现动作变换
+void SpritePlayer::setSpriteFrameRect(PlayerState* state, float& elapsed) {//设置精灵当前帧矩形
+	if (*state != PlayerState::Idle && localState != *state) {//出现动作变换
 		localState = *state;
 		initAction();
 	}
+	//if(context->getData<bool>("is"))
 	//增加经过时间，判断是否可以下一帧或循环
 	refreshTime();
-	//两种结构
-
-	//播完停止
-	if (localState == PlayerState::Down) {
-
+	if (animeState == pre && (*spriteSheet)[localState].isLoop) animeState = running;
+	int idx;
+	int preFrameEnd = (*spriteSheet)[localState].startFrame + (*spriteSheet)[localState].pre;
+	int runningFrameEnd = (*spriteSheet)[localState].startFrame + (*spriteSheet)[localState].running;
+	int postFrameEnd = (*spriteSheet)[localState].startFrame + (*spriteSheet)[localState].endFrame;
+	switch (animeState) {
+	case pre:
+		updateFrame();
+		if (elapsed >= (*actionFrameDelay)[curFrame]) {
+			if (++curFrame > preFrameEnd) {
+				animeState = running;
+			}
+			elapsed = 0;
+		}
+		break;
+	case running:
+		updateFrame();
+		if (elapsed >= (*actionFrameDelay)[curFrame]) {
+			if (++curFrame >= runningFrameEnd) {
+				if ((*spriteSheet)[localState].isLoop) {
+					curFrame = preFrameEnd;
+				}
+				else {
+					animeState = post;
+				}
+			}
+			elapsed = 0;
+		}
+		break;
+	case post:
+		updateFrame();
+		if (elapsed >= (*actionFrameDelay)[curFrame]) {
+			if (++curFrame >= postFrameEnd) {
+				animeState = pre;
+				//context->setData("playerState", PlayerState::Idle);
+			}
+			elapsed = 0;
+		}
+		break;
+	case none:
+		//cout << "角色无状态" << endl;
+		break;
+	default:
+		cerr << "animeState出错,animeState被给予 " << animeState << "数值" << endl;
 	}
-
-
-	//循环播放
-	else if (localState == PlayerState::Left || localState == PlayerState::Right) {
-		int idx = elapsed / (*actionFrameDelay)[localState];
-		SpriteSheet& t = (*spriteSheet)[localState];
-		SDL_FRect& newFrame = getFrame(idx % (t.endFrame - t.startFrame) + t.startFrame);
-		spriteFrameRect.x = newFrame.x;
-		spriteFrameRect.y = newFrame.y;
-	}
-
 }
 
-void SpritePlayer::initAction() {			//遇到动作变化就重置时间
-	elapsed = 0;
+void SpritePlayer::initAction() {
+	curFrame = (*spriteSheet)[localState].startFrame;
+	animeState = pre;
 }
 
 void SpritePlayer::refreshTime() {			//刷新时间
@@ -79,6 +110,12 @@ SDL_FRect& SpritePlayer::getFrame(int idx) {//获取当前帧
 	return frames[idx];
 }
 
+void SpritePlayer::updateFrame() {//获取当前帧
+	//cout << curFrame << endl;
+	spriteFrameRect.x = frames[curFrame].x;
+	spriteFrameRect.y = frames[curFrame].y;
+}
+
 
 
 
@@ -86,3 +123,6 @@ SDL_Texture* SpritePlayer::getTexture() {	//返回纹理
 	return texture;
 }
 
+bool SpritePlayer::isAnimationFinished() {
+	return animeState == none || (*spriteSheet)[localState].isLoop;
+}

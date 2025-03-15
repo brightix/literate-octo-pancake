@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "gameWorld.h"
+#include "../core/Resolution.h"
 
 void GameWorld::setWorld(const nlohmann::json& config) {
 	worldAttrs.gravity = config["gravity"];
@@ -49,7 +50,35 @@ void GameWorld::show_log() {
 	}
 }
 
+void GameWorld::show_log_on_screen() {
+	TextRenderer& textRenderer = TextRenderer::getInstance();
+	Timer& t = Timer::getInstance();
+	SDL_Renderer* renderer = RendererManager::getInstance().getRenderer();
+	SDL_Texture* texture;
+	textRenderer.setColor(200,200,200,255);
+	int i = 0;
+	
+	//帧率
+	texture = textRenderer.getTextTexture("帧数:" + to_string((int)(1000 / t.getDeltaTime())), "pixel_12", 40);
+	SDL_FRect dstRect = { 0,i++ * log_interval,0,0 };
+	SDL_GetTextureSize(texture, &dstRect.w, &dstRect.h);
+	SDL_RenderTexture(renderer, texture, nullptr, &dstRect);
 
+	//玩家信息
+	if (player) {
+		texture = textRenderer.getTextTexture("玩家坐标 x:" + to_string((int)player->getAttrs().playerX) + ", y : " + to_string((int)player->getAttrs().playerY), "pixel_12",40);
+		SDL_FRect dstRect = {0,i++*log_interval,0,0};
+		SDL_GetTextureSize(texture,&dstRect.w,&dstRect.h);
+		SDL_RenderTexture(renderer, texture,nullptr,&dstRect);
+	}
+
+
+
+}
+
+GameWorld::GameWorld() {
+	log_interval = 40;
+}
 
 GameWorld::~GameWorld() {
 	cout << "GameWorld 已被摧毁!" << endl;

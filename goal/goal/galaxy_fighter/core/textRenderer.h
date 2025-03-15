@@ -1,5 +1,8 @@
 #pragma once
 #include "pch.h"
+
+#pragma execution_character_set("utf-8")
+
 class TextRenderer {
 public:
 	static TextRenderer& getInstance();
@@ -8,7 +11,9 @@ public:
 
 	void setColor(Uint8 R, Uint8 G, Uint8 B, Uint8 A);
 
-	SDL_Texture* getTextTexture(const char* str);
+	SDL_Texture* getTextTexture(const string& str);
+
+	SDL_Texture* getTextTexture(const string& str, const string& fontType, int size);
 
 	void renderText(float x, float y, SDL_Texture* texture);
 

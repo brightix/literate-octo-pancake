@@ -16,8 +16,20 @@ void TextRenderer::setColor(Uint8 R, Uint8 G, Uint8 B, Uint8 A) {
 
 
 
-SDL_Texture* TextRenderer::getTextTexture(const char* str) {
-	SDL_Surface* textSurface = TTF_RenderText_Blended(font,str, 0, textColor);
+SDL_Texture* TextRenderer::getTextTexture(const string& str) {
+	SDL_Surface* textSurface = TTF_RenderText_Blended(font,str.c_str(), 0, textColor);
+	if (!textSurface) {
+		std::cerr << "textSurface 创建失败" << std::endl;
+	}
+	SDL_Texture* textTexture = SDL_CreateTextureFromSurface(render, textSurface);
+	SDL_DestroySurface(textSurface);
+	return textTexture;
+}
+
+SDL_Texture* TextRenderer::getTextTexture(const string& str,const string& fontType,int size) {
+	font = ResourceManager::getInstance().getFont(fontType,size);
+	TTF_FontHasGlyph(font,1);
+	SDL_Surface* textSurface = TTF_RenderText_Blended(font, str.c_str(), 0, textColor);
 	if (!textSurface) {
 		std::cerr << "textSurface 创建失败" << std::endl;
 	}

@@ -31,18 +31,22 @@ PlayerObject::PlayerObject(const json& config){
 		playerAttrs->player_render_height
 	};
 
+	//Rect
+	shared_ptr<SDL_FRect> rect = std::make_shared<SDL_FRect>(trect);//渲染出来的大小,设置初始位置
+	hitBox = make_shared<Rect>(rect);
 
-	rect = std::make_shared<SDL_FRect>(trect);//渲染出来的大小,设置初始位置
 
-	TransformUtils TFUtil;
-	for (auto& [key,val] : config["actionFrameDelay"].items()) {
-		if (TFUtil.string2playerState.count(key)) {
-			actionFrameDelay[TFUtil.string2playerState[key]] = val;
-		}
+	//actionFrameDelay
+	vector<float> actionframedelay = {};
+	actionFrameDelay = make_shared<std::vector<float>>(actionframedelay);
+	for (auto & val : config["actionFrameDelay"]) {
+			actionFrameDelay->push_back(val);
 	}
+	//spriteSheet
+	TransformUtils TFUtil;
 	for (auto& [key,val] : config["spriteSheet"].items()) {
 		if (TFUtil.string2playerState.count(key)) {
-			spriteSheet[TFUtil.string2playerState[key]] = {val["startFrame"],val["endFrame"]};
+			spriteSheet[TFUtil.string2playerState[key]] = {val["startFrame"],val["pre"],val["running"],val["post"],val["endFrame"],val["isLoop"]};
 		}
 	}
 
@@ -55,10 +59,11 @@ PlayerObject::PlayerObject(const json& config){
 	playerState = context->getData<PlayerState>("playerState").get();
 	context->initData("rect",rect);
 	context->initData("spriteSheet", make_shared<std::unordered_map<PlayerState, SpriteSheet>>(spriteSheet));
-	context->initData("actionFrameDelay",make_shared<std::unordered_map<PlayerState,double>>(actionFrameDelay));
+	context->initData("actionFrameDelay",actionFrameDelay);
 	context->initData("texture", ResourceManager::getInstance().getTexture(config["texture"]["catalog"],config["texture"]["fileName"]));
 	setBehavior_tree(config["behavior_tree"], createNodeFromJson);
-	sprite = make_unique<SpritePlayer>(context);
+	spritePlayer = make_shared<SpritePlayer>(context);
+	context->initData("spritePlayer",spritePlayer);
 }
 
 bool PlayerObject::setBehavior_tree(const json& config,function<shared_ptr<BTNode>(const json&,shared_ptr<Context>)> nodeFactory) {
@@ -75,7 +80,7 @@ void PlayerObject::update() {
 
 void PlayerObject::render()
 {
-	sprite->update();
+	spritePlayer->update();
 }
 
 PlayerAttrs& PlayerObject::getAttrs()
@@ -130,4 +135,8 @@ void PlayerObject::removePlayerState(PlayerState playerState)
 
 void PlayerObject::resetState() {
 	*this->playerState = PlayerState::Idle;
+}
+
+SDL_FRect* PlayerObject::getRect() {
+	return hitBox->rect.get();
 }

@@ -15,6 +15,8 @@ public:
 
 	void renderTexture(const std::string& catalog, const std::string& fileName);
 
+	void renderTexture(const std::string& catalog, const std::string& fileName, int location);
+
 
 	RendererManager(const RendererManager&) = delete;
 	RendererManager& operator=(const RendererManager&) = delete;

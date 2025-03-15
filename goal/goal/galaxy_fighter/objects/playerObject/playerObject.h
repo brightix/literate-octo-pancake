@@ -40,14 +40,18 @@ public:
 
 	void resetState();
 
+	SDL_FRect* getRect();
+
 protected:
+
 	PlayerState* playerState;
 	std::unique_ptr<ParalleNode> root;
 	std::unique_ptr<BTNode> renderNode;
-	std::unique_ptr<SpritePlayer> sprite;
+	std::shared_ptr<SpritePlayer> spritePlayer;
+
 
 	std::shared_ptr<Context> context;
 	std::shared_ptr<PlayerAttrs> playerAttrs;
 	std::unordered_map<PlayerState, SpriteSheet> spriteSheet;
-	std::unordered_map<PlayerState, double> actionFrameDelay;
+	std::shared_ptr<std::vector<float>> actionFrameDelay;
 };

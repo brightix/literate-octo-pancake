@@ -21,13 +21,16 @@ public:
 	static GameWorld& getInstance();
 	void show_log();
 
+	void show_log_on_screen();
+
 	GameWorld(const GameWorld&) = delete;
 	GameWorld& operator=(const GameWorld&) = delete;
 private:
 
-	GameWorld() = default;
+	GameWorld();
 	~GameWorld();
 	WorldAttrs worldAttrs;
+	float log_interval;
 	Camera* camera;
 	PlayerObject* player;
 	Uint64 report_log_time;

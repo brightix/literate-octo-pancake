@@ -37,6 +37,9 @@ void Camera::update() {
 
 	}
 	SDL_FRect* rect = owner->getRect();
+	if (!rect) {
+		throw "相机持有者的hitbox为nullptr";
+	}
 		viewport.x = rect->x + rect->w / 2 - windowRect.w / 2;
 		viewport.y = rect->y + rect->h / 2 - windowRect.h / 2;
 		clampToWorldBounds();

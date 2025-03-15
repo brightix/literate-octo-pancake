@@ -9,8 +9,6 @@ namespace BTAction_player {
     {
 
     };
-
-
     class display_at_position :
         public BTNode
     {

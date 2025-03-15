@@ -16,8 +16,14 @@ enum class PlayerState : Uint16 {
 	Down = 1 << 2,//0100
 	Right = 1 << 3,//1000
 	Interruptible_mask = Jump | Left | Down | Right,
-	Left_Jump = 1 << 4,
-	Right_jump = 1 << 5	
+	Attack = 1 << 4,
+	Roll = 1 << 5,
+};
+
+enum class ActionState :Uint16 {
+	PreAction,
+	Action,
+	PostAction
 };
 
 namespace std {

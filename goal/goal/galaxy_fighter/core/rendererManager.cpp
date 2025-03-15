@@ -28,9 +28,37 @@ void RendererManager::renderTexture(const std::string& catalog,const std::string
 	SDL_RenderTexture(renderer, texture.get(), nullptr, &rect);
 }
 
+void RendererManager::renderTexture(const std::string& catalog, const std::string& fileName,int location) {
+	SDL_FRect window = Resolution::getInstance().getWindowRect();
+	float x, y, w, h;
+	shared_ptr<SDL_Texture> texture = ResourceManager::getInstance().getTexture(catalog, fileName);
+	SDL_GetTextureSize(texture.get(), &w, &h);
+
+	switch (location) {
+	case 0:
+		x = 0, y = 0;
+		break;
+	case 1:
+		x = window.w - w, y = 0;
+		break;
+	case 2:
+		x = 0, y = window.h - h;
+		break;
+	case 3:
+		x = window.w - w, y = window.h - h;
+		break;
+	default:
+		x = 0, y = 0;
+	}
+
+	SDL_FRect rect = { x,y,w,h };
+
+	SDL_RenderTexture(renderer, texture.get(), nullptr, &rect);
+}
+
 RendererManager::RendererManager(){
 	renderer = nullptr;
-	window = SDL_CreateWindow("menu", swidth, sheight, SDL_WINDOW_MAXIMIZED);
+	window = SDL_CreateWindow("ÒøºÓ¶¹¸¯¿éÓÂ´³ÆáºÚÎÚ¶ûÂ·Ææ", swidth, sheight, SDL_WINDOW_MAXIMIZED);
 	init(window);
 	SDL_SetRenderDrawColor(renderer,0,0,0,255);
 }

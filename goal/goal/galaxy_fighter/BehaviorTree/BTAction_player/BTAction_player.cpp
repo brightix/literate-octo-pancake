@@ -126,47 +126,47 @@ player_detect_input::player_detect_input(shared_ptr<Context> context) : BTNode(c
 }
 
 bool player_detect_input::execute() {
-	int orientation = 0;
-	PlayerState ps = PlayerState::Idle;
+	if (!getter()->getData<SpritePlayer>("spritePlayer")->isAnimationFinished()) {
+		return false;
+	}
+	PlayerState* ps = getter()->getData<PlayerState>("playerState").get();
 	auto& input = InputManager::getInstance();
 	if (input.isKeyPressed(SDL_SCANCODE_LEFT)) {
-		ps &= ~PlayerState::Right;
-		ps |= PlayerState::Left;
+		*ps &= ~PlayerState::Right;
+		*ps |= PlayerState::Left;
 	}
 	if (input.isKeyPressed(SDL_SCANCODE_RIGHT)) {
-		ps &= ~PlayerState::Left;
-		ps |= PlayerState::Right;
+		*ps &= ~PlayerState::Left;
+		*ps |= PlayerState::Right;
 	}
 	if (input.isKeyPressed(SDL_SCANCODE_UP)) {
-		if ((ps & PlayerState::Down) == PlayerState::Idle) {//如果在跳跃则不能下蹲
-			ps |= PlayerState::Jump;
+		if ((bool)(*ps & PlayerState::Down)) {//如果在跳跃则不能下蹲
+			*ps |= PlayerState::Jump;
 		}
 	}
 	if (input.isKeyPressed(SDL_SCANCODE_DOWN)) {
-		if ((ps & PlayerState::Jump) == PlayerState::Idle) {//如果在跳跃则不能下蹲
-			ps |= PlayerState::Down;
+		if ((bool)(*ps & PlayerState::Jump)) {//如果在跳跃则不能下蹲
+			*ps |= PlayerState::Down;
 		}
 	}
-
-	//shared_ptr<PlayerState> playerState = getter()->getData<PlayerState>("playerState");
-	//int state = to_underLying(*playerState.get());
-	//if ((*playerState & PlayerState::Interruptible_mask) == PlayerState::Idle) {//如果在非移动动作，不修改状态
-	//	return false;
-	//}
-
-	getter()->setData("playerState",ps);
+	if (input.isKeyPressed(SDL_SCANCODE_J)) {
+		*ps |= PlayerState::Attack;
+	}
+	else if (input.isKeyPressed(SDL_SCANCODE_K)) {
+		*ps |= PlayerState::Roll;
+	}
 	return true;
 }
 //跳跃
 player_move_jump::player_move_jump(shared_ptr<Context> context) : BTNode(context) {}
 
 bool player_move_jump::execute() {
-
 	PlayerState* state = getter()->getData<PlayerState>("playerState").get();
-	if (!(bool)(*state & PlayerState::Interruptible_mask)) {//如果当前状态除了移动还有别的动作，无法被打断
-		return false;
-	}
 	PlayerAttrs* attrs = getter()->getData<PlayerAttrs>("playerAttrs").get();
+	//if (!(bool)(*state & PlayerState::Interruptible_mask)) {//如果当前状态除了移动还有别的动作，无法被打断
+	//	return false;
+	//}
+	
 	if ((bool)(*state & PlayerState::Jump)) {
 		attrs->playerY -= attrs->player_move_speed;
 		attrs->playerY = max(attrs->playerY, 0);
@@ -177,6 +177,9 @@ bool player_move_jump::execute() {
 
 
 //下蹲
+
+
+
 player_move_down::player_move_down(shared_ptr<Context> context) : BTNode(context) {}
 
 bool player_move_down::execute() {
@@ -186,8 +189,8 @@ bool player_move_down::execute() {
 	}
 	PlayerAttrs* attrs = getter()->getData<PlayerAttrs>("playerAttrs").get();
 	if ((bool)(*state & PlayerState::Down)) {
-		attrs->playerY += attrs->player_move_speed;
-		attrs->playerY = min(attrs->playerY,Camera::getInstance().getCameraRange().h - attrs->player_render_height);
+		//待补充：下蹲矩形缩小
+			
 		return true;
 	}
 }
