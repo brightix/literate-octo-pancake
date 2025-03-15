@@ -2,21 +2,71 @@
 #include "playerObject.h"
 #include "PlayerState.h"
 #include "../../BehaviorTree/BTAction_player/BTAction_player.h"
+#include "../../BehaviorTree/BTNodeFactory.h"
+#include "../../utils/transformUtils.h"
+using json = nlohmann::json;
 
-PlayerObject::PlayerObject(){
-	auto& res = Resolution::getInstance();
-	rect = { (float)res.getResolution().first / 2,(float)res.getResolution().second / 2,100,100};
-	attrs[player_x] = rect.x;
-	attrs[player_y] = rect.y;
-	attrs[player_health] = 5;
-	attrs[player_move_speed] = 10;
+static void from_json(const json& j, PlayerAttrs& p) {
+	p.playerX = j.value("playerX", 0.0f);
+	p.playerY = j.value("playerY", 0.0f);
+	p.playerHP = j.value("playerHP", 5.0f);
+	p.player_move_speed = j.value("player_move_speed", 10.0f);
+	p.player_render_width = j.value("player_render_width", 128);
+	p.player_render_height = j.value("player_render_height", 128);
+	p.player_sprite_frame_width = j.value("player_sprite_frame_width", 128.0f);
+	p.player_sprite_frame_height = j.value("player_sprite_frame_height", 128.0f);
+	p.player_sprite_frame = j.value("player_sprite_frame", 1);
+	p.player_orientation = j.value("player_orientation", true);
 }
 
-std::array<float,player_attrs_count>& PlayerObject::getAttrs() { return attrs; }
+PlayerObject::PlayerObject(const json& config){
+	playerAttrs = make_shared<PlayerAttrs>();
+	*playerAttrs = config["playerAttrs"].get<PlayerAttrs>();
+	playerAttrs->playerX = Resolution::getInstance().getWindowRect().w / 2 - playerAttrs->player_render_width / 2;
+	playerAttrs->playerY = Resolution::getInstance().getWindowRect().h / 2 - playerAttrs->player_render_height / 2;
+	SDL_FRect trect = {
+		playerAttrs->playerX,
+		playerAttrs->playerY,
+		playerAttrs->player_render_width,
+		playerAttrs->player_render_height
+	};
 
-void PlayerObject::setMove(float nx,float ny) {
-	rect.x = nx;
-	rect.y = ny;
+
+	rect = std::make_shared<SDL_FRect>(trect);//渲染出来的大小,设置初始位置
+
+	TransformUtils TFUtil;
+	for (auto& [key,val] : config["actionFrameDelay"].items()) {
+		if (TFUtil.string2playerState.count(key)) {
+			actionFrameDelay[TFUtil.string2playerState[key]] = val;
+		}
+	}
+	for (auto& [key,val] : config["spriteSheet"].items()) {
+		if (TFUtil.string2playerState.count(key)) {
+			spriteSheet[TFUtil.string2playerState[key]] = {val["startFrame"],val["endFrame"]};
+		}
+	}
+
+	context = make_shared<Context>();
+	context->initData("isPlayerOnGround",make_shared<bool>(false));
+	context->initData("playerAttrs",playerAttrs);
+	context->initData("interruptible_mask", make_shared<int>(0b00001111));
+
+	context->initData("playerState",make_shared<PlayerState>(PlayerState::Idle));
+	playerState = context->getData<PlayerState>("playerState").get();
+	context->initData("rect",rect);
+	context->initData("spriteSheet", make_shared<std::unordered_map<PlayerState, SpriteSheet>>(spriteSheet));
+	context->initData("actionFrameDelay",make_shared<std::unordered_map<PlayerState,double>>(actionFrameDelay));
+	context->initData("texture", ResourceManager::getInstance().getTexture(config["texture"]["catalog"],config["texture"]["fileName"]));
+	setBehavior_tree(config["behavior_tree"], createNodeFromJson);
+	sprite = make_unique<SpritePlayer>(context);
+}
+
+bool PlayerObject::setBehavior_tree(const json& config,function<shared_ptr<BTNode>(const json&,shared_ptr<Context>)> nodeFactory) {
+	root = make_unique<ParalleNode>();
+	for (auto& node : config["root"]["children"]) {
+		root->addChild(nodeFactory(node,context));
+	}
+	return true;
 }
 
 void PlayerObject::update() {
@@ -28,9 +78,14 @@ void PlayerObject::render()
 	sprite->update();
 }
 
+PlayerAttrs& PlayerObject::getAttrs()
+{
+	return *context->getData<PlayerAttrs>("playerAttrs").get();
+}
+
 ObjectState PlayerObject::getBaseState()
 {
-	switch (playerState) {
+	switch (*playerState) {
 	case PlayerState::Idle: 
 		return ObjectState::Idle;
 	default:
@@ -40,23 +95,39 @@ ObjectState PlayerObject::getBaseState()
 
 PlayerState PlayerObject::getState()
 {
-	return playerState;
+	return *playerState;
+}
+
+const std::string PlayerObject::printState() {
+	if (!playerState) {
+		return "playerState 为空指针";
+	}
+	switch (*playerState) {
+	case PlayerState::Idle:
+		return "Idle";
+	case PlayerState::Jump:
+		return "Jump";
+	case PlayerState::Down:
+		return "Down";
+	case PlayerState::Left:
+		return "Left";
+	case PlayerState::Right:
+		return "Right";
+	default:
+		return "未知状态";
+	}
 }
 
 void PlayerObject::setPlayerState(PlayerState playerState)
 {
-	this->playerState |= playerState;
+	*this->playerState |= playerState;
 }
 
 void PlayerObject::removePlayerState(PlayerState playerState)
 {
-	this->playerState |= playerState;
+	*this->playerState |= playerState;
 }
 
 void PlayerObject::resetState() {
-	this->playerState = PlayerState::Idle;
-}
-
-void PlayerObject::refreshAnimationTime() {
-
+	*this->playerState = PlayerState::Idle;
 }

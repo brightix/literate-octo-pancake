@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "ParalleNode.h"
 
-void ParalleNode::addChild(unique_ptr<BTNode> child) {
+void ParalleNode::addChild(shared_ptr<BTNode> child) {
 	children.emplace_back(move(child));
 }
 

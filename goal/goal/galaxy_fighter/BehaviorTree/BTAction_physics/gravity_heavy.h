@@ -5,7 +5,7 @@ namespace BTAction_physics {
         public BTNode
     {
     public:
-        gravity_heavy() = default;
+        gravity_heavy(std::shared_ptr<Context> context);
         bool execute() override;
     };
 }

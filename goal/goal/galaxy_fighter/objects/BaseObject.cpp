@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "BaseObject.h"
 
-SDL_FRect& BaseObject::getRect()
+SDL_FRect* BaseObject::getRect()
 {
-	return rect;
+	return rect.get();
 }
 

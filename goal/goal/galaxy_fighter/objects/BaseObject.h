@@ -9,12 +9,12 @@ enum class ObjectState {
 class BaseObject
 {
 public:
-	SDL_FRect& getRect();
+	SDL_FRect* getRect();
 	BaseObject() = default;
 	~BaseObject() = default;
 	virtual ObjectState getBaseState() = 0;
 protected:
-	SDL_FRect rect;
+	std::shared_ptr<SDL_FRect> rect;
 	SDL_FRect renderRect;
 	ObjectState objectState;
 };

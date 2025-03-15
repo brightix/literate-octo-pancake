@@ -28,7 +28,7 @@ void MenuButton::update() {
 MenuBackground::MenuBackground(SDL_Texture* texture) {
 	this->texture = texture;
 	root = make_unique<ParalleNode>();
-	root->addChild(make_unique<display_full>(texture));
+	//root->addChild(make_unique<display_full>(texture));
 }
 
 void MenuBackground::update() {

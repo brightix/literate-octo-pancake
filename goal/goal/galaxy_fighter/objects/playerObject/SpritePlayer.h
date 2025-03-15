@@ -2,6 +2,7 @@
 #include "pch.h"
 #include "PlayerObject.h"
 #include "../../BehaviorTree/paralle/ParalleNode.h"
+#include "../../core/Context.h"
 
 typedef struct SpriteSheet {
 	int startFrame;
@@ -10,6 +11,7 @@ typedef struct SpriteSheet {
 
 	class SpritePlayer
 	{
+		std::shared_ptr<Context> context;
 		SDL_Texture* texture;
 		SDL_FRect* viewportRect;
 		std::unordered_map<PlayerState, SpriteSheet>* spriteSheet;
@@ -22,7 +24,6 @@ typedef struct SpriteSheet {
 		SDL_FRect spriteFrameRect;
 	
 		int textureWidth;
-		int frameWidth, frameHeight, framesCount;
 		float elapsed;
 
 
@@ -39,15 +40,7 @@ typedef struct SpriteSheet {
 	void initAction();
 public:
 	//≥ı ºªØ
-	SpritePlayer(
-		SDL_Texture* texture,
-		SDL_FRect* viewport,
-		std::unordered_map<PlayerState, SpriteSheet>* spriteSheet,
-		std::unordered_map<PlayerState, double>* actionFrameDelay,
-		PlayerState* playerState,
-		float frameWidth,
-		float frameHeight,
-		int framesCount);
+	SpritePlayer(std::shared_ptr<Context> context);
 
 	void setSpriteFrameRect(PlayerState* state, float elapsed);
 

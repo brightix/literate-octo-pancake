@@ -7,7 +7,7 @@ TextRenderer& TextRenderer::getInstance() {
 }
 
 void TextRenderer::setFont(const string& type,int size) {
-	font = ResourceManager::getInstance().get_font(type, size);
+	font = ResourceManager::getInstance().getFont(type, size);
 }
 
 void TextRenderer::setColor(Uint8 R, Uint8 G, Uint8 B, Uint8 A) {

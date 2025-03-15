@@ -1,14 +1,40 @@
 #include "pch.h"
 #include "MapObject.h"
 #include "../../../BehaviorTree/BTAction_scene/BTAction_image.h"
+#include "../../../BehaviorTree/BTNodeFactory.h"
 #include "../../camera/Camera.h"
 
-MapObject::MapObject(SDL_Texture* texture){
-	this->texture = texture;
+using json = nlohmann::json;
+
+MapObject::MapObject(const json& config){
+	
 	this->camera = &Camera::getInstance();
+	this->context = make_shared<Context>();
+	std::string catalog = config["texture"]["catalog"];
+	std::string fileName = config["texture"]["fileName"];
+	context->initData("texture", ResourceManager::getInstance().getTexture(catalog,fileName));
+
+
+	shared_ptr<double> angle = make_shared<double>(config["texture"]["angle"].get<double>());
+	context->initData("angle",angle);
+
+	//初始化地图矩形
+	auto texture = context->getData<SDL_Texture>("texture").get();
+	SDL_FRect wholeRect = { 0,0,0,0};
+	SDL_GetTextureSize(texture, &wholeRect.w, &wholeRect.h);
+	context->initData("wholeRect",make_shared<SDL_FRect>(wholeRect));
 
 	root = make_unique<ParalleNode>();
-	renderNode = std::make_unique<BTAction_image::display_background>(texture,0.0);
+	for (auto& node : config["behavior_tree"]["renderNode"]["children"]) {
+		std::string nodeName = node["name"];
+		if (nodeName == "display_background") {
+			renderNode = createNodeFromJson(node,context);
+		}
+	}
+}
+
+void MapObject::setContext() {
+
 }
 
 
@@ -22,10 +48,13 @@ void MapObject::render()
 	renderNode->execute();
 }
 
-SDL_Texture* MapObject::getTexture()
+SDL_FRect* MapObject::getWholeRect()
 {
-	return texture;
+	return context->getData<SDL_FRect>("wholeRect").get();
 }
 
-test_bk::test_bk(SDL_Texture* texture) :MapObject(texture){}
+SDL_Texture* MapObject::getTexture()
+{
+	return context->getData<SDL_Texture>("texture").get();
+}
 

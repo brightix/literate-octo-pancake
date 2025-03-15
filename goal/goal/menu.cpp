@@ -20,11 +20,11 @@ void Menu::loadResource() {
 	TextRenderer& textRenderer = TextRenderer::getInstance();
 
 
-	bk = move(make_unique<MenuBackground>(resource.get_bk()[0].get()));
-	logoList.emplace_back(make_unique<MenuButton>(resource.get_game_logo()[0].get(), 0.1f, swidth * 0.1, sheight * 0.7));
-	logoList.emplace_back(make_unique<MenuButton>(resource.get_game_logo()[1].get(), 0.1f, swidth * 0.25, sheight * 0.7));
-	logoList.emplace_back(make_unique<MenuButton>(resource.get_game_logo()[2].get(), 0.1f, swidth * 0.4, sheight * 0.7));
-	logoList.emplace_back(make_unique<MenuButton>(textRenderer.getTextTexture("Start"), 1.0f, swidth * 0.8, sheight * 0.5));
+	//bk = move(make_unique<MenuBackground>(resource.get_bk()[0].get()));
+	//logoList.emplace_back(make_unique<MenuButton>(resource.get_game_logo()[0].get(), 0.1f, swidth * 0.1, sheight * 0.7));
+	//logoList.emplace_back(make_unique<MenuButton>(resource.get_game_logo()[1].get(), 0.1f, swidth * 0.25, sheight * 0.7));
+	//logoList.emplace_back(make_unique<MenuButton>(resource.get_game_logo()[2].get(), 0.1f, swidth * 0.4, sheight * 0.7));
+	//logoList.emplace_back(make_unique<MenuButton>(textRenderer.getTextTexture("Start"), 1.0f, swidth * 0.8, sheight * 0.5));
 }
 
 void Menu::destroy() {
@@ -33,17 +33,17 @@ void Menu::destroy() {
 }
 
 void Menu::update() {
-	TextRenderer& textRenderer = TextRenderer::getInstance();
-	sort(logoList.begin(), logoList.end(), [&](auto& a,auto& b) {
-		return a->getRect().w < b->getRect().w ;
-		});
-	bk->update();
-	for (auto& logo : logoList) {
-		logo->update();
-	}
+	//TextRenderer& textRenderer = TextRenderer::getInstance();
+	//sort(logoList.begin(), logoList.end(), [&](auto& a,auto& b) {
+	//	return a->getRect().w < b->getRect().w ;
+	//	});
+	//bk->update();
+	//for (auto& logo : logoList) {
+	//	logo->update();
+	//}
 
 	
-	textRenderer.renderText(swidth*0.05,sheight*0.9,textRenderer.getTextTexture("VER 0.0.1"));
+	//textRenderer.renderText(swidth*0.05,sheight*0.9,textRenderer.getTextTexture("VER 0.0.1"));
 }
 void Menu::welcome() {
 	init();

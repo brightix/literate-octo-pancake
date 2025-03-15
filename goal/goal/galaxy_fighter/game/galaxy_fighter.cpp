@@ -2,6 +2,7 @@
 #include "galaxy_fighter.h"
 #include "../objects/environmentAssets/mapObject/MapObject.h"
 #include "../objects/playerObject/Player_GreenTofu.h"
+using json = nlohmann::json;
 
 Galaxy_fighter::Galaxy_fighter(){
 	camera = &Camera::getInstance();
@@ -10,10 +11,15 @@ Galaxy_fighter::Galaxy_fighter(){
 
 void Galaxy_fighter::loadResource() {
 	ResourceManager& resource = ResourceManager::getInstance();
-	background = make_unique<test_bk>(resource.get_bk()[3].get());
-	camera->setCameraRange(background->getTexture());
-	//player = make_unique<Player_lion>();
-	player = make_unique<Player_GreenTofu>();
+	ifstream file("config.json");
+	json config;
+	file >> config;
+	GameWorld::getInstance().setWorld(config["world"]);
+	background = make_unique<MapObject>(config["background"]);
+	camera->setCameraRange(background->getWholeRect());
+
+	player = make_shared<PlayerObject>(config["player_tofu"]);
+
 	camera->setCameraOwner(player.get());
 }
 
@@ -23,11 +29,9 @@ void Galaxy_fighter::update() {
 	background->update();
 
 	background->render();
+	RendererManager::getInstance().renderTexture("player","girl_1_normal.png");
 	player->render();
 
-	//for (auto& element :elements_dynamic) {
-	//	element->execute();
-	//}
 }
 
 void Galaxy_fighter::loaaGameWorld() {

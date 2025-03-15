@@ -2,9 +2,9 @@
 #include "../BTNode.h"
 class ParalleNode : public BTNode
 {
-	std::vector<std::unique_ptr<BTNode>> children;
+	std::vector<std::shared_ptr<BTNode>> children;
 public:
-	void addChild(std::unique_ptr<BTNode> child);
+	void addChild(std::shared_ptr<BTNode> child);
 	bool execute() override;
 };
 

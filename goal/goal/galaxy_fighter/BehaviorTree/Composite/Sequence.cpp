@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Sequence.h"
 
-void Sequence::addChild(unique_ptr<BTNode> BTNode) {
+void Sequence::addChild(shared_ptr<BTNode> BTNode) {
 	children.emplace_back(move(BTNode));
 }
 

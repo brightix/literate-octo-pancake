@@ -4,11 +4,12 @@ class Camera
 public:
 	static Camera& getInstance();
 	SDL_FRect* getViewport();
-	SDL_FRect* getWindowRect();
+
+
 	void setCameraOwner(BaseObject* owner);//设置跟随目标
 
-	void setCameraRange(SDL_Texture* texture);//将地图矩形传过来
-	std::pair<float, float> getCameraRange();
+	void setCameraRange(SDL_FRect* rect);//将地图矩形传过来
+	SDL_FRect& getCameraRange();
 
 	std::pair<bool, bool>& ownerxyCrashedState();
 
@@ -27,7 +28,6 @@ private:
 	BaseObject* owner;
 	SDL_FRect viewport;
 	SDL_FRect windowRect;
-	float world_width, world_height;
-	int screen_width, screen_height;
+	SDL_FRect* world;
 };
 

@@ -5,30 +5,19 @@
 
 using namespace BTAction_image;
 
-display_full::display_full(SDL_Texture* texture) {
+display_full::display_full(shared_ptr<Context> context) : BTNode(context){
 	Resolution& resolution = Resolution::getInstance();
-	this->texture = texture;
-	rect = { 0.0f,0.0f,static_cast<float>(resolution.getResolution().first),static_cast<float>(resolution.getResolution().second) };
+	rect = { 0.0f,0.0f,static_cast<float>(resolution.getWindowRect().w),static_cast<float>(resolution.getWindowRect().h) };
 }
 
 bool display_full::execute() {
-	if (SDL_RenderTexture(RendererManager::getInstance().getRenderer(), texture, nullptr, &rect)) {
+	if (SDL_RenderTexture(RendererManager::getInstance().getRenderer(), getter()->getData<SDL_Texture>("texture").get(), nullptr, &rect)) {
 		return true;
 	}
 	else {
 		SDL_Log("渲染纹理失败");
 		return false;
 	}
-}
-
-display_scroll_virtically::display_scroll_virtically(SDL_Texture* texture, SDL_Rect* rect) {
-	this->texture = texture;
-	this->rect1;
-}
-
-bool display_scroll_virtically::execute() {
-	//SDL_RenderTexture(RendererManager::getInstance().getRenderer(), texture, nullptr, rect);
-	return true;
 }
 
 display_at_position::display_at_position(SDL_Texture* texture, SDL_FRect* rect, double angle) {
@@ -48,16 +37,20 @@ bool display_at_position::execute() {
 }
 
 
-display_background::display_background(SDL_Texture* texture, double angle)
-{
-	this->texture = texture;
+display_background::display_background(shared_ptr<Context> context):BTNode(context){
 	this->camera = &Camera::getInstance();
-	this->angle = angle;
 }
 
 bool display_background::execute() {
-	auto showRect = camera->getViewport();
-	if (SDL_RenderTextureRotated(RendererManager::getInstance().getRenderer(), texture,showRect, camera->getWindowRect(), angle, nullptr, SDL_FLIP_NONE)) {
+	if (SDL_RenderTextureRotated(
+			RendererManager::getInstance().getRenderer(),//渲染器
+			getter()->getData<SDL_Texture>("texture").get(),//纹理
+			camera->getViewport(), &Resolution::getInstance().getWindowRect(),//相机视野
+			*getter()->getData<double>("angle"),//旋转角度
+			nullptr,//旋转中心
+			SDL_FLIP_NONE//是否翻转
+		)) 
+	{
 		return true;
 	}
 	else {

@@ -21,7 +21,12 @@ void RendererManager::cleanUP() {
 	}
 }
 
-
+void RendererManager::renderTexture(const std::string& catalog,const std::string& fileName) {
+	SDL_FRect rect = { 0,0,0,0 };
+	shared_ptr<SDL_Texture> texture = ResourceManager::getInstance().getTexture(catalog, fileName);
+	SDL_GetTextureSize(texture.get(), &rect.w, &rect.h);
+	SDL_RenderTexture(renderer, texture.get(), nullptr, &rect);
+}
 
 RendererManager::RendererManager(){
 	renderer = nullptr;

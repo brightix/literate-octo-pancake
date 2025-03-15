@@ -71,7 +71,7 @@ void InputManager::postUpdate() {
 
 
 bool InputManager::isKeyIdle(SDL_Scancode key) { return keys[key].state == IDLE; }
-bool InputManager::isKeyPressed(SDL_Scancode key) { return keys[key].state == PRESSED; }
+bool InputManager::isKeyPressed(SDL_Scancode key) { return keys[key].state == PRESSED || keys[key].state == HELD; }
 bool InputManager::isKeyHeld(SDL_Scancode key) { return keys[key].state == HELD; }
 bool InputManager::isKeyReleased(SDL_Scancode key) { return keys[key].state == RELEASED; }
 

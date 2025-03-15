@@ -4,44 +4,50 @@
 #include "../BaseObject.h"
 #include "PlayerState.h"
 #include "SpritePlayer.h"
+#include "../../../json.hpp"
 
-constexpr short player_attrs_count = 9;
+typedef struct PlayerAttrs {
+	float playerX;
+	float playerY;
+	float playerHP;
+	float player_move_speed;
 
-enum PlayerAttr {
-	player_x,
-	player_y,
-	player_health,
-	player_move_speed,
 
-	player_render_width,
-	player_render_height,
+	float player_render_width;
+	float player_render_height;
 
-	player_sprite_texture_width,
-	player_sprite_texture_height,
-	player_sprite_frame
-};
+	float player_sprite_frame_width;
+	float player_sprite_frame_height;
+	float player_sprite_frame;
+	bool player_orientation;
+}PlayerAttrs;
 
-class PlayerObject : public BaseObject{
+class PlayerObject : public BaseObject {
 public:
-	PlayerObject();
-	std::array<float,player_attrs_count>& getAttrs();
-	void setMove(float nx, float ny);
+	PlayerObject(const nlohmann::json& config);
+	bool setBehavior_tree(const nlohmann::json& config, std::function < std::shared_ptr<BTNode>(const nlohmann::json&, std::shared_ptr<Context> ) >nodeFactory);
 	void update();
 	void render();
 
+	PlayerAttrs& getAttrs();
+
 	ObjectState getBaseState() override;
 	PlayerState getState();
+
+	const std::string printState();
 	void setPlayerState(PlayerState playerState);
 	void removePlayerState(PlayerState playerState);
 
 	void resetState();
 
-	virtual void refreshAnimationTime();
-
 protected:
-	std::array<float, player_attrs_count> attrs;
+	PlayerState* playerState;
 	std::unique_ptr<ParalleNode> root;
 	std::unique_ptr<BTNode> renderNode;
-	PlayerState playerState;
 	std::unique_ptr<SpritePlayer> sprite;
+
+	std::shared_ptr<Context> context;
+	std::shared_ptr<PlayerAttrs> playerAttrs;
+	std::unordered_map<PlayerState, SpriteSheet> spriteSheet;
+	std::unordered_map<PlayerState, double> actionFrameDelay;
 };

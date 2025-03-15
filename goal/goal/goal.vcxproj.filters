@@ -129,6 +129,21 @@
     <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_physics\gravity_heavy.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="galaxy_fighter\BehaviorTree\InputBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\core\Context.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BTNode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\core\PhysicsEngine\QuadTree.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\utils\transformUtils.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="galaxy_fighter\core\inputManager.h">
@@ -248,5 +263,23 @@
     <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_physics\gravity_heavy.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="galaxy_fighter\BehaviorTree\InputBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\core\Context.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\core\PhysicsEngine\QuadTree.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\utils\transformUtils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config.json" />
   </ItemGroup>
 </Project>

@@ -1,29 +1,25 @@
 #pragma once
 #include "../../../BehaviorTree/paralle/ParalleNode.h"
 #include "../../camera/Camera.h"
+#include "../../../core/Context.h"
+
 
 class MapObject
 {
 public:
-	MapObject(SDL_Texture* texture);
+	MapObject(const nlohmann::json& config);
+
 	void update();
 
 	void render();
-
+	SDL_FRect* getWholeRect();
 	SDL_Texture* getTexture();
 protected:
-	SDL_Texture* texture;
+	shared_ptr<Context> context;
+	void setContext();
 	Camera* camera;
 	std::unique_ptr<ParalleNode> root;
-	unique_ptr<BTNode> renderNode;
+	shared_ptr<BTNode> renderNode;
 };
 
-
-
-
-class test_bk : public MapObject {
-public:
-	test_bk(SDL_Texture* texture);
-
-};
 

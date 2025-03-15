@@ -13,6 +13,8 @@ public:
 	bool init(SDL_Window* window);
 	void cleanUP();
 
+	void renderTexture(const std::string& catalog, const std::string& fileName);
+
 
 	RendererManager(const RendererManager&) = delete;
 	RendererManager& operator=(const RendererManager&) = delete;

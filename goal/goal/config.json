@@ -1,0 +1,110 @@
+{
+    "background": {
+        "texture": {
+            "catalog": "bk",
+            "fileName": "bk_4.png",
+            "angle": 0.0
+        },
+        "behavior_tree": {
+            "renderNode": {
+                "children": [
+                    {
+                        "name": "display_background",
+                        "type": "display_background"
+                    }
+                ]
+            }
+        }
+
+    },
+    "player_tofu": {
+        "playerAttrs": {
+            "playerX": 0,
+            "playerY": 0,
+            "playerHP": 5,
+            "player_move_speed": 5,
+            "player_render_width": 128,
+            "player_render_height": 128,
+            "player_sprite_frame_width": 192,
+            "player_sprite_frame_height": 192,
+            "player_sprite_frame": 1,
+            "player_orientation": true
+
+        },
+        "texture": {
+            "catalog": "player",
+            "fileName": "player_tofu.png",
+            "angle": 0.0
+        },
+        "actionFrameDelay": {
+            "Idle": 250,
+            "Jump": 41,
+            "Down": 41,
+            "Left": 41,
+            "Right": 82
+        },
+        "spriteSheet": {
+            "Idle": {
+                "startFrame": 0,
+                "endFrame": 4
+            },
+            "Jump": {
+                "startFrame": 16,
+                "endFrame": 47
+            },
+            "Left": {
+                "startFrame": 6,
+                "endFrame": 15
+            },
+            "Down": {
+                "startFrame": 50,
+                "endFrame": 77
+            },
+            "Right": {
+                "startFrame": 6,
+                "endFrame": 15
+            }
+        },
+        "behavior_tree": {
+            "root": {
+                "children": [
+                    {
+                        "name": "检测玩家输入",
+                        "type": "player_detect_input"
+                    },
+                    {
+                        "name": "跳跃",
+                        "type": "player_move_jump"
+                    },
+                    {
+                        "name": "下蹲",
+                        "type": "player_move_down"
+                    },
+                    {
+                        "name": "左移",
+                        "type": "player_move_left"
+                    },
+                    {
+                        "name": "右移",
+                        "type": "player_move_right"
+                    },
+                    {
+                        "name": "更新显示矩形坐标",
+                        "type": "refreshRect"
+                    }
+                ]
+            },
+            "renderNode": {
+                "children": [
+                    {
+                        "name": "玩家居中渲染",
+                        "type": "display_anime_at_center"
+                    }
+                ]
+            }
+        }
+    },
+    "world": {
+        "gravity": 1.0
+    }
+}

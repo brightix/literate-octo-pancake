@@ -16,7 +16,7 @@ constexpr int ENEMY_TYPE_CNT = 3;//敌机种类数量
 //基准帧数
 constexpr double BASE_FRAME_TIME = 1000/60;
 
-constexpr double globalSpeed = 0.3f;
+constexpr double globalSpeed = 1.0f;
 
 //日志打印时间
 constexpr double LOG_TIME_INTERVAL = 1000;

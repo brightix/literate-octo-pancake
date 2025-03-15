@@ -1,3 +1,4 @@
+#pragma once
 #include "pch.h"
 #include "../gameObject/gameObject.h"
 #include "../objects/camera/Camera.h"
@@ -14,7 +15,7 @@ private:
 
 
 	unique_ptr<MapObject> background;
-	unique_ptr<PlayerObject> player;
+	shared_ptr<PlayerObject> player;
 	//vector<unique_ptr<BTNode>> elements_dynamic;
 	Camera* camera;
 };

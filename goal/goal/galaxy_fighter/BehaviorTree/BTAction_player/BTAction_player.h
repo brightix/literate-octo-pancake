@@ -1,7 +1,7 @@
 #pragma once
 #include "../BTNode.h"
 #include "../../objects/playerObject/playerObject.h"
-
+#include "../InputBuffer.h"
 
 namespace BTAction_player {
     class BTAction_player :
@@ -49,9 +49,11 @@ namespace BTAction_player {
         SDL_FRect rect_show;
 
         SDL_FRect* windowRect;
+
+        bool* isTowardRight;
         double angle;
     public:
-        display_anime_at_center(SDL_Texture* texture, SDL_FRect& spriteFrameRect ,SDL_FRect* parentRect, double angle);
+        display_anime_at_center(SDL_Texture* texture, SDL_FRect& spriteFrameRect ,SDL_FRect* parentRect, double angle,bool* isTowardRight);
         bool execute();
 
     };
@@ -59,30 +61,75 @@ namespace BTAction_player {
     class player_move_image :
         public BTNode 
     {
-        PlayerObject& player;
         float limitWidth, limitHeight;
     public:
-        player_move_image(PlayerObject& player);
+        player_move_image(shared_ptr<Context> context);
         bool execute();
     };
 
-    class player_move_sprite :
-        public BTNode
-    {
-        PlayerObject& player;
-        float limitWidth, limitHeight;
+    class CheckComboNode : public BTNode {
+        vector<string> combo;
+        InputBuffer& inputBuffer;
     public:
-        player_move_sprite(PlayerObject& player);
+        CheckComboNode(const vector<string>& combo,InputBuffer& buf) : combo(combo),inputBuffer(buf){}
+        bool execute() override;
+    };
+
+    class player_detect_input :
+        public BTNode 
+    {
+    public:
+        player_detect_input(shared_ptr<Context> context);
         bool execute();
     };
 
-    class cal_sprite_rect :
+    class player_move_jump :
+        public BTNode 
+    {
+    public:
+        player_move_jump(shared_ptr<Context> context);
+        bool execute();
+    };
+
+    class player_move_down:
         public BTNode
     {
     public:
-        cal_sprite_rect();
+        player_move_down(shared_ptr<Context> context);
         bool execute();
     };
+
+    class player_move_left :
+        public BTNode
+    {
+    public:
+        player_move_left(shared_ptr<Context> context);
+        bool execute();
+    };
+
+    class player_move_right :
+        public BTNode
+    {
+    public:
+        player_move_right(shared_ptr<Context> context);
+        bool execute();
+    };
+
+    class refreshRect :
+        public BTNode
+    {
+    public:
+        refreshRect(shared_ptr<Context> context);
+        bool execute();
+    };
+
+    //class isPlayer :
+    //    public BTNode
+    //{
+    //public:
+    //    refreshRect(shared_ptr<Context> context);
+    //    bool execute();
+    //};
 }
 
 

@@ -1,6 +1,9 @@
 #pragma once
 #include "../BTNode.h"
 #include "../../objects/camera/Camera.h"
+#include "../../core/Context.h"
+
+
 namespace BTAction_image {
 	class BTAction_image : public BTNode
 	{
@@ -9,21 +12,9 @@ namespace BTAction_image {
 
 	class display_full : public BTNode {
 	private:
-		SDL_Texture* texture;
 		SDL_FRect rect;
 	public:
-		display_full(SDL_Texture* texture);//整个窗口显示
-		bool execute() override;
-	};
-
-	//垂直滚动图片
-	class display_scroll_virtically : public BTNode {
-	private:
-		SDL_Texture* texture;
-		SDL_Rect* rect1;
-		SDL_Rect* rect2;
-	public:
-		display_scroll_virtically(SDL_Texture* texture, SDL_Rect* rect);
+		display_full(shared_ptr<Context> context);//整个窗口显示
 		bool execute() override;
 	};
 
@@ -40,13 +31,10 @@ namespace BTAction_image {
 
 	class display_background: public BTNode {
 	public:
-		display_background(SDL_Texture* texture, double angle);
+		display_background(shared_ptr<Context> context);
 		bool execute();
 	private:
-		SDL_Texture* texture;
 		Camera* camera;
-		double angle;
-
 	};
 
 	//缩放
