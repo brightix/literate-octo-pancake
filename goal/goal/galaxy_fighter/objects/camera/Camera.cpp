@@ -2,7 +2,7 @@
 #include "Camera.h"
 
 
-Camera& Camera::getInstance() {
+Camera& Camera::Instance() {
 	static Camera instance;
 	return instance;
 }
@@ -10,7 +10,7 @@ Camera& Camera::getInstance() {
 Camera::Camera() {
 	this->owner = nullptr;
 
-	windowRect = Resolution::getInstance().getWindowRect();
+	windowRect = Resolution::Instance().getWindowRect();
 	viewport = windowRect;
 	world = &windowRect;
 }
@@ -33,16 +33,13 @@ std::pair<bool, bool>& Camera::ownerxyCrashedState() {
 }
 
 void Camera::update() {
-	if (owner->getBaseState() != ObjectState::Idle) {
-
-	}
-	SDL_FRect* rect = owner->getRect();
-	if (!rect) {
-		throw "相机持有者的hitbox为nullptr";
-	}
-		viewport.x = rect->x + rect->w / 2 - windowRect.w / 2;
-		viewport.y = rect->y + rect->h / 2 - windowRect.h / 2;
-		clampToWorldBounds();
+	SDL_FRect& rect = owner->getHitBox()->rect;
+	//if (!rect) {
+	//	throw "相机持有者的hitbox为nullptr";
+	//}
+	viewport.x = rect.x + rect.w / 2 - windowRect.w / 2;
+	viewport.y = rect.y + rect.h / 2 - windowRect.h / 2;
+	clampToWorldBounds();
 }
 void Camera::clampToWorldBounds() {
 	auto boundary_x = max(0.0f,world->w - viewport.w);
@@ -64,4 +61,13 @@ void Camera::clampToWorldBounds() {
 		viewport.y = boundary_y;
 		isxyCrashed.second = true;
 	}
+}
+
+bool Camera::isOnScreen(SDL_FRect& rect) {
+	return !(rect.x + rect.w < viewport.x || rect.x > viewport.x + viewport.w ||
+		rect.y + rect.h < viewport.y || rect.y > viewport.y + viewport.h);
+}
+
+SDL_FRect Camera::worldToScreen(SDL_FRect& rect) {
+	return { rect.x - viewport.x,rect.y - viewport.y,rect.w,rect.h };
 }

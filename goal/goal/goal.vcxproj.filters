@@ -108,25 +108,16 @@
     <ClCompile Include="galaxy_fighter\objects\camera\Camera.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="galaxy_fighter\objects\playerObject\Player_lion.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_player\BTAction_player.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="galaxy_fighter\objects\BaseObject.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="galaxy_fighter\objects\playerObject\Player_GreenTofu.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="galaxy_fighter\objects\playerObject\PlayerState.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="galaxy_fighter\objects\playerObject\SpritePlayer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_physics\gravity_heavy.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="galaxy_fighter\BehaviorTree\InputBuffer.cpp">
@@ -138,10 +129,49 @@
     <ClCompile Include="galaxy_fighter\BehaviorTree\BTNode.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="galaxy_fighter\core\PhysicsEngine\QuadTree.cpp">
+    <ClCompile Include="galaxy_fighter\utils\transformUtils.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="galaxy_fighter\utils\transformUtils.cpp">
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_player\move\MoveNode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\core\BlackBoard.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_player\Action.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_player\jump\JumpNode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_player\fall\FallNode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\core\physics\QuadTree.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\objects\environmentAssets\groundObject\GroundObject.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\objects\UI\UI.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\objects\UI\component.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\objects\UI\esc\Esc_button.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\objects\UI\UIManager\UIManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\objects\UI\esc\Esc_interface.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_player\display_at_position\display_at_position.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_player\Down\Down.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -242,25 +272,16 @@
     <ClInclude Include="galaxy_fighter\objects\camera\Camera.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="galaxy_fighter\objects\playerObject\Player_lion.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_player\BTAction_player.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="galaxy_fighter\objects\BaseObject.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="galaxy_fighter\objects\playerObject\Player_GreenTofu.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="galaxy_fighter\objects\playerObject\PlayerState.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="galaxy_fighter\objects\playerObject\SpritePlayer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_physics\gravity_heavy.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="galaxy_fighter\BehaviorTree\InputBuffer.h">
@@ -272,10 +293,49 @@
     <ClInclude Include="json.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="galaxy_fighter\core\PhysicsEngine\QuadTree.h">
+    <ClInclude Include="galaxy_fighter\utils\transformUtils.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="galaxy_fighter\utils\transformUtils.h">
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_player\move\MoveNode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\core\BlackBoard.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_player\Action.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_player\jump\JumpNode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_player\fall\FallNode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\core\physics\QuadTree.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\objects\environmentAssets\groundObject\GroundObject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\objects\UI\UI.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\objects\UI\component.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\objects\UI\esc\Esc_button.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\objects\UI\UIManager\UIManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\objects\UI\esc\Esc_interface.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_player\display_at_position\display_at_position.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_player\Down\Down.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

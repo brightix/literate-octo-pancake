@@ -20,7 +20,7 @@ struct MouseInfo {
 
 class InputManager {  
 public:
-	static InputManager& getInstance();
+	static InputManager& Instance();
 
 	bool update(const SDL_Event& e);
 	void postUpdate();
@@ -29,6 +29,7 @@ public:
 	//¼üÅÌ
 	bool isKeyIdle(SDL_Scancode key);
 	bool isKeyPressed(SDL_Scancode key);
+	bool isKeyPressedOnce(SDL_Scancode key);
 	bool isKeyHeld(SDL_Scancode key);
 	bool isKeyReleased(SDL_Scancode key);
 	
@@ -42,7 +43,7 @@ public:
 
 	void getMousexy(int& x, int& y);
 	bool isPointInRect(SDL_FRect& rect);
-	bool isCursorHovering(const SDL_FRect& rect);
+	bool isCursorHovering(SDL_FRect* rect);
 
 	void isSpacePressed();
 

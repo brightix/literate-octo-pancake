@@ -1,7 +1,7 @@
 #pragma once
 #include "BTNode.h"
 
-#define REGISTER_BEHAVIOR_NODE(nodeType) static bool nodeType##Registered = []() { BehaviorRegistry::getInstance().Register("scalingUp", []() -> std::unique_ptr<BTNode> { return std::make_unique<scalingUp>(); }); return true; }();
+#define REGISTER_BEHAVIOR_NODE(nodeType) static bool nodeType##Registered = []() { BehaviorRegistry::Instance().Register("scalingUp", []() -> std::unique_ptr<BTNode> { return std::make_unique<scalingUp>(); }); return true; }();
 
 
 using behaviorCreateFunc = std::function<std::unique_ptr<BTNode>()>;
@@ -10,7 +10,7 @@ class BehaviorRegistry
 {
 public:
 
-	static BehaviorRegistry& getInstance();
+	static BehaviorRegistry& Instance();
 
 	void Register(const std::string& name, behaviorCreateFunc func);
 

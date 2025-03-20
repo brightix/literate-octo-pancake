@@ -1,13 +1,13 @@
 #include "pch.h"
 #include "textRenderer.h"
 
-TextRenderer& TextRenderer::getInstance() {
+TextRenderer& TextRenderer::Instance() {
 	static TextRenderer instance;
 	return instance;
 }
 
 void TextRenderer::setFont(const string& type,int size) {
-	font = ResourceManager::getInstance().getFont(type, size);
+	font = ResourceManager::Instance().getFont(type, size);
 }
 
 void TextRenderer::setColor(Uint8 R, Uint8 G, Uint8 B, Uint8 A) {
@@ -27,7 +27,7 @@ SDL_Texture* TextRenderer::getTextTexture(const string& str) {
 }
 
 SDL_Texture* TextRenderer::getTextTexture(const string& str,const string& fontType,int size) {
-	font = ResourceManager::getInstance().getFont(fontType,size);
+	font = ResourceManager::Instance().getFont(fontType,size);
 	TTF_FontHasGlyph(font,1);
 	SDL_Surface* textSurface = TTF_RenderText_Blended(font, str.c_str(), 0, textColor);
 	if (!textSurface) {
@@ -49,7 +49,7 @@ TextRenderer::TextRenderer() {
 	TTF_Init();
 	setFont("pixel_10", 75);
 	setColor(255,255,255,255);
-	render = RendererManager::getInstance().getRenderer();
+	render = RendererManager::Instance().getRenderer();
 }
 
 TextRenderer::~TextRenderer()

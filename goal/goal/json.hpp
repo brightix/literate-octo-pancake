@@ -1511,13 +1511,13 @@ NLOHMANN_JSON_NAMESPACE_END
     #define JSON_HEDLEY_NO_RETURN
 #endif
 
-#if defined(JSON_HEDLEY_NO_ESCAPE)
-    #undef JSON_HEDLEY_NO_ESCAPE
+#if defined(JSON_HEDLEY_NO_Esc_buttonAPE)
+    #undef JSON_HEDLEY_NO_Esc_buttonAPE
 #endif
-#if JSON_HEDLEY_HAS_ATTRIBUTE(noescape)
-    #define JSON_HEDLEY_NO_ESCAPE __attribute__((__noescape__))
+#if JSON_HEDLEY_HAS_ATTRIBUTE(noEsc_buttonape)
+    #define JSON_HEDLEY_NO_Esc_buttonAPE __attribute__((__noEsc_buttonape__))
 #else
-    #define JSON_HEDLEY_NO_ESCAPE
+    #define JSON_HEDLEY_NO_Esc_buttonAPE
 #endif
 
 #if defined(JSON_HEDLEY_UNREACHABLE)
@@ -2936,7 +2936,7 @@ inline bool operator<(const value_t lhs, const value_t rhs) noexcept
 }  // namespace detail
 NLOHMANN_JSON_NAMESPACE_END
 
-// #include <nlohmann/detail/string_escape.hpp>
+// #include <nlohmann/detail/string_Esc_buttonape.hpp>
 //     __ _____ _____ _____
 //  __|  |   __|     |   | |  JSON for Modern C++
 // |  |  |__   |  |  | | | |  version 3.11.3
@@ -2980,14 +2980,14 @@ inline void replace_substring(StringType& s, const StringType& f,
 }
 
 /*!
- * @brief string escaping as described in RFC 6901 (Sect. 4)
- * @param[in] s string to escape
- * @return    escaped string
+ * @brief string Esc_buttonaping as dEsc_buttonribed in RFC 6901 (Sect. 4)
+ * @param[in] s string to Esc_buttonape
+ * @return    Esc_buttonaped string
  *
- * Note the order of escaping "~" to "~0" and "/" to "~1" is important.
+ * Note the order of Esc_buttonaping "~" to "~0" and "/" to "~1" is important.
  */
 template<typename StringType>
-inline StringType escape(StringType s)
+inline StringType Esc_buttonape(StringType s)
 {
     replace_substring(s, StringType{"~"}, StringType{"~0"});
     replace_substring(s, StringType{"/"}, StringType{"~1"});
@@ -2995,14 +2995,14 @@ inline StringType escape(StringType s)
 }
 
 /*!
- * @brief string unescaping as described in RFC 6901 (Sect. 4)
- * @param[in] s string to unescape
- * @return    unescaped string
+ * @brief string unEsc_buttonaping as dEsc_buttonribed in RFC 6901 (Sect. 4)
+ * @param[in] s string to unEsc_buttonape
+ * @return    unEsc_buttonaped string
  *
- * Note the order of escaping "~1" to "/" and "~0" to "~" is important.
+ * Note the order of Esc_buttonaping "~1" to "/" and "~0" to "~" is important.
  */
 template<typename StringType>
-static void unescape(StringType& s)
+static void unEsc_buttonape(StringType& s)
 {
     replace_substring(s, StringType{"~1"}, StringType{"/"});
     replace_substring(s, StringType{"~0"}, StringType{"~"});
@@ -4450,7 +4450,7 @@ class exception : public std::exception
         auto str = std::accumulate(tokens.rbegin(), tokens.rend(), std::string{},
                                    [](const std::string & a, const std::string & b)
         {
-            return concat(a, '/', detail::escape(b));
+            return concat(a, '/', detail::Esc_buttonape(b));
         });
         return concat('(', str, ") ");
 #else
@@ -6660,7 +6660,7 @@ NLOHMANN_JSON_NAMESPACE_BEGIN
 /*!
 @brief SAX interface
 
-This class describes the SAX interface used by @ref nlohmann::json::sax_parse.
+This class dEsc_buttonribes the SAX interface used by @ref nlohmann::json::sax_parse.
 Each function is called in different situations while the input is parsed. The
 boolean return value informs the parser whether to continue processing the
 input.
@@ -6765,7 +6765,7 @@ struct json_sax
     @brief a parse error occurred
     @param[in] position    the position in the input where the error occurs
     @param[in] last_token  the last read token
-    @param[in] ex          an exception object describing the error
+    @param[in] ex          an exception object dEsc_buttonribing the error
     @return whether parsing should proceed (must return false)
     */
     virtual bool parse_error(std::size_t position,
@@ -7612,7 +7612,7 @@ class lexer : public lexer_base<BasicJsonType>
     @brief scan a string literal
 
     This function scans a string according to Sect. 7 of RFC 8259. While
-    scanning, bytes are escaped and copied into buffer token_buffer. Then the
+    scanning, bytes are Esc_buttonaped and copied into buffer token_buffer. Then the
     function returns successfully, token_buffer is *not* null-terminated (as it
     may contain \0 bytes), and token_buffer.size() is the number of bytes in the
     string.
@@ -7621,7 +7621,7 @@ class lexer : public lexer_base<BasicJsonType>
             token_type::parse_error otherwise
 
     @note In case of errors, variable error_message contains a textual
-          description.
+          dEsc_buttonription.
     */
     token_type scan_string()
     {
@@ -7649,7 +7649,7 @@ class lexer : public lexer_base<BasicJsonType>
                     return token_type::value_string;
                 }
 
-                // escapes
+                // Esc_buttonapes
                 case '\\':
                 {
                     switch (get())
@@ -7687,7 +7687,7 @@ class lexer : public lexer_base<BasicJsonType>
                             add('\t');
                             break;
 
-                        // unicode escapes
+                        // unicode Esc_buttonapes
                         case 'u':
                         {
                             const int codepoint1 = get_codepoint();
@@ -7782,7 +7782,7 @@ class lexer : public lexer_base<BasicJsonType>
                             break;
                         }
 
-                        // other characters after escape
+                        // other characters after Esc_buttonape
                         default:
                             error_message = "invalid string: forbidden character after backslash";
                             return token_type::parse_error;
@@ -7794,193 +7794,193 @@ class lexer : public lexer_base<BasicJsonType>
                 // invalid control characters
                 case 0x00:
                 {
-                    error_message = "invalid string: control character U+0000 (NUL) must be escaped to \\u0000";
+                    error_message = "invalid string: control character U+0000 (NUL) must be Esc_buttonaped to \\u0000";
                     return token_type::parse_error;
                 }
 
                 case 0x01:
                 {
-                    error_message = "invalid string: control character U+0001 (SOH) must be escaped to \\u0001";
+                    error_message = "invalid string: control character U+0001 (SOH) must be Esc_buttonaped to \\u0001";
                     return token_type::parse_error;
                 }
 
                 case 0x02:
                 {
-                    error_message = "invalid string: control character U+0002 (STX) must be escaped to \\u0002";
+                    error_message = "invalid string: control character U+0002 (STX) must be Esc_buttonaped to \\u0002";
                     return token_type::parse_error;
                 }
 
                 case 0x03:
                 {
-                    error_message = "invalid string: control character U+0003 (ETX) must be escaped to \\u0003";
+                    error_message = "invalid string: control character U+0003 (ETX) must be Esc_buttonaped to \\u0003";
                     return token_type::parse_error;
                 }
 
                 case 0x04:
                 {
-                    error_message = "invalid string: control character U+0004 (EOT) must be escaped to \\u0004";
+                    error_message = "invalid string: control character U+0004 (EOT) must be Esc_buttonaped to \\u0004";
                     return token_type::parse_error;
                 }
 
                 case 0x05:
                 {
-                    error_message = "invalid string: control character U+0005 (ENQ) must be escaped to \\u0005";
+                    error_message = "invalid string: control character U+0005 (ENQ) must be Esc_buttonaped to \\u0005";
                     return token_type::parse_error;
                 }
 
                 case 0x06:
                 {
-                    error_message = "invalid string: control character U+0006 (ACK) must be escaped to \\u0006";
+                    error_message = "invalid string: control character U+0006 (ACK) must be Esc_buttonaped to \\u0006";
                     return token_type::parse_error;
                 }
 
                 case 0x07:
                 {
-                    error_message = "invalid string: control character U+0007 (BEL) must be escaped to \\u0007";
+                    error_message = "invalid string: control character U+0007 (BEL) must be Esc_buttonaped to \\u0007";
                     return token_type::parse_error;
                 }
 
                 case 0x08:
                 {
-                    error_message = "invalid string: control character U+0008 (BS) must be escaped to \\u0008 or \\b";
+                    error_message = "invalid string: control character U+0008 (BS) must be Esc_buttonaped to \\u0008 or \\b";
                     return token_type::parse_error;
                 }
 
                 case 0x09:
                 {
-                    error_message = "invalid string: control character U+0009 (HT) must be escaped to \\u0009 or \\t";
+                    error_message = "invalid string: control character U+0009 (HT) must be Esc_buttonaped to \\u0009 or \\t";
                     return token_type::parse_error;
                 }
 
                 case 0x0A:
                 {
-                    error_message = "invalid string: control character U+000A (LF) must be escaped to \\u000A or \\n";
+                    error_message = "invalid string: control character U+000A (LF) must be Esc_buttonaped to \\u000A or \\n";
                     return token_type::parse_error;
                 }
 
                 case 0x0B:
                 {
-                    error_message = "invalid string: control character U+000B (VT) must be escaped to \\u000B";
+                    error_message = "invalid string: control character U+000B (VT) must be Esc_buttonaped to \\u000B";
                     return token_type::parse_error;
                 }
 
                 case 0x0C:
                 {
-                    error_message = "invalid string: control character U+000C (FF) must be escaped to \\u000C or \\f";
+                    error_message = "invalid string: control character U+000C (FF) must be Esc_buttonaped to \\u000C or \\f";
                     return token_type::parse_error;
                 }
 
                 case 0x0D:
                 {
-                    error_message = "invalid string: control character U+000D (CR) must be escaped to \\u000D or \\r";
+                    error_message = "invalid string: control character U+000D (CR) must be Esc_buttonaped to \\u000D or \\r";
                     return token_type::parse_error;
                 }
 
                 case 0x0E:
                 {
-                    error_message = "invalid string: control character U+000E (SO) must be escaped to \\u000E";
+                    error_message = "invalid string: control character U+000E (SO) must be Esc_buttonaped to \\u000E";
                     return token_type::parse_error;
                 }
 
                 case 0x0F:
                 {
-                    error_message = "invalid string: control character U+000F (SI) must be escaped to \\u000F";
+                    error_message = "invalid string: control character U+000F (SI) must be Esc_buttonaped to \\u000F";
                     return token_type::parse_error;
                 }
 
                 case 0x10:
                 {
-                    error_message = "invalid string: control character U+0010 (DLE) must be escaped to \\u0010";
+                    error_message = "invalid string: control character U+0010 (DLE) must be Esc_buttonaped to \\u0010";
                     return token_type::parse_error;
                 }
 
                 case 0x11:
                 {
-                    error_message = "invalid string: control character U+0011 (DC1) must be escaped to \\u0011";
+                    error_message = "invalid string: control character U+0011 (DC1) must be Esc_buttonaped to \\u0011";
                     return token_type::parse_error;
                 }
 
                 case 0x12:
                 {
-                    error_message = "invalid string: control character U+0012 (DC2) must be escaped to \\u0012";
+                    error_message = "invalid string: control character U+0012 (DC2) must be Esc_buttonaped to \\u0012";
                     return token_type::parse_error;
                 }
 
                 case 0x13:
                 {
-                    error_message = "invalid string: control character U+0013 (DC3) must be escaped to \\u0013";
+                    error_message = "invalid string: control character U+0013 (DC3) must be Esc_buttonaped to \\u0013";
                     return token_type::parse_error;
                 }
 
                 case 0x14:
                 {
-                    error_message = "invalid string: control character U+0014 (DC4) must be escaped to \\u0014";
+                    error_message = "invalid string: control character U+0014 (DC4) must be Esc_buttonaped to \\u0014";
                     return token_type::parse_error;
                 }
 
                 case 0x15:
                 {
-                    error_message = "invalid string: control character U+0015 (NAK) must be escaped to \\u0015";
+                    error_message = "invalid string: control character U+0015 (NAK) must be Esc_buttonaped to \\u0015";
                     return token_type::parse_error;
                 }
 
                 case 0x16:
                 {
-                    error_message = "invalid string: control character U+0016 (SYN) must be escaped to \\u0016";
+                    error_message = "invalid string: control character U+0016 (SYN) must be Esc_buttonaped to \\u0016";
                     return token_type::parse_error;
                 }
 
                 case 0x17:
                 {
-                    error_message = "invalid string: control character U+0017 (ETB) must be escaped to \\u0017";
+                    error_message = "invalid string: control character U+0017 (ETB) must be Esc_buttonaped to \\u0017";
                     return token_type::parse_error;
                 }
 
                 case 0x18:
                 {
-                    error_message = "invalid string: control character U+0018 (CAN) must be escaped to \\u0018";
+                    error_message = "invalid string: control character U+0018 (CAN) must be Esc_buttonaped to \\u0018";
                     return token_type::parse_error;
                 }
 
                 case 0x19:
                 {
-                    error_message = "invalid string: control character U+0019 (EM) must be escaped to \\u0019";
+                    error_message = "invalid string: control character U+0019 (EM) must be Esc_buttonaped to \\u0019";
                     return token_type::parse_error;
                 }
 
                 case 0x1A:
                 {
-                    error_message = "invalid string: control character U+001A (SUB) must be escaped to \\u001A";
+                    error_message = "invalid string: control character U+001A (SUB) must be Esc_buttonaped to \\u001A";
                     return token_type::parse_error;
                 }
 
                 case 0x1B:
                 {
-                    error_message = "invalid string: control character U+001B (ESC) must be escaped to \\u001B";
+                    error_message = "invalid string: control character U+001B (Esc_button) must be Esc_buttonaped to \\u001B";
                     return token_type::parse_error;
                 }
 
                 case 0x1C:
                 {
-                    error_message = "invalid string: control character U+001C (FS) must be escaped to \\u001C";
+                    error_message = "invalid string: control character U+001C (FS) must be Esc_buttonaped to \\u001C";
                     return token_type::parse_error;
                 }
 
                 case 0x1D:
                 {
-                    error_message = "invalid string: control character U+001D (GS) must be escaped to \\u001D";
+                    error_message = "invalid string: control character U+001D (GS) must be Esc_buttonaped to \\u001D";
                     return token_type::parse_error;
                 }
 
                 case 0x1E:
                 {
-                    error_message = "invalid string: control character U+001E (RS) must be escaped to \\u001E";
+                    error_message = "invalid string: control character U+001E (RS) must be Esc_buttonaped to \\u001E";
                     return token_type::parse_error;
                 }
 
                 case 0x1F:
                 {
-                    error_message = "invalid string: control character U+001F (US) must be escaped to \\u001F";
+                    error_message = "invalid string: control character U+001F (US) must be Esc_buttonaped to \\u001F";
                     return token_type::parse_error;
                 }
 
@@ -8304,7 +8304,7 @@ class lexer : public lexer_base<BasicJsonType>
     This function scans a string according to Sect. 6 of RFC 8259.
 
     The function is realized with a deterministic finite state machine derived
-    from the grammar described in RFC 8259. Starting in state "init", the
+    from the grammar dEsc_buttonribed in RFC 8259. Starting in state "init", the
     input is read and used to determined the next state. Only state "done"
     accepts the number. State "error" is a trap state to model errors. In the
     table below, "anything" means any character but the ones listed before.
@@ -8816,16 +8816,16 @@ scan_number_done:
 
     /// return the last read token (for errors only).  Will never contain EOF
     /// (an arbitrary value that is not a valid char value, often -1), because
-    /// 255 may legitimately occur.  May contain NUL, which should be escaped.
+    /// 255 may legitimately occur.  May contain NUL, which should be Esc_buttonaped.
     std::string get_token_string() const
     {
-        // escape control characters
+        // Esc_buttonape control characters
         std::string result;
         for (const auto c : token_string)
         {
             if (static_cast<unsigned char>(c) <= '\x1F')
             {
-                // escape control characters
+                // Esc_buttonape control characters
                 std::array<char, 9> cs{{}};
                 static_cast<void>((std::snprintf)(cs.data(), cs.size(), "<U+%.4X>", static_cast<unsigned char>(c))); // NOLINT(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
                 result += cs.data();
@@ -8988,7 +8988,7 @@ scan_number_done:
     /// buffer for variable-length tokens (numbers, strings)
     string_t token_buffer {};
 
-    /// a description of occurred lexer errors
+    /// a dEsc_buttonription of occurred lexer errors
     const char* error_message = "";
 
     // number values
@@ -12222,7 +12222,7 @@ using parser_callback_t =
 /*!
 @brief syntax analysis
 
-This class implements a recursive descent parser.
+This class implements a recursive dEsc_buttonent parser.
 */
 template<typename BasicJsonType, typename InputAdapterType>
 class parser
@@ -13827,7 +13827,7 @@ NLOHMANN_JSON_NAMESPACE_END
 
 // #include <nlohmann/detail/string_concat.hpp>
 
-// #include <nlohmann/detail/string_escape.hpp>
+// #include <nlohmann/detail/string_Esc_buttonape.hpp>
 
 // #include <nlohmann/detail/value_t.hpp>
 
@@ -13876,7 +13876,7 @@ class json_pointer
                                string_t{},
                                [](const string_t& a, const string_t& b)
         {
-            return detail::concat(a, '/', detail::escape(b));
+            return detail::concat(a, '/', detail::Esc_buttonape(b));
         });
     }
 
@@ -13908,7 +13908,7 @@ class json_pointer
         return *this;
     }
 
-    /// @brief append an unescaped reference token at the end of this JSON pointer
+    /// @brief append an unEsc_buttonaped reference token at the end of this JSON pointer
     /// @sa https://json.nlohmann.me/api/json_pointer/operator_slasheq/
     json_pointer& operator/=(string_t token)
     {
@@ -13931,7 +13931,7 @@ class json_pointer
         return json_pointer(lhs) /= rhs;
     }
 
-    /// @brief create a new JSON pointer by appending the unescaped token at the end of the JSON pointer
+    /// @brief create a new JSON pointer by appending the unEsc_buttonaped token at the end of the JSON pointer
     /// @sa https://json.nlohmann.me/api/json_pointer/operator_slash/
     friend json_pointer operator/(const json_pointer& lhs, string_t token) // NOLINT(performance-unnecessary-value-param)
     {
@@ -13983,14 +13983,14 @@ class json_pointer
         return reference_tokens.back();
     }
 
-    /// @brief append an unescaped token at the end of the reference pointer
+    /// @brief append an unEsc_buttonaped token at the end of the reference pointer
     /// @sa https://json.nlohmann.me/api/json_pointer/push_back/
     void push_back(const string_t& token)
     {
         reference_tokens.push_back(token);
     }
 
-    /// @brief append an unescaped token at the end of the reference pointer
+    /// @brief append an unEsc_buttonaped token at the end of the reference pointer
     /// @sa https://json.nlohmann.me/api/json_pointer/push_back/
     void push_back(string_t&& token)
     {
@@ -14504,7 +14504,7 @@ class json_pointer
             // (start) and the last slash (slash).
             auto reference_token = reference_string.substr(start, slash - start);
 
-            // check reference tokens are properly escaped
+            // check reference tokens are properly Esc_buttonaped
             for (std::size_t pos = reference_token.find_first_of('~');
                     pos != string_t::npos;
                     pos = reference_token.find_first_of('~', pos + 1))
@@ -14516,12 +14516,12 @@ class json_pointer
                                          (reference_token[pos + 1] != '0' &&
                                           reference_token[pos + 1] != '1')))
                 {
-                    JSON_THROW(detail::parse_error::create(108, 0, "escape character '~' must be followed with '0' or '1'", nullptr));
+                    JSON_THROW(detail::parse_error::create(108, 0, "Esc_buttonape character '~' must be followed with '0' or '1'", nullptr));
                 }
             }
 
             // finally, store the reference token
-            detail::unescape(reference_token);
+            detail::unEsc_buttonape(reference_token);
             result.push_back(reference_token);
         }
 
@@ -14574,7 +14574,7 @@ class json_pointer
                     // iterate object and use keys as reference string
                     for (const auto& element : *value.m_data.m_value.object)
                     {
-                        flatten(detail::concat(reference_string, '/', detail::escape(element.first)), element.second, result);
+                        flatten(detail::concat(reference_string, '/', detail::Esc_buttonape(element.first)), element.second, result);
                     }
                 }
                 break;
@@ -14878,7 +14878,7 @@ NLOHMANN_JSON_NAMESPACE_END
 
 // #include <nlohmann/detail/string_concat.hpp>
 
-// #include <nlohmann/detail/string_escape.hpp>
+// #include <nlohmann/detail/string_Esc_buttonape.hpp>
 
 // #include <nlohmann/detail/meta/cpp_future.hpp>
 
@@ -16939,7 +16939,7 @@ http://florian.loitsch.com/publications (bench.tar.gz).
 
 The code is distributed under the MIT license, Copyright (c) 2009 Florian Loitsch.
 
-For a detailed description of the algorithm see:
+For a detailed dEsc_buttonription of the algorithm see:
 
 [1] Loitsch, "Printing Floating-Point Numbers Quickly and Accurately with
     Integers", Proceedings of the ACM SIGPLAN 2010 Conference on Programming
@@ -18098,7 +18098,7 @@ class serializer
     additional parameter. In case of arrays and objects, the function is
     called recursively.
 
-    - strings and object keys are escaped using `escape_string()`
+    - strings and object keys are Esc_buttonaped using `Esc_buttonape_string()`
     - integer numbers are converted implicitly via `operator<<`
     - floating-point numbers are converted to a string using `"%g"` format
     - binary values are serialized as objects containing the subtype and the
@@ -18107,7 +18107,7 @@ class serializer
     @param[in] val               value to serialize
     @param[in] pretty_print      whether the output shall be pretty-printed
     @param[in] ensure_ascii If @a ensure_ascii is true, all non-ASCII characters
-    in the output are escaped with `\uXXXX` sequences, and the result consists
+    in the output are Esc_buttonaped with `\uXXXX` sequences, and the result consists
     of ASCII characters only.
     @param[in] indent_step       the indent level
     @param[in] current_indent    the current indent level (only used internally)
@@ -18145,7 +18145,7 @@ class serializer
                     {
                         o->write_characters(indent_string.c_str(), new_indent);
                         o->write_character('\"');
-                        dump_escaped(i->first, ensure_ascii);
+                        dump_Esc_buttonaped(i->first, ensure_ascii);
                         o->write_characters("\": ", 3);
                         dump(i->second, true, ensure_ascii, indent_step, new_indent);
                         o->write_characters(",\n", 2);
@@ -18156,7 +18156,7 @@ class serializer
                     JSON_ASSERT(std::next(i) == val.m_data.m_value.object->cend());
                     o->write_characters(indent_string.c_str(), new_indent);
                     o->write_character('\"');
-                    dump_escaped(i->first, ensure_ascii);
+                    dump_Esc_buttonaped(i->first, ensure_ascii);
                     o->write_characters("\": ", 3);
                     dump(i->second, true, ensure_ascii, indent_step, new_indent);
 
@@ -18173,7 +18173,7 @@ class serializer
                     for (std::size_t cnt = 0; cnt < val.m_data.m_value.object->size() - 1; ++cnt, ++i)
                     {
                         o->write_character('\"');
-                        dump_escaped(i->first, ensure_ascii);
+                        dump_Esc_buttonaped(i->first, ensure_ascii);
                         o->write_characters("\":", 2);
                         dump(i->second, false, ensure_ascii, indent_step, current_indent);
                         o->write_character(',');
@@ -18183,7 +18183,7 @@ class serializer
                     JSON_ASSERT(i != val.m_data.m_value.object->cend());
                     JSON_ASSERT(std::next(i) == val.m_data.m_value.object->cend());
                     o->write_character('\"');
-                    dump_escaped(i->first, ensure_ascii);
+                    dump_Esc_buttonaped(i->first, ensure_ascii);
                     o->write_characters("\":", 2);
                     dump(i->second, false, ensure_ascii, indent_step, current_indent);
 
@@ -18255,7 +18255,7 @@ class serializer
             case value_t::string:
             {
                 o->write_character('\"');
-                dump_escaped(*val.m_data.m_value.string, ensure_ascii);
+                dump_Esc_buttonaped(*val.m_data.m_value.string, ensure_ascii);
                 o->write_character('\"');
                 return;
             }
@@ -18383,20 +18383,20 @@ class serializer
 
   JSON_PRIVATE_UNLESS_TESTED:
     /*!
-    @brief dump escaped string
+    @brief dump Esc_buttonaped string
 
-    Escape a string by replacing certain special characters by a sequence of an
-    escape character (backslash) and another character and other control
+    Esc_buttonape a string by replacing certain special characters by a sequence of an
+    Esc_buttonape character (backslash) and another character and other control
     characters by a sequence of "\u" followed by a four-digit hex
-    representation. The escaped string is written to output stream @a o.
+    representation. The Esc_buttonaped string is written to output stream @a o.
 
-    @param[in] s  the string to escape
-    @param[in] ensure_ascii  whether to escape non-ASCII characters with
+    @param[in] s  the string to Esc_buttonape
+    @param[in] ensure_ascii  whether to Esc_buttonape non-ASCII characters with
                              \uXXXX sequences
 
     @complexity Linear in the length of string @a s.
     */
-    void dump_escaped(const string_t& s, const bool ensure_ascii)
+    void dump_Esc_buttonaped(const string_t& s, const bool ensure_ascii)
     {
         std::uint32_t codepoint{};
         std::uint8_t state = UTF8_ACCEPT;
@@ -18467,7 +18467,7 @@ class serializer
 
                         default:
                         {
-                            // escape control characters (0x00..0x1F) or, if
+                            // Esc_buttonape control characters (0x00..0x1F) or, if
                             // ensure_ascii parameter is used, non-ASCII characters
                             if ((codepoint <= 0x1F) || (ensure_ascii && (codepoint >= 0x7F)))
                             {
@@ -18585,7 +18585,7 @@ class serializer
                 {
                     if (!ensure_ascii)
                     {
-                        // code point will not be escaped - copy byte to buffer
+                        // code point will not be Esc_buttonaped - copy byte to buffer
                         string_buffer[bytes++] = s[i];
                     }
                     ++undumped_chars;
@@ -18772,7 +18772,7 @@ class serializer
         // so we later avoid reversing the result
         buffer_ptr += n_chars;
 
-        // Fast int2ascii implementation inspired by "Fastware" talk by Andrei Alexandrescu
+        // Fast int2ascii implementation inspired by "Fastware" talk by Andrei AlexandrEsc_buttonu
         // See: https://www.youtube.com/watch?v=o4-CwDo2zpg
         while (abs_value >= 100)
         {
@@ -20122,7 +20122,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 
     /// @brief create a null object
     /// @sa https://json.nlohmann.me/api/basic_json/basic_json/
-    basic_json(std::nullptr_t = nullptr) noexcept // NOLINT(bugprone-exception-escape)
+    basic_json(std::nullptr_t = nullptr) noexcept // NOLINT(bugprone-exception-Esc_buttonape)
         : basic_json(value_t::null)
     {
         assert_invariant();
@@ -20134,7 +20134,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                typename U = detail::uncvref_t<CompatibleType>,
                detail::enable_if_t <
                    !detail::is_basic_json<U>::value && detail::is_compatible_type<basic_json_t, U>::value, int > = 0 >
-    basic_json(CompatibleType && val) noexcept(noexcept( // NOLINT(bugprone-forwarding-reference-overload,bugprone-exception-escape)
+    basic_json(CompatibleType && val) noexcept(noexcept( // NOLINT(bugprone-forwarding-reference-overload,bugprone-exception-Esc_buttonape)
                 JSONSerializer<U>::to_json(std::declval<basic_json_t&>(),
                                            std::forward<CompatibleType>(val))))
     {
@@ -20248,7 +20248,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
         else
         {
-            // the initializer list describes an array -> create array
+            // the initializer list dEsc_buttonribes an array -> create array
             m_data.m_type = value_t::array;
             m_data.m_value.array = create<array_t>(init.begin(), init.end());
         }
@@ -22790,7 +22790,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 
     /// @brief exchanges the values
     /// @sa https://json.nlohmann.me/api/basic_json/swap/
-    void swap(array_t& other) // NOLINT(bugprone-exception-escape,cppcoreguidelines-noexcept-swap,performance-noexcept-swap)
+    void swap(array_t& other) // NOLINT(bugprone-exception-Esc_buttonape,cppcoreguidelines-noexcept-swap,performance-noexcept-swap)
     {
         // swap only works for arrays
         if (JSON_HEDLEY_LIKELY(is_array()))
@@ -22806,7 +22806,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 
     /// @brief exchanges the values
     /// @sa https://json.nlohmann.me/api/basic_json/swap/
-    void swap(object_t& other) // NOLINT(bugprone-exception-escape,cppcoreguidelines-noexcept-swap,performance-noexcept-swap)
+    void swap(object_t& other) // NOLINT(bugprone-exception-Esc_buttonape,cppcoreguidelines-noexcept-swap,performance-noexcept-swap)
     {
         // swap only works for objects
         if (JSON_HEDLEY_LIKELY(is_object()))
@@ -22822,7 +22822,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 
     /// @brief exchanges the values
     /// @sa https://json.nlohmann.me/api/basic_json/swap/
-    void swap(string_t& other) // NOLINT(bugprone-exception-escape,cppcoreguidelines-noexcept-swap,performance-noexcept-swap)
+    void swap(string_t& other) // NOLINT(bugprone-exception-Esc_buttonape,cppcoreguidelines-noexcept-swap,performance-noexcept-swap)
     {
         // swap only works for strings
         if (JSON_HEDLEY_LIKELY(is_string()))
@@ -22838,7 +22838,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 
     /// @brief exchanges the values
     /// @sa https://json.nlohmann.me/api/basic_json/swap/
-    void swap(binary_t& other) // NOLINT(bugprone-exception-escape,cppcoreguidelines-noexcept-swap,performance-noexcept-swap)
+    void swap(binary_t& other) // NOLINT(bugprone-exception-Esc_buttonape,cppcoreguidelines-noexcept-swap,performance-noexcept-swap)
     {
         // swap only works for strings
         if (JSON_HEDLEY_LIKELY(is_binary()))
@@ -22854,7 +22854,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 
     /// @brief exchanges the values
     /// @sa https://json.nlohmann.me/api/basic_json/swap/
-    void swap(typename binary_t::container_type& other) // NOLINT(bugprone-exception-escape)
+    void swap(typename binary_t::container_type& other) // NOLINT(bugprone-exception-Esc_buttonape)
     {
         // swap only works for strings
         if (JSON_HEDLEY_LIKELY(is_binary()))
@@ -24352,8 +24352,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                 // first pass: traverse this object's elements
                 for (auto it = source.cbegin(); it != source.cend(); ++it)
                 {
-                    // escape the key name to be used in a JSON patch
-                    const auto path_key = detail::concat(path, '/', detail::escape(it.key()));
+                    // Esc_buttonape the key name to be used in a JSON patch
+                    const auto path_key = detail::concat(path, '/', detail::Esc_buttonape(it.key()));
 
                     if (target.find(it.key()) != target.end())
                     {
@@ -24377,7 +24377,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                     if (source.find(it.key()) == source.end())
                     {
                         // found a key that is not in this -> add it
-                        const auto path_key = detail::concat(path, '/', detail::escape(it.key()));
+                        const auto path_key = detail::concat(path, '/', detail::Esc_buttonape(it.key()));
                         result.push_back(
                         {
                             {"op", "add"}, {"path", path_key},
@@ -24703,7 +24703,7 @@ inline void swap(nlohmann::NLOHMANN_BASIC_JSON_TPL& j1, nlohmann::NLOHMANN_BASIC
 #undef JSON_HEDLEY_MSVC_VERSION_CHECK
 #undef JSON_HEDLEY_NEVER_INLINE
 #undef JSON_HEDLEY_NON_NULL
-#undef JSON_HEDLEY_NO_ESCAPE
+#undef JSON_HEDLEY_NO_Esc_buttonAPE
 #undef JSON_HEDLEY_NO_RETURN
 #undef JSON_HEDLEY_NO_THROW
 #undef JSON_HEDLEY_NULL

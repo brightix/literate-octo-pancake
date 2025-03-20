@@ -10,14 +10,14 @@ Menu::Menu() {
 }
 
 void Menu::init() {
-	Resolution::getInstance();
-	RendererManager::getInstance();
-	ResourceManager::getInstance();
+	Resolution::Instance();
+	RendererManager::Instance();
+	ResourceManager::Instance();
 }
 
 void Menu::loadResource() {
-	ResourceManager& resource = ResourceManager::getInstance();
-	TextRenderer& textRenderer = TextRenderer::getInstance();
+	ResourceManager& resource = ResourceManager::Instance();
+	TextRenderer& textRenderer = TextRenderer::Instance();
 
 
 	//bk = move(make_unique<MenuBackground>(resource.get_bk()[0].get()));
@@ -33,7 +33,7 @@ void Menu::destroy() {
 }
 
 void Menu::update() {
-	//TextRenderer& textRenderer = TextRenderer::getInstance();
+	//TextRenderer& textRenderer = TextRenderer::Instance();
 	//sort(logoList.begin(), logoList.end(), [&](auto& a,auto& b) {
 	//	return a->getRect().w < b->getRect().w ;
 	//	});
@@ -47,14 +47,14 @@ void Menu::update() {
 }
 void Menu::welcome() {
 	init();
-	Timer& timer = Timer::getInstance();
-	InputManager& input = InputManager::getInstance();
-	GameWorld& gw = GameWorld::getInstance();
-	Resolution& resolution = Resolution::getInstance();
-	TextRenderer& textRenderer = TextRenderer::getInstance();
-	ResourceManager& resource = ResourceManager::getInstance();//资源管理
+	Timer& timer = Timer::Instance();
+	InputManager& input = InputManager::Instance();
+	GameWorld& gw = GameWorld::Instance();
+	Resolution& resolution = Resolution::Instance();
+	TextRenderer& textRenderer = TextRenderer::Instance();
+	ResourceManager& resource = ResourceManager::Instance();//资源管理
 
-	SDL_Renderer* renderer = RendererManager::getInstance().getRenderer();
+	SDL_Renderer* renderer = RendererManager::Instance().getRenderer();
 
 	loadResource();
 	while (running) {
@@ -107,7 +107,7 @@ void Menu::welcome() {
 };
 
 game_name Menu::selectGame() {
-	InputManager& input = InputManager::getInstance();
+	InputManager& input = InputManager::Instance();
 	for (int i = 0;i < logoList.size();i++) {
 		if (input.isPointInRect(logoList[i]->getRect())) {
 			destroy();

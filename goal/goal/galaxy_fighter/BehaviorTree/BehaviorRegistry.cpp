@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "BehaviorRegistry.h"
 
-BehaviorRegistry& BehaviorRegistry::getInstance() {
+BehaviorRegistry& BehaviorRegistry::Instance() {
 	static BehaviorRegistry instance;
 	return instance;
 }

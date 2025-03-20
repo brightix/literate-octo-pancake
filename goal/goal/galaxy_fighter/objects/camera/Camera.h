@@ -2,7 +2,7 @@
 class Camera
 {
 public:
-	static Camera& getInstance();
+	static Camera& Instance();
 	SDL_FRect* getViewport();
 
 
@@ -17,6 +17,8 @@ public:
 
 
 	void clampToWorldBounds();
+	bool isOnScreen(SDL_FRect& rect);
+	SDL_FRect worldToScreen(SDL_FRect& rect);
 	Camera(const Camera&) = delete;
 	Camera operator=(const Camera&) = delete;
 	

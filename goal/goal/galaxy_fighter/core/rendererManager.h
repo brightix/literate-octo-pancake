@@ -5,7 +5,7 @@
 
 class RendererManager {
 public:
-	static RendererManager& getInstance();
+	static RendererManager& Instance();
 
 	SDL_Renderer* getRenderer();
 	SDL_Window* getWindow();

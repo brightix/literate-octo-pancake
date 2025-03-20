@@ -18,7 +18,7 @@ public:
 	PlayerObject& getPlayer();
 
 	WorldAttrs& getWorldAttrs();
-	static GameWorld& getInstance();
+	static GameWorld& Instance();
 	void show_log();
 
 	void show_log_on_screen();

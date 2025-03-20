@@ -4,7 +4,7 @@
 
 namespace fs = std::filesystem;
 
-ResourceManager& ResourceManager::getInstance() {
+ResourceManager& ResourceManager::Instance() {
 	static ResourceManager instance;
 	return instance;
 }
@@ -51,7 +51,7 @@ TTF_Font* ResourceManager::getFont(const std::string& type, int size) {
 }
 
 ResourceManager::ResourceManager() {
-	this->renderer = RendererManager::getInstance().getRenderer();
+	this->renderer = RendererManager::Instance().getRenderer();
 	basePath_texture = ".\\galaxy_fighter\\assets\\img";
 	basePath_font = ".\\galaxy_fighter\\assets\\font";
 	basePath_music = ".\\galaxy_fighter\\assets\\music";

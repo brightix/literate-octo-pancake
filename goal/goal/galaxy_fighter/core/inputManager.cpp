@@ -2,13 +2,13 @@
 #include "inputManager.h"
 
 
-InputManager& InputManager::getInstance() {
+InputManager& InputManager::Instance() {
 	static InputManager instance;
 	return instance;
 }
 
 bool InputManager::update(const SDL_Event& e) {
-	Uint64 now = Timer::getInstance().getTicks();
+	Uint64 now = Timer::Instance().getTicks();
 	KeyInfo& curKey = keys[e.key.scancode];
 	switch (e.type) {
 	case SDL_EVENT_QUIT:
@@ -56,7 +56,7 @@ void InputManager::handleMouseButtonUp(Uint8 buttonId, MouseInfo& mouse, Uint64 
 }
 
 void InputManager::postUpdate() {
-	Uint64 now = Timer::getInstance().getTicks();
+	Uint64 now = Timer::Instance().getTicks();
 	for (auto& [key, info] : keys) {
 		if (info.state == PRESSED) {
 			if (now - info.pressTime >= LONG_PRESS_THRESHOLD) {
@@ -72,6 +72,7 @@ void InputManager::postUpdate() {
 
 bool InputManager::isKeyIdle(SDL_Scancode key) { return keys[key].state == IDLE; }
 bool InputManager::isKeyPressed(SDL_Scancode key) { return keys[key].state == PRESSED || keys[key].state == HELD; }
+bool InputManager::isKeyPressedOnce(SDL_Scancode key) { return keys[key].state == PRESSED; }
 bool InputManager::isKeyHeld(SDL_Scancode key) { return keys[key].state == HELD; }
 bool InputManager::isKeyReleased(SDL_Scancode key) { return keys[key].state == RELEASED; }
 
@@ -97,8 +98,8 @@ bool InputManager::isPointInRect(SDL_FRect& rect) {
 	return false;
 }
 
-bool InputManager::isCursorHovering(const SDL_FRect& rect) {
-	if (rect.x <= mouse.x && mouse.x <= rect.x + rect.w && rect.y <= mouse.y && mouse.y <= rect.y + rect.h) {
+bool InputManager::isCursorHovering(SDL_FRect* rect) {
+	if (rect->x <= mouse.x && mouse.x <= rect->x + rect->w && rect->y <= mouse.y && mouse.y <= rect->y + rect->h) {
 		return true;
 	}
 	return false;
@@ -108,7 +109,7 @@ bool InputManager::isCursorHovering(const SDL_FRect& rect) {
 
 void InputManager::isSpacePressed() {
 	if (isKeyReleased(SDL_SCANCODE_SPACE)) {
-		Timer& timer = Timer::getInstance();
+		Timer& timer = Timer::Instance();
 		if (timer.getIsPause()) {
 			timer.resume();
 		}
@@ -124,11 +125,11 @@ SDL_Scancode& operator++(SDL_Scancode& lhs) {
 }
 
 void InputManager::checkAllKeyEvents() {
-	Uint64 now = Timer::getInstance().getTicks();
+	Uint64 now = Timer::Instance().getTicks();
 	if (now - last_frame_select_time >= FRAME_SELECTED_THRESHOLD) {
 		for (SDL_Scancode i = SDL_SCANCODE_1;i <= SDL_SCANCODE_4;++i) {
 			if (isKeyPressed(i)) {
-				Timer::getInstance().selectFrame(i - SDLK_1);
+				Timer::Instance().selectFrame(i - SDLK_1);
 				last_frame_select_time = now;
 				break;
 			}

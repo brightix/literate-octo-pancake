@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "rendererManager.h"
 
-RendererManager& RendererManager::getInstance() {
+RendererManager& RendererManager::Instance() {
 	static RendererManager instance;
 	return instance;
 }
@@ -23,15 +23,15 @@ void RendererManager::cleanUP() {
 
 void RendererManager::renderTexture(const std::string& catalog,const std::string& fileName) {
 	SDL_FRect rect = { 0,0,0,0 };
-	shared_ptr<SDL_Texture> texture = ResourceManager::getInstance().getTexture(catalog, fileName);
+	shared_ptr<SDL_Texture> texture = ResourceManager::Instance().getTexture(catalog, fileName);
 	SDL_GetTextureSize(texture.get(), &rect.w, &rect.h);
 	SDL_RenderTexture(renderer, texture.get(), nullptr, &rect);
 }
 
 void RendererManager::renderTexture(const std::string& catalog, const std::string& fileName,int location) {
-	SDL_FRect window = Resolution::getInstance().getWindowRect();
+	SDL_FRect window = Resolution::Instance().getWindowRect();
 	float x, y, w, h;
-	shared_ptr<SDL_Texture> texture = ResourceManager::getInstance().getTexture(catalog, fileName);
+	shared_ptr<SDL_Texture> texture = ResourceManager::Instance().getTexture(catalog, fileName);
 	SDL_GetTextureSize(texture.get(), &w, &h);
 
 	switch (location) {
@@ -62,8 +62,9 @@ RendererManager::RendererManager(){
 	init(window);
 	SDL_SetRenderDrawColor(renderer,0,0,0,255);
 }
+
 RendererManager::~RendererManager(){
-	//ResourceManager::getInstance().shutdown();
+	//ResourceManager::Instance().shutdown();
 	SDL_DestroyWindow(window);
 	cleanUP();
 	cout << "äÖÈ¾Æ÷µ¥ÀýÒÑ¹Ø±Õ" << endl;

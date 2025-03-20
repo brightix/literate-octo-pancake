@@ -7,7 +7,7 @@ typedef struct s s;
 //¼ÆÊ±Æ÷
 class Timer {
 public:
-	static Timer& getInstance();
+	static Timer& Instance();
 
 	void update();
 	Uint64 getTicks() const;

@@ -1,25 +1,24 @@
 #include "pch.h"
 #include "SpritePlayer.h"
 #include "../../BehaviorTree/BTAction_player/BTAction_player.h"
+#include "../../BehaviorTree/BTAction_player/Action.h"
 
-SpritePlayer::SpritePlayer(std::shared_ptr<Context> context) : context(context)
+
+SpritePlayer::SpritePlayer(PlayerObject* player) : player(player)
 {
 	//初始化属性
-	this->texture = context->getData<SDL_Texture>("texture").get();
-	this->viewportRect = context->getData<SDL_FRect>("rect").get();
-	this->spriteSheet = context->getData<unordered_map<PlayerState,SpriteSheet>>("spriteSheet").get();
-	this->actionFrameDelay = context->getData<vector<float>>("actionFrameDelay");
-	this->localState = PlayerState::Idle;
-
+	this->texture = player->getTexture();
+	this->actionFrameDelay = player->getActionFrameDelay();
+	
 	//初始化调用
 	this->root = make_unique<ParalleNode>();
 
 	float textureWidth, textureHeight;//整张大小
-	SDL_GetTextureSize(texture, &textureWidth, &textureHeight);
+	SDL_GetTextureSize(texture.get(), &textureWidth, &textureHeight);
+	attrs = player->getAttrs();
 
-
-	float frameWidth = context->getData<PlayerAttrs>("playerAttrs")->player_sprite_frame_width;
-	float frameHeight = context->getData<PlayerAttrs>("playerAttrs")->player_sprite_frame_height;//单帧大小
+	float frameWidth = attrs->player_sprite_frame_width;
+	float frameHeight = attrs->player_sprite_frame_height;//单帧大小
 
 	for (int row = 0;row * frameHeight < textureHeight;row++) {
 		for (int col = 0;col*frameWidth < textureWidth;col++) {
@@ -27,102 +26,122 @@ SpritePlayer::SpritePlayer(std::shared_ptr<Context> context) : context(context)
 		}
 	}
 
-	this->spriteFrameRect = { 1,1,frameWidth,frameHeight };
-	this->curFrame = 0;
-	initAction();
-	root->addChild(make_unique<BTAction_player::display_anime_at_center>(texture,spriteFrameRect,viewportRect,0.0,&context->getData<PlayerAttrs>("playerAttrs")->player_orientation));
+	srcrect = make_shared<SDL_FRect>(SDL_FRect({ 1,1,frameWidth,frameHeight }));
+
+	actionState = "NULL";
+	angle = 0.0;
+	root->addChild(make_shared<display_at_position>(texture, srcrect, player->getRenderRect(), &angle, &attrs->player_orientation));
 }
-
-
-
 
 
 bool SpritePlayer::update() {				//就是update
-	setSpriteFrameRect(context->getData<PlayerState>("playerState").get(), elapsed);
+	setSpriteFrameRect();
 	return root->execute();
 }
 
-void SpritePlayer::setSpriteFrameRect(PlayerState* state, float& elapsed) {//设置精灵当前帧矩形
-	if (*state != PlayerState::Idle && localState != *state) {//出现动作变换
-		localState = *state;
-		initAction();
+void SpritePlayer::setSpriteFrameRect() {
+	auto state = player->getActionState();
+	auto ss = player->getSpriteSheet();
+	string tfs = TransFormState();
+	if (actionState != tfs) {
+		actionState = tfs;
+		elapsed = 0;
+		curFrame = (*ss)[actionState].startFrame;
 	}
-	//if(context->getData<bool>("is"))
-	//增加经过时间，判断是否可以下一帧或循环
-	refreshTime();
-	if (animeState == pre && (*spriteSheet)[localState].isLoop) animeState = running;
-	int idx;
-	int preFrameEnd = (*spriteSheet)[localState].startFrame + (*spriteSheet)[localState].pre;
-	int runningFrameEnd = (*spriteSheet)[localState].startFrame + (*spriteSheet)[localState].running;
-	int postFrameEnd = (*spriteSheet)[localState].startFrame + (*spriteSheet)[localState].endFrame;
-	switch (animeState) {
-	case pre:
-		updateFrame();
-		if (elapsed >= (*actionFrameDelay)[curFrame]) {
-			if (++curFrame > preFrameEnd) {
-				animeState = running;
+	cout << actionState << endl;
+	SpriteSheet& curss = (*ss)[actionState];
+	*srcrect = getFrame(curFrame);
+	elapsed += Timer::Instance().getDeltaAdjustTime();
+	if (elapsed >= (*actionFrameDelay)[curFrame]) {
+		if (++curFrame >= curss.endFrame) {
+			if (curss.isLoop) {
+				curFrame = curss.startFrame;
 			}
-			elapsed = 0;
-		}
-		break;
-	case running:
-		updateFrame();
-		if (elapsed >= (*actionFrameDelay)[curFrame]) {
-			if (++curFrame >= runningFrameEnd) {
-				if ((*spriteSheet)[localState].isLoop) {
-					curFrame = preFrameEnd;
-				}
-				else {
-					animeState = post;
-				}
+			else {
+				(*state)[actionState] = false;
 			}
-			elapsed = 0;
 		}
-		break;
-	case post:
-		updateFrame();
-		if (elapsed >= (*actionFrameDelay)[curFrame]) {
-			if (++curFrame >= postFrameEnd) {
-				animeState = pre;
-				//context->setData("playerState", PlayerState::Idle);
-			}
-			elapsed = 0;
-		}
-		break;
-	case none:
-		//cout << "角色无状态" << endl;
-		break;
-	default:
-		cerr << "animeState出错,animeState被给予 " << animeState << "数值" << endl;
+		elapsed = 0;
 	}
 }
 
-void SpritePlayer::initAction() {
-	curFrame = (*spriteSheet)[localState].startFrame;
-	animeState = pre;
-}
+string SpritePlayer::TransFormState() {
+	auto state = player->getActionState();
 
-void SpritePlayer::refreshTime() {			//刷新时间
-	elapsed += Timer::getInstance().getDeltaAdjustTime();
+	if ((*state)["isAttack"]) {
+		return "Attack";
+	}
+	else if ((*state)["Idle_to_Jump"]) {
+		return "Idle_to_Jump";
+	}
+	else if ((*state)["isJump"]) {
+		return "Jump";
+	}
+	else if ((*state)["Jump_to_Fall"]) {
+		return "Jump_to_Fall";
+	}
+	else if ((*state)["isFall"]) {
+		return "Fall";
+	}
+	else if ((*state)["Fall_to_Idle"]) {
+		return "Fall_to_Idle";
+	}
+	else if ((*state)["Idle_to_Down"]) {
+		return "Idle_to_Down";
+	}
+	else if ((*state)["Down"]) {
+		return "Down";
+	}
+	else if ((*state)["Down_to_Idle"]) {
+		return "Down_to_Idle";
+	}
+	else if ((*state)["Idle_to_Run"]) {
+		return "Idle_to_Run";
+	}
+	else if ((*state)["isRun"]) {
+		return "Run";
+	}
+	else if ((*state)["Run_to_Idle"]) {
+		return "Run_to_Idle";
+	}
+	return "Idle";
 }
 
 SDL_FRect& SpritePlayer::getFrame(int idx) {//获取当前帧
 	return frames[idx];
 }
 
-void SpritePlayer::updateFrame() {//获取当前帧
-	//cout << curFrame << endl;
-	spriteFrameRect.x = frames[curFrame].x;
-	spriteFrameRect.y = frames[curFrame].y;
-}
+//void SpritePlayer::initAction() {
+//	curFrame = (*spriteSheet)[localState].startFrame;
+//	animeState = pre;
+//}
+//
+//void SpritePlayer::refreshTime() {			//刷新时间
+//	elapsed += Timer::Instance().getDeltaAdjustTime();
+//}
+//
 
-
-
-
-SDL_Texture* SpritePlayer::getTexture() {	//返回纹理
-	return texture;
-}
-
-bool SpritePlayer::isAnimationFinished() {
-	return animeState == none || (*spriteSheet)[localState].isLoop;
-}
+//
+//void SpritePlayer::updateFrame() {//获取当前帧
+//	//cout << curFrame << endl;
+//	if (curFrame > frames.size()) {
+//		cerr << "精灵表发生越界，最大值：" << frames.size() << "当前值" << curFrame<< endl;
+//		curFrame = 0;
+//	}
+//	spriteFrameRect.x = frames[curFrame].x;
+//	spriteFrameRect.y = frames[curFrame].y;
+//}
+//
+//
+//
+//
+//SDL_Texture* SpritePlayer::getTexture() {	//返回纹理
+//	return texture;
+//}
+//
+//bool SpritePlayer::isAnimationFinished() {
+//	return animeState == none || isAnyStateNonInterruptible(localState);
+//}
+//
+//
+//玩家动作解析

@@ -117,7 +117,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\21811\Desktop\literate-octo-pancake\goal\goal\galaxy_fighter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\21811\OneDrive\Desktop\literate-octo-pancake\goal\goal\galaxy_fighter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -136,7 +136,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\21811\Desktop\literate-octo-pancake\goal\goal\galaxy_fighter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\21811\OneDrive\Desktop\literate-octo-pancake\goal\goal\galaxy_fighter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,6 +147,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_player\Down\Down.cpp" />
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_player\display_at_position\display_at_position.cpp" />
+    <ClCompile Include="galaxy_fighter\objects\UI\esc\Esc_interface.cpp" />
+    <ClCompile Include="galaxy_fighter\objects\UI\esc\Esc_button.cpp" />
+    <ClCompile Include="galaxy_fighter\objects\UI\component.cpp" />
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_player\fall\FallNode.cpp" />
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_player\Action.cpp" />
+    <ClCompile Include="galaxy_fighter\core\BlackBoard.cpp" />
     <ClCompile Include="galaxy_fighter\core\Context.cpp" />
     <ClCompile Include="galaxy_fighter\BehaviorTree\BTNode.cpp" />
     <ClCompile Include="galaxy_fighter\objects\BaseObject.cpp" />
@@ -175,8 +183,9 @@
     </ClCompile>
     <ClCompile Include="galaxy_fighter\utils\random_utils.cpp" />
     <ClCompile Include="gameObject\gameObject.cpp" />
-    <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_physics\gravity_heavy.cpp" />
     <ClCompile Include="galaxy_fighter\BehaviorTree\InputBuffer.cpp" />
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_player\jump\JumpNode.cpp" />
+    <ClCompile Include="galaxy_fighter\objects\environmentAssets\groundObject\GroundObject.cpp" />
     <ClCompile Include="main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
@@ -190,14 +199,23 @@
     <ClCompile Include="galaxy_fighter\BehaviorTree\Composite\Selector.cpp" />
     <ClCompile Include="galaxy_fighter\BehaviorTree\Composite\Sequence.cpp" />
     <ClCompile Include="galaxy_fighter\BehaviorTree\paralle\ParalleNode.cpp" />
-    <ClCompile Include="galaxy_fighter\objects\playerObject\Player_lion.cpp" />
-    <ClCompile Include="galaxy_fighter\objects\playerObject\Player_GreenTofu.cpp" />
     <ClCompile Include="galaxy_fighter\objects\playerObject\PlayerState.cpp" />
     <ClCompile Include="galaxy_fighter\objects\playerObject\SpritePlayer.cpp" />
-    <ClCompile Include="galaxy_fighter\core\PhysicsEngine\QuadTree.cpp" />
     <ClCompile Include="galaxy_fighter\utils\transformUtils.cpp" />
+    <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_player\move\MoveNode.cpp" />
+    <ClCompile Include="galaxy_fighter\core\physics\QuadTree.cpp" />
+    <ClCompile Include="galaxy_fighter\objects\UI\UI.cpp" />
+    <ClCompile Include="galaxy_fighter\objects\UI\UIManager\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_player\Down\Down.h" />
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_player\display_at_position\display_at_position.h" />
+    <ClInclude Include="galaxy_fighter\objects\UI\esc\Esc_interface.h" />
+    <ClInclude Include="galaxy_fighter\objects\UI\esc\Esc_button.h" />
+    <ClInclude Include="galaxy_fighter\objects\UI\component.h" />
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_player\fall\FallNode.h" />
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_player\Action.h" />
+    <ClInclude Include="galaxy_fighter\core\BlackBoard.h" />
     <ClInclude Include="galaxy_fighter\core\Context.h" />
     <ClInclude Include="galaxy_fighter\objects\BaseObject.h" />
     <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_player\BTAction_player.h" />
@@ -225,9 +243,10 @@
     <ClInclude Include="galaxy_fighter\utils\random_utils.h" />
     <ClInclude Include="gameObject\gameObject.h" />
     <ClInclude Include="galaxy_fighter\objects\environmentAssets\mapObject\MapObject.h" />
-    <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_physics\gravity_heavy.h" />
     <ClInclude Include="galaxy_fighter\BehaviorTree\InputBuffer.h" />
+    <ClInclude Include="galaxy_fighter\objects\environmentAssets\groundObject\GroundObject.h" />
     <ClInclude Include="json.hpp" />
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_player\jump\JumpNode.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="galaxy_fighter\objects\MainMenuObject\MenuText.h" />
     <ClInclude Include="galaxy_fighter\objects\MainMenuObject\MenuImage.h" />
@@ -236,12 +255,13 @@
     <ClInclude Include="galaxy_fighter\BehaviorTree\Composite\Selector.h" />
     <ClInclude Include="galaxy_fighter\BehaviorTree\Composite\Sequence.h" />
     <ClInclude Include="galaxy_fighter\BehaviorTree\paralle\ParalleNode.h" />
-    <ClInclude Include="galaxy_fighter\objects\playerObject\Player_lion.h" />
-    <ClInclude Include="galaxy_fighter\objects\playerObject\Player_GreenTofu.h" />
     <ClInclude Include="galaxy_fighter\objects\playerObject\PlayerState.h" />
     <ClInclude Include="galaxy_fighter\objects\playerObject\SpritePlayer.h" />
-    <ClInclude Include="galaxy_fighter\core\PhysicsEngine\QuadTree.h" />
     <ClInclude Include="galaxy_fighter\utils\transformUtils.h" />
+    <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_player\move\MoveNode.h" />
+    <ClInclude Include="galaxy_fighter\core\physics\QuadTree.h" />
+    <ClInclude Include="galaxy_fighter\objects\UI\UI.h" />
+    <ClInclude Include="galaxy_fighter\objects\UI\UIManager\UIManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />

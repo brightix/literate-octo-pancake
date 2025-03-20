@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Resolution.h"
 
-Resolution& Resolution::getInstance() {
+Resolution& Resolution::Instance() {
 	static Resolution instance;
 	return instance;
 }
@@ -22,7 +22,7 @@ Resolution::~Resolution()
 
 void Resolution::setResolution(short level) { 
 	curRes = level;
-	SDL_SetWindowSize(RendererManager::getInstance().getWindow(), resolution[level].first, resolution[level].second);
+	SDL_SetWindowSize(RendererManager::Instance().getWindow(), resolution[level].first, resolution[level].second);
 	windowRect.w = resolution[level].first;
 	windowRect.h = resolution[level].second;
 	cout << "分辨率更改为" << windowRect.w << "x" << windowRect.h << endl;

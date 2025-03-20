@@ -1,31 +1,28 @@
 #pragma once
 #include "pch.h"
 
-enum class ObjectState {
-	Idle = 0,
-	None = 1 << 0
-};
+class Rect;
 
-class Rect {
-public:
-	std::shared_ptr<SDL_FRect> rect;
-	Rect() = default;
-	Rect(std::shared_ptr<SDL_FRect> rect);
-	bool contains(float px, float py) const;
-	bool intersects(const Rect& other) const;
+enum ObjectType {
+	Player,
+	Enemy,
+	Ground,
 };
 
 class BaseObject
 {
+private:
+	ObjectType type;
 public:
-	virtual SDL_FRect* getRect();
-	BaseObject() = default;
-	~BaseObject() = default;
-	virtual ObjectState getBaseState() = 0;
-protected:
-	std::shared_ptr<Rect> hitBox;
+	BaseObject(ObjectType type) : type(type) {}
+	virtual ~BaseObject() = default;
 
-	SDL_FRect renderRect;
-	ObjectState objectState;
+	virtual void update() = 0;
+	virtual void render() = 0;
+	virtual Rect* getHitBox() = 0;
+	virtual void on_collision(BaseObject* other) = 0;
+	virtual ObjectType getObjectType() {
+		return type;
+	};
 };
 

@@ -8,11 +8,11 @@ using json = nlohmann::json;
 
 MapObject::MapObject(const json& config){
 	
-	this->camera = &Camera::getInstance();
+	this->camera = &Camera::Instance();
 	this->context = make_shared<Context>();
 	std::string catalog = config["texture"]["catalog"];
 	std::string fileName = config["texture"]["fileName"];
-	context->initData("texture", ResourceManager::getInstance().getTexture(catalog,fileName));
+	context->initData("texture", ResourceManager::Instance().getTexture(catalog,fileName));
 
 
 	shared_ptr<double> angle = make_shared<double>(config["texture"]["angle"].get<double>());

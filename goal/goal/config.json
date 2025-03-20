@@ -21,6 +21,11 @@
         "playerAttrs": {
             "playerX": 0,
             "playerY": 0,
+            "velocityX": 0.0,
+            "velocityY": 0.0,
+            "gravity": 0.5,
+            "acceleration": 0.6,
+            "friction": 0.7,
             "playerHP": 5,
             "player_move_speed": 5,
             "player_render_width": 128,
@@ -28,7 +33,7 @@
             "player_sprite_frame_width": 192,
             "player_sprite_frame_height": 192,
             "player_sprite_frame": 1,
-            "player_orientation": true
+            "player_orientation": 1
 
         },
         "texture": {
@@ -37,128 +42,123 @@
             "angle": 0.0
         },
         "actionFrameDelay": [
-            250,
-            250,
-            250,
-            250,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41,
-            41
+            600,
+            200,
+            200,
+            200,
+            200,
+            1000,
+            200,
+            200,
+            240,
+            88,
+            240,
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            100,
+            100,
+            100,
+            100,
+            100,
+            100,
+            100,
+            100,
+            100,
+            100,
+            100,
+            100,
+            100
         ],
         "spriteSheet": {
             "Idle": {
                 "startFrame": 0,
-                "pre": 0,
-                "running": 4,
-                "post": 0,
-                "endFrame": 4,
-                "isLoop": true
+                "endFrame": 1,
+                "isLoop": true,
+                "isInterruptible": true
+            },
+            "Idle_to_Jump": {
+                "startFrame": 2,
+                "endFrame": 3,
+                "isLoop": false,
+                "isInterruptible": false
             },
             "Jump": {
-                "startFrame": 0,
-                "pre": 0,
-                "running": 4,
-                "post": 0,
+                "startFrame": 4,
                 "endFrame": 4,
-                "isLoop": false
+                "isLoop": true,
+                "isInterruptible": false
             },
-            "Left": {
-                "startFrame": 0,
-                "pre": 0,
-                "running": 4,
-                "post": 0,
-                "endFrame": 4,
-                "isLoop": true
+            "Jump_to_Fall": {
+                "startFrame": 5,
+                "endFrame": 5,
+                "isLoop": false,
+                "isInterruptible": false
+            },
+            "Fall": {
+                "startFrame": 6,
+                "endFrame": 7,
+                "isLoop": true,
+                "isInterruptible": true
+            },
+            "Fall_to_Idle": {
+                "startFrame": 8,
+                "endFrame": 10,
+                "isLoop": false,
+                "isInterruptible": false
+            },
+            "Idle_to_Run": {
+                "startFrame": 11,
+                "endFrame": 11,
+                "isLoop": false,
+                "isInterruptible": true
+            },
+            "Run": {
+                "startFrame": 11,
+                "endFrame": 19,
+                "isLoop": true,
+                "isInterruptible": true
+            },
+            "Run_to_Idle": {
+                "startFrame": 19,
+                "endFrame": 19,
+                "isLoop": false,
+                "isInterruptible": true
+            },
+            "Idle_to_Down": {
+                "startFrame": 20,
+                "endFrame": 23,
+                "isLoop": false,
+                "isInterruptible": false
             },
             "Down": {
-                "startFrame": 0,
-                "pre": 0,
-                "running": 4,
-                "post": 0,
-                "endFrame": 4,
-                "isLoop": false
+                "startFrame": 24,
+                "endFrame": 24,
+                "isLoop": true,
+                "isInterruptible": false
             },
-            "Right": {
-                "startFrame": 5,
-                "pre": 2,
-                "running":15 ,
-                "post": 0,
-                "endFrame": 17,
-                "isLoop": true
+            "Down_to_Idle": {
+                "startFrame": 24,
+                "endFrame": 29,
+                "isLoop": false,
+                "isInterruptible": false
+            },
+            "wink": {
+                "startFrame": 29,
+                "endFrame": 35,
+                "isLoop": false,
+                "isInterruptible": true
             }
         },
         "behavior_tree": {
@@ -173,16 +173,20 @@
                         "type": "player_move_jump"
                     },
                     {
+                        "name": "坠落",
+                        "type": "player_move_fall"
+                    },
+                    {
                         "name": "下蹲",
                         "type": "player_move_down"
                     },
                     {
-                        "name": "左移",
-                        "type": "player_move_left"
+                        "name": "跑步",
+                        "type": "player_move_run"
                     },
                     {
-                        "name": "右移",
-                        "type": "player_move_right"
+                        "name": "判断是否在地面",
+                        "type": "is_on_ground"
                     },
                     {
                         "name": "更新显示矩形坐标",

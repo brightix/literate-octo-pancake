@@ -5,7 +5,7 @@
 
 class TextRenderer {
 public:
-	static TextRenderer& getInstance();
+	static TextRenderer& Instance();
 
 	void setFont(const string& type,int size);
 

@@ -15,7 +15,7 @@
 #include <queue>
 #include "../json.hpp"
 #include <fstream>
-
+#include <stack>
 
 
 #include "config.h"

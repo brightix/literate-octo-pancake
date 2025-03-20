@@ -5,7 +5,7 @@
 class Resolution
 {
 public:
-	static Resolution& getInstance();
+	static Resolution& Instance();
 
 	void setResolution(short level);
 	void setLandScape(bool b);

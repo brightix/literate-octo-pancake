@@ -10,15 +10,23 @@ constexpr auto to_underLying(Enum e) noexcept {
 
 
 enum class PlayerState : Uint16 {
-	Idle = 0,
-	Jump = 1 << 0,//0001
-	Left = 1 << 1,//0010
-	Down = 1 << 2,//0100
-	Right = 1 << 3,//1000
-	Interruptible_mask = Jump | Left | Down | Right,
-	Attack = 1 << 4,
-	Roll = 1 << 5,
+	Idle,
+	Idle_to_Jump,
+	Jump,
+	Fall,
+	Idle_to_Run,
+	Run,
+	Run_to_Idle,
+	Idle_to_Down,
+	Down,
+	Down_to_Idle,
+	Attack = 1 << 5,
+	Roll = 1 << 6,
+	On_ground = 1 << 7,
+	Interruptible_mask = Jump | Run | Fall | Attack | Roll | On_ground,
 };
+
+
 
 enum class ActionState :Uint16 {
 	PreAction,

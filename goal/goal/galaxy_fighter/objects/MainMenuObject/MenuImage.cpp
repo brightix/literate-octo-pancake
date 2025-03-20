@@ -4,10 +4,10 @@
 
 using namespace BTAction_image;
 MenuButton::MenuButton(SDL_Texture* texture,float scale, float x, float y) {
-	float f = Resolution::getInstance().getScaleFactor();
+	float f = Resolution::Instance().getScaleFactor();
 	
 	this->texture = texture;
-	this->renderer = RendererManager::getInstance().getRenderer();
+	this->renderer = RendererManager::Instance().getRenderer();
 	this->rect = { x,y, 0.0f,0.0f };
 	SDL_GetTextureSize(texture,&rect.w,&rect.h);
 	this->rect.w *= f*scale;
@@ -20,7 +20,7 @@ MenuButton::MenuButton(SDL_Texture* texture,float scale, float x, float y) {
 SDL_FRect& MenuButton::getRect() { return rect; }
 
 void MenuButton::update() {
-	isSelecting = InputManager::getInstance().isCursorHovering(rect);
+	isSelecting = InputManager::Instance().isCursorHovering(&rect);
 	root->execute();
 }
 

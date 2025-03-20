@@ -13,6 +13,7 @@ namespace BTAction_image {
 	class display_full : public BTNode {
 	private:
 		SDL_FRect rect;
+		shared_ptr<Context> context;
 	public:
 		display_full(shared_ptr<Context> context);//整个窗口显示
 		bool execute() override;
@@ -35,6 +36,7 @@ namespace BTAction_image {
 		bool execute();
 	private:
 		Camera* camera;
+		shared_ptr<Context> context;
 	};
 
 	//缩放

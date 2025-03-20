@@ -4,7 +4,7 @@
 using namespace std;
 void InputBuffer::registerInput(const string& key)
 {
-	Uint64 n = Timer::getInstance().getTicks();
+	Uint64 n = Timer::Instance().getTicks();
 	buffer.push({key,n});
 	while (buffer.size() > maxBufferSize) {
 		buffer.pop();

@@ -5,13 +5,14 @@
 
 using namespace BTAction_image;
 
-display_full::display_full(shared_ptr<Context> context) : BTNode(context){
-	Resolution& resolution = Resolution::getInstance();
+display_full::display_full(shared_ptr<Context> context){
+	Resolution& resolution = Resolution::Instance();
+	this->context = context;
 	rect = { 0.0f,0.0f,static_cast<float>(resolution.getWindowRect().w),static_cast<float>(resolution.getWindowRect().h) };
 }
 
 bool display_full::execute() {
-	if (SDL_RenderTexture(RendererManager::getInstance().getRenderer(), getter()->getData<SDL_Texture>("texture").get(), nullptr, &rect)) {
+	if (SDL_RenderTexture(RendererManager::Instance().getRenderer(), context->getData<SDL_Texture>("texture").get(), nullptr, &rect)) {
 		return true;
 	}
 	else {
@@ -27,7 +28,7 @@ display_at_position::display_at_position(SDL_Texture* texture, SDL_FRect* rect, 
 }
 
 bool display_at_position::execute() {
-	if (SDL_RenderTextureRotated(RendererManager::getInstance().getRenderer(), texture, nullptr, rect, angle, nullptr, SDL_FLIP_NONE)) {
+	if (SDL_RenderTextureRotated(RendererManager::Instance().getRenderer(), texture, nullptr, rect, angle, nullptr, SDL_FLIP_NONE)) {
 		return true;
 	}
 	else {
@@ -37,16 +38,17 @@ bool display_at_position::execute() {
 }
 
 
-display_background::display_background(shared_ptr<Context> context):BTNode(context){
-	this->camera = &Camera::getInstance();
+display_background::display_background(shared_ptr<Context> context){
+	this->camera = &Camera::Instance();
+	this->context = context;
 }
 
 bool display_background::execute() {
 	if (SDL_RenderTextureRotated(
-			RendererManager::getInstance().getRenderer(),//渲染器
-			getter()->getData<SDL_Texture>("texture").get(),//纹理
-			camera->getViewport(), &Resolution::getInstance().getWindowRect(),//相机视野
-			*getter()->getData<double>("angle"),//旋转角度
+			RendererManager::Instance().getRenderer(),//渲染器
+			context->getData<SDL_Texture>("texture").get(),//纹理
+			camera->getViewport(), &Resolution::Instance().getWindowRect(),//相机视野
+			*context->getData<double>("angle"),//旋转角度
 			nullptr,//旋转中心
 			SDL_FLIP_NONE//是否翻转
 		)) 
@@ -73,7 +75,7 @@ bool scaling_up_hovering::execute() {
 		return false;
 	}
 
-	elapsed += Timer::getInstance().getDeltaAdjustTime() * (isSelecting ? 1 : -1);
+	elapsed += Timer::Instance().getDeltaAdjustTime() * (isSelecting ? 1 : -1);
 	if (elapsed > duration || elapsed < 0) {
 		elapsed = clamp(elapsed, 0.0f, (float)duration);
 	}
@@ -102,7 +104,7 @@ delay::delay(double delay_time)
 
 bool delay::execute()
 {
-	delay_time -= Timer::getInstance().getDeltaTime();
+	delay_time -= Timer::Instance().getDeltaTime();
 	if (delay_time <= 0) {
 		return true;
 	}
@@ -114,7 +116,7 @@ check_hover::check_hover(SDL_FRect* rect) {
 }
 
 bool check_hover::execute() {
-	if (InputManager::getInstance().isCursorHovering(*rect)) {
+	if (InputManager::Instance().isCursorHovering(rect)) {
 		return true;
 	}
 	return false;

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "timer.h"
 
-Timer& Timer::getInstance() {
+Timer& Timer::Instance() {
 	static Timer instance;
 	return instance;
 }

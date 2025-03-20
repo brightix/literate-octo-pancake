@@ -19,7 +19,7 @@ enum TTF_Type {
 
 class ResourceManager {
 public:
-	static ResourceManager& getInstance();
+	static ResourceManager& Instance();
 
 
 

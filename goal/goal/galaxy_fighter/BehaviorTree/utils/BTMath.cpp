@@ -10,3 +10,8 @@ float BTMath::SmoothStep(float t) {
 	return t * t * t * (t * (t * 6 - 15) + 10);
 }
 
+float BTMath::SmoothAcceleration()
+{
+	return 0.0f;
+}
+
