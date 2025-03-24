@@ -30,7 +30,7 @@ class QuadTree
 	static constexpr int MAX_LEVEL = 5;
 	int level;
 	Rect bounds;
-	std::vector<BaseObject*> objects;
+	std::vector<std::shared_ptr<BaseObject>> objects;
 	QuadTree* node[4];
 public:
 	QuadTree() = default;
@@ -61,7 +61,7 @@ public:
 		node[3] = new QuadTree(level + 1, Rect({ x + halfWidth,y + halfHeight,halfWidth,halfHeight }));
 	}
 
-	int getIndex(BaseObject* obj) {
+	int getIndex(std::shared_ptr<BaseObject> obj) {
 		float verticalMidPoint = bounds.rect.x + bounds.rect.w / 2;
 		float horizonMidPoint = bounds.rect.y + bounds.rect.h / 2;
 		SDL_FRect r = obj->getHitBox()->rect;
@@ -82,7 +82,7 @@ public:
 		return -1;
 	}
 
-	void insert(BaseObject* obj) {
+	void insert(std::shared_ptr<BaseObject> obj) {
 		if (node[0]) {
 			int idx = getIndex(obj);
 			if (idx != -1) {
@@ -110,7 +110,7 @@ public:
 		}
 	}
 
-	void retrieve(std::vector<BaseObject*>& returnObjects, BaseObject* obj) {
+	void retrieve(std::vector<std::shared_ptr<BaseObject>>& returnObjects, std::shared_ptr<BaseObject> obj) {
 		int idx = getIndex(obj);
 		if (node[0]) {
 			if (idx == -1) {
@@ -125,19 +125,24 @@ public:
 		returnObjects.insert(returnObjects.begin(), objects.begin(), objects.end());
 	}
 
-	void update_collision(std::vector<BaseObject*>& objects) {
+	void update_collision(std::vector<std::shared_ptr<BaseObject>>& objects) {
 		this->clear();
-		for (auto o : objects) {
-			this->insert(o);
+		for (int i = 0;i < objects.size();) {
+			if (objects[i]->shouldDelete()) {
+				objects.erase(objects.begin() + i);
+			}
+			else {
+				this->insert(objects[i++]);
+			}
 		}
 		for (auto obj : objects) {
-			if (obj->getObjectType() == ObjectType::Ground) {
+			if (obj->getObjectType() == ObjectType::Object_Ground) {
 				continue;
 			}
-			if (obj->getObjectType() == ObjectType::Bullet) {
+			if (obj->getObjectType() == ObjectType::Object_Bullet) {
 				//¼ì²âÊÇ·ñ³ö½ç
 			}
-			std::vector<BaseObject*> possibleCollision;
+			std::vector<std::shared_ptr<BaseObject>> possibleCollision;
 			this->retrieve(possibleCollision, obj);
 			for (auto other : possibleCollision) {
 				if (obj == other) continue;

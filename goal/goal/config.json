@@ -24,7 +24,7 @@
             "velocityX": 0.0,
             "velocityY": 0.0,
             "MaxRunStrength": 400.0,
-            "MaxJumpStrength": 2000,
+            "MaxJumpStrength": 1500,
             "gravity": 2500,
             "accelerationX": 4000,
             "accelerationY": 4000,

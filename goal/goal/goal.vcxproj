@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="galaxy_fighter\objects\playerObject\AttackBox.cpp" />
     <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_player\Down\Down.cpp" />
     <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_player\display_at_position\display_at_position.cpp" />
     <ClCompile Include="galaxy_fighter\FSM\Player\PlayerState.cpp" />
@@ -209,6 +210,7 @@
     <ClCompile Include="galaxy_fighter\FSM\Player\TransitionState.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="galaxy_fighter\objects\playerObject\AttackBox.h" />
     <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_player\Down\Down.h" />
     <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_player\display_at_position\display_at_position.h" />
     <ClInclude Include="galaxy_fighter\core\Resolution.h" />

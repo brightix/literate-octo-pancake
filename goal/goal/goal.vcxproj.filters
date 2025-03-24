@@ -177,6 +177,9 @@
     <ClCompile Include="galaxy_fighter\FSM\Player\PlayerState.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="galaxy_fighter\objects\playerObject\AttackBox.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="galaxy_fighter\core\inputManager.h">
@@ -342,6 +345,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="galaxy_fighter\core\Resolution.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\objects\playerObject\AttackBox.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

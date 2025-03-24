@@ -2,7 +2,7 @@
 #include "GroundObject.h"
 #include "../../../core/resourceManager.h"
 
-GroundObject::GroundObject(float x, float y, float scaleFactor) : BaseObject(ObjectType::Ground)
+GroundObject::GroundObject(float x, float y, float scaleFactor) : BaseObject(ObjectType::Object_Ground)
 {
 	float resFactor = Resolution::Instance().getScaleFactor();
 	SDL_FRect trect = { x,y,100,100 };
@@ -35,6 +35,6 @@ shared_ptr<SDL_FRect> GroundObject::getRenderRect()
 	return shared_ptr<SDL_FRect>();
 }
 
-void GroundObject::on_collision(BaseObject* other) {
+void GroundObject::on_collision(shared_ptr<BaseObject> other) {
 	return;
 }

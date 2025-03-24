@@ -14,7 +14,7 @@ void GameWorld::setPlayer(PlayerObject* h){ player = h; }
 
 void GameWorld::setCamera(Camera* camera) { this->camera = camera; }
 
-void GameWorld::addNewObject(const string& s,BaseObject* newObject) {
+void GameWorld::addNewObject(const string& s, shared_ptr<BaseObject> newObject) {
 	//if (s == "ground") {
 	//	GroundObjects.push_back(newObject);
 	//}
@@ -27,11 +27,11 @@ void GameWorld::addNewObject(const string& s,BaseObject* newObject) {
 	objects.push_back(newObject);
 }
 
-vector<BaseObject*>& GameWorld::getObjects() {
+vector<shared_ptr<BaseObject>>& GameWorld::getObjects() {
 	return objects;
 }
 
-vector<BaseObject*>& GameWorld::getGroundObjects() {
+vector<shared_ptr<BaseObject>>& GameWorld::getGroundObjects() {
 	return GroundObjects;
 }
 

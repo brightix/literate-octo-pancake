@@ -84,11 +84,13 @@ public:
 	float getMaxLightAttackRange();
 
 
+	nlohmann::json& getConfig();
+
 	void setVelocityX(float val);
 	void setVelocityY(float val);
 	void setOrientation(float val);
 
-	void on_collision(BaseObject* other);
+	void on_collision(std::shared_ptr<BaseObject> other);
 
 
 
@@ -114,6 +116,8 @@ public:
 
 
 private:
+	nlohmann::json config;
+
 	unordered_map<string,bool> actionState;
 	unordered_map<string,float> jumpData;
 

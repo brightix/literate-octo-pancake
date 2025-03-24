@@ -4,8 +4,15 @@
 void move(PlayerObject& player);
 void demove(PlayerObject& player);
 void render(PlayerObject& player);
+void fall(PlayerObject& player);
 
-																			//MoveLeft×´Ì¬
+class Move;
+class Jump;
+class Fall;
+class Crouch;
+class Hurt;
+class LightAttack;
+														//MoveLeft×´Ì¬
 void IdleState::Enter(PlayerObject& player)
 {
 	cout << "½øÈë Idle" << endl;
@@ -21,13 +28,13 @@ void IdleState::Update(PlayerObject& player)
 		player.ChangeState(new Jump);
 	}
 	else if (!player.IsGrounded()) {
-		player.ChangeState(new Fall);
+		player.ChangeState(new  Fall);
 	}
 	else if(player.getVelocityX() != 0){
 		demove(player);
 	}
-	else if (player.IsLightAttack()) {
-		player.ChangeState(new LightAttack);
+	if (player.IsLightAttack()) {
+		player.ChangeState(new  LightAttack);
 	}
 }
 
@@ -155,10 +162,10 @@ void Fall::Update(PlayerObject& player)
 		demove(player);
 	}
 	if (!player.IsGrounded()) {
-		float delta = Timer::Instance().getDeltaAdjustTime();
-		float velocity = player.getVelocityY() + player.getGravity() * delta;
-		velocity = min(velocity, 2000);
-		player.setVelocityY(velocity);
+		fall(player);
+	}
+	else if (player.IsLightAttack()) {
+		player.ChangeState(new LightAttack);
 	}
 	else {
 		player.ChangeState(new IdleState);
@@ -180,14 +187,39 @@ std::string Fall::GetState()
 	return "Fall";
 }
 
-															//Fall  ×´Ì¬
+
+void Hurt::Enter(PlayerObject& player)
+{
+}
+
+void Hurt::Update(PlayerObject& player)
+{
+}
+
+void Hurt::Render(PlayerObject& player)
+{
+}
+
+void Hurt::Exit(PlayerObject& player)
+{
+}
+
+std::string Hurt::GetState()
+{
+	return std::string();
+}
+
+
+															//LightAttack  ×´Ì¬
 void LightAttack::Enter(PlayerObject& player)
 {
 	cout << "½øÈë LightAttack" << endl;
 	player.setActionFrameStart();
 	player.setVelocityX(0);
-	hitBox = Rect({ player.getPositionX(),player.getPositionY(),0,player.getRenderRect()->h });
-
+	SDL_FRect rect = player.getHitBox()->rect;
+	rect.x = rect.x + player.getOrientation() * rect.w;
+	attackBox = make_shared<AttackBox>(AttackBox(&player, "attack_light.jpg",rect));
+	GameWorld::Instance().addNewObject("Attack", attackBox);
 }
 
 void LightAttack::Update(PlayerObject& player)
@@ -198,15 +230,18 @@ void LightAttack::Update(PlayerObject& player)
 	else {
 		demove(player);
 	}
-	actionTime += Timer::Instance().getDeltaAdjustTime();
-	if (actionTime < 0.5) {
-		hitBox.rect.w = actionTime * player.getMaxLightAttackRange();
+	if (player.getVelocityY() < 0) {
+
 	}
-	else if(actionTime < 1.0){
-		hitBox.rect.w = (1 - actionTime) * player.getMaxLightAttackRange();
+	else if(!player.IsGrounded()) {
+		if (!player.IsJumping()) {
+			player.setVelocityY(0);
+		}
+		fall(player);
 	}
-	else{
-		player.ChangeState(new IdleState);
+	attackBox->update();
+	if (attackBox->isFinished()) {
+		player.ChangeState(new  IdleState);
 	}
 }
 
@@ -217,6 +252,7 @@ void LightAttack::Render(PlayerObject& player)
 
 void LightAttack::Exit(PlayerObject& player)
 {
+	attackBox.reset();
 	//cout << "ÍË³ö Fall" << endl;
 }
 
@@ -262,6 +298,13 @@ void demove(PlayerObject& player) {
 	player.setVelocityX(velocity);
 }
 
+void fall(PlayerObject& player) {
+	float delta = Timer::Instance().getDeltaAdjustTime();
+	float velocity = player.getVelocityY() + player.getGravity() * delta;
+	velocity = min(velocity, 2000);
+	player.setVelocityY(velocity);
+}
+
 void render(PlayerObject& player) {
 	SDL_Texture* texture = player.getTexture().get();
 	SDL_FRect* srcrect = player.getActionFrameRect();
@@ -276,3 +319,5 @@ std::string Crouch::GetState()
 {
 	return "Crouch";
 }
+
+

@@ -2,6 +2,7 @@
 #include "pch.h"
 #include "../../objects/playerObject/playerObject.h"
 #include "../../core/physics/QuadTree.h"
+#include "../../objects/playerObject/AttackBox.h"
 
 class MoveLeft;
 class MoveRight;
@@ -78,11 +79,23 @@ public:
     std::string GetState();
 };
 
+class Hurt :
+    public PlayerState
+{
+    float actionTime = 0;
+public:
+    void Enter(PlayerObject& player);
+    void Update(PlayerObject& player);
+    void Render(PlayerObject& player);
+    void Exit(PlayerObject& player);
+    std::string GetState();
+};
+
 class LightAttack :
     public PlayerState
 {
     float actionTime = 0;
-    Rect hitBox;
+    std::shared_ptr<AttackBox> attackBox;
 public:
     void Enter(PlayerObject& player);
     void Update(PlayerObject& player);

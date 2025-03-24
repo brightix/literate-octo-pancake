@@ -14,6 +14,7 @@ Galaxy_fighter::Galaxy_fighter(){
 void Galaxy_fighter::loadResource() {
 	ResourceManager& resource = ResourceManager::Instance();
 	GameWorld& gw = GameWorld::Instance();
+
 	ifstream file("config.json");
 	json config;
 	file >> config;
@@ -25,16 +26,16 @@ void Galaxy_fighter::loadResource() {
 	player = make_shared<PlayerObject>(config["player_tofu"]);
 
 	camera->setCameraOwner(player.get());
-	gw.addNewObject("player",player.get() );
-	gw.addNewObject("ground",new GroundObject(1000, 700, 0.03));
-	gw.addNewObject("ground", new GroundObject(0, 1000, 1));
+	gw.addNewObject("player",player);
+	gw.addNewObject("ground",make_shared<GroundObject>(GroundObject(1000, 700, 0.03)));
+	gw.addNewObject("ground", make_shared<GroundObject>(GroundObject(0, 1000, 1)));
 
 	//objects.push_back(new GroundObject(200, 800, 0.1));
 	//objects.push_back(new GroundObject(400, 750, 0.1));
 }
 
 void Galaxy_fighter::update() {
-	vector<BaseObject*>& objects = GameWorld::Instance().getObjects();
+	vector<shared_ptr<BaseObject>>& objects = GameWorld::Instance().getObjects();
 	//Âß¼­²ã
 	background->render();
 	ui.update();
@@ -62,6 +63,7 @@ void Galaxy_fighter::loaaGameWorld() {
 	gw.setCamera(camera);
 	gw.setPlayer(player.get());
 	//gw.setObjects(&objects);
+	QuadTreeManager::Instance().init(Camera::Instance().getCameraRange());
 	//qtree = QuadTree(0, Camera::Instance().getCameraRange());
 }
 
