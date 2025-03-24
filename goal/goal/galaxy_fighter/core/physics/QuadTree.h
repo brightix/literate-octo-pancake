@@ -30,7 +30,7 @@ class QuadTree
 	static constexpr int MAX_LEVEL = 5;
 	int level;
 	Rect bounds;
-	std::vector<std::shared_ptr<BaseObject>> objects;
+	std::vector<BaseObject*> objects;
 	QuadTree* node[4];
 public:
 	QuadTree() = default;
@@ -61,7 +61,7 @@ public:
 		node[3] = new QuadTree(level + 1, Rect({ x + halfWidth,y + halfHeight,halfWidth,halfHeight }));
 	}
 
-	int getIndex(std::shared_ptr<BaseObject> obj) {
+	int getIndex(BaseObject* obj) {
 		float verticalMidPoint = bounds.rect.x + bounds.rect.w / 2;
 		float horizonMidPoint = bounds.rect.y + bounds.rect.h / 2;
 		SDL_FRect r = obj->getHitBox()->rect;
@@ -82,7 +82,7 @@ public:
 		return -1;
 	}
 
-	void insert(std::shared_ptr<BaseObject> obj) {
+	void insert(BaseObject* obj) {
 		if (node[0]) {
 			int idx = getIndex(obj);
 			if (idx != -1) {
@@ -110,7 +110,7 @@ public:
 		}
 	}
 
-	void retrieve(std::vector<std::shared_ptr<BaseObject>>& returnObjects, std::shared_ptr<BaseObject> obj) {
+	void retrieve(std::vector<BaseObject*>& returnObjects, BaseObject* obj) {
 		int idx = getIndex(obj);
 		if (node[0]) {
 			if (idx == -1) {
@@ -125,10 +125,11 @@ public:
 		returnObjects.insert(returnObjects.begin(), objects.begin(), objects.end());
 	}
 
-	void update_collision(std::vector<std::shared_ptr<BaseObject>>& objects) {
+	void update_collision(std::vector<BaseObject*>& objects) {
 		this->clear();
 		for (int i = 0;i < objects.size();) {
 			if (objects[i]->shouldDelete()) {
+				delete objects[i];
 				objects.erase(objects.begin() + i);
 			}
 			else {
@@ -142,7 +143,7 @@ public:
 			if (obj->getObjectType() == ObjectType::Object_Bullet) {
 				//¼ì²âÊÇ·ñ³ö½ç
 			}
-			std::vector<std::shared_ptr<BaseObject>> possibleCollision;
+			std::vector<BaseObject*> possibleCollision;
 			this->retrieve(possibleCollision, obj);
 			for (auto other : possibleCollision) {
 				if (obj == other) continue;

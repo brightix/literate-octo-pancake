@@ -83,6 +83,7 @@ public:
 
 	float getMaxLightAttackRange();
 
+	string getCurrentState();
 
 	nlohmann::json& getConfig();
 
@@ -90,7 +91,7 @@ public:
 	void setVelocityY(float val);
 	void setOrientation(float val);
 
-	void on_collision(std::shared_ptr<BaseObject> other);
+	void on_collision(BaseObject* other);
 
 
 

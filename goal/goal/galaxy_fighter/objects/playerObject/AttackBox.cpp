@@ -1,21 +1,23 @@
 #include "pch.h"
 #include "AttackBox.h"
 #include "../../FSM/Player/PlayerState.h"
-AttackBox::AttackBox(BaseObject* from,string attackType,SDL_FRect rect) : BaseObject(ObjectType::Object_AttackBox)
+AttackBox::AttackBox(PlayerObject* from,string attackType) : BaseObject(ObjectType::Object_AttackBox)
 {
 	this->from = from;
 	texture = ResourceManager::Instance().getTexture("player",attackType).get();
-	hitBox = Rect(rect);
+	SDL_FRect& fatherBox = from->getHitBox()->rect;
+	hitBox.rect = fatherBox;
+	hitBox.rect.x = fatherBox.x + from->getOrientation() * fatherBox.w;
 }
 
-void AttackBox::on_collision(shared_ptr<BaseObject> other)
+void AttackBox::on_collision(BaseObject* other)
 {
 	switch (other->getObjectType()) {
 	case Object_Ground:
 		break;
 	case Object_Player:
-		if (other.get() != from) {
-			if (auto* player = dynamic_cast<PlayerObject*>(other.get())) {
+		if (other != from) {
+			if (auto* player = dynamic_cast<PlayerObject*>(other)) {
 				player->ChangeState(new Hurt);
 			}
 		}
@@ -27,6 +29,9 @@ void AttackBox::on_collision(shared_ptr<BaseObject> other)
 
 void AttackBox::update()
 {
+	SDL_FRect& fatherBox = from->getHitBox()->rect;
+	hitBox.rect.x = fatherBox.x + from->getOrientation() * fatherBox.w;
+	hitBox.rect.y = fatherBox.y;
 	actionTime += Timer::Instance().getDeltaAdjustTime();
 }
 
@@ -37,6 +42,7 @@ void AttackBox::render()
 		SDL_FRect sr = Camera::Instance().worldToScreen(showRect);
 		SDL_RenderTexture(RendererManager::Instance().getRenderer(),texture,nullptr,&sr);
 	}
+	cout << showRect.x << endl;
 }
 
 Rect* AttackBox::getHitBox()
@@ -51,5 +57,5 @@ std::shared_ptr<SDL_FRect> AttackBox::getRenderRect()
 
 bool AttackBox::shouldDelete()
 {
-	return actionTime >= 1.0;
+	return actionTime >= 0.3;
 }

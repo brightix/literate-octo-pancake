@@ -35,6 +35,6 @@ shared_ptr<SDL_FRect> GroundObject::getRenderRect()
 	return shared_ptr<SDL_FRect>();
 }
 
-void GroundObject::on_collision(shared_ptr<BaseObject> other) {
+void GroundObject::on_collision(BaseObject* other) {
 	return;
 }

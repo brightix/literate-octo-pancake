@@ -1,16 +1,22 @@
 #pragma once
 #include "pch.h"
 #include "../BaseObject.h"
+//#include "playerObject.h"
+
+class PlayerObject;
+
 class AttackBox :
     public BaseObject
 {
     Rect hitBox;
-    BaseObject* from;
+    PlayerObject* from;
     SDL_Texture* texture;
     float actionTime = 0.0f;
+    Rect* fatherHitBox;
+    int* orientation;
 public:
-    AttackBox(BaseObject* from,std::string attackType,SDL_FRect rect);
-    void on_collision(std::shared_ptr<BaseObject> other) override ;
+    AttackBox(PlayerObject* from,std::string attackType);
+    void on_collision(BaseObject* other) override ;
 
     void update();
     void render();

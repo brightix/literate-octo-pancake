@@ -95,7 +95,7 @@ class LightAttack :
     public PlayerState
 {
     float actionTime = 0;
-    std::shared_ptr<AttackBox> attackBox;
+    BaseObject* attackBox;
 public:
     void Enter(PlayerObject& player);
     void Update(PlayerObject& player);

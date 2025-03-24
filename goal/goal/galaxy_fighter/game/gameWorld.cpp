@@ -14,7 +14,7 @@ void GameWorld::setPlayer(PlayerObject* h){ player = h; }
 
 void GameWorld::setCamera(Camera* camera) { this->camera = camera; }
 
-void GameWorld::addNewObject(const string& s, shared_ptr<BaseObject> newObject) {
+void GameWorld::addNewObject(const string& s, BaseObject* newObject) {
 	//if (s == "ground") {
 	//	GroundObjects.push_back(newObject);
 	//}
@@ -27,11 +27,11 @@ void GameWorld::addNewObject(const string& s, shared_ptr<BaseObject> newObject) 
 	objects.push_back(newObject);
 }
 
-vector<shared_ptr<BaseObject>>& GameWorld::getObjects() {
+vector<BaseObject*>& GameWorld::getObjects() {
 	return objects;
 }
 
-vector<shared_ptr<BaseObject>>& GameWorld::getGroundObjects() {
+vector<BaseObject*>& GameWorld::getGroundObjects() {
 	return GroundObjects;
 }
 
@@ -68,7 +68,7 @@ void GameWorld::show_log() {
 		if (player)
 		{
 			cout << "| 玩家坐标x  :" << (short)player->getAttrs()->playerX << ", y:" << (short)player->getAttrs()->playerY << endl;
-			cout << "| 玩家状态   :" << player->printActionState() << endl;
+			cout << "| 玩家状态   :" << player->getCurrentState() << endl;
 		}
 		if(camera)
 			cout << "| 相机坐标x  :" << (short)camera->getViewport()->x << ", y:" << (short)camera->getViewport()->y << endl;
@@ -105,13 +105,19 @@ void GameWorld::show_log_on_screen() {
 		SDL_RenderTexture(renderer, texture,nullptr,&dstRect);
 
 
-		texture = textRenderer.getTextTexture("每秒移速 :" + to_string(player->getVelocityX()), "pingfang", 30);
+		texture = textRenderer.getTextTexture("每秒移速 :" + to_string((int)player->getVelocityX()), "pingfang", 30);
 		dstRect = { 0,i++ * log_interval,0,0 };
 		SDL_GetTextureSize(texture, &dstRect.w, &dstRect.h);
 		dstRect.x = resolution.w - dstRect.w;
 		SDL_RenderTexture(renderer, texture, nullptr, &dstRect);
 
-		texture = textRenderer.getTextTexture("每秒掉落速度 :" + to_string(player->getVelocityY()), "pingfang", 30);
+		texture = textRenderer.getTextTexture("每秒掉落速度 :" + to_string((int)player->getVelocityY()), "pingfang", 30);
+		dstRect = { 0,i++ * log_interval,0,0 };
+		SDL_GetTextureSize(texture, &dstRect.w, &dstRect.h);
+		dstRect.x = resolution.w - dstRect.w;
+		SDL_RenderTexture(renderer, texture, nullptr, &dstRect);
+
+		texture = textRenderer.getTextTexture("状态 :" + player->getCurrentState(), "pingfang", 30);
 		dstRect = { 0,i++ * log_interval,0,0 };
 		SDL_GetTextureSize(texture, &dstRect.w, &dstRect.h);
 		dstRect.x = resolution.w - dstRect.w;

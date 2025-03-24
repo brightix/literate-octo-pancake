@@ -16,6 +16,6 @@ public:
     void render() override;
     Rect* getHitBox() override ;
     std::shared_ptr<SDL_FRect> getRenderRect() override ;
-    void on_collision(std::shared_ptr<BaseObject> other);
+    void on_collision(BaseObject* other);
 };
 

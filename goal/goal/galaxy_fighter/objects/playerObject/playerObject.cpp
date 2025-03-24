@@ -144,7 +144,7 @@ shared_ptr<vector<float>> PlayerObject::getActionFrameDelay() { return actionFra
 shared_ptr<unordered_map<std::string, SpriteSheet>> PlayerObject::getSpriteSheet() { return spriteSheet; }
 
 
-void PlayerObject::on_collision(shared_ptr<BaseObject> other) {
+void PlayerObject::on_collision(BaseObject* other) {
 
 	switch (other->getObjectType()) {
 	case Object_Ground:
@@ -241,6 +241,11 @@ float PlayerObject::getMaxJumpStrength() { return attrs->MaxJumpStrength; }
 float PlayerObject::getFriction() { return attrs->friction; }
 float PlayerObject::getMaxLightAttackRange() { return 100; }
 
+string PlayerObject::getCurrentState()
+{
+	return currentState->GetState();
+}
+
 
 json& PlayerObject::getConfig() {
 	return config;
@@ -254,7 +259,7 @@ void PlayerObject::setOrientation(float val) { attrs->player_orientation = val; 
 bool PlayerObject::IsMovingLeft() { return InputManager::Instance().isKeyPressed(SDL_SCANCODE_A); }
 bool PlayerObject::IsMovingRight() { return InputManager::Instance().isKeyPressed(SDL_SCANCODE_D); }
 bool PlayerObject::IsMoving() { return InputManager::Instance().isKeyPressed(SDL_SCANCODE_A) || InputManager::Instance().isKeyPressed(SDL_SCANCODE_D); }
-bool PlayerObject::IsJumping() { return InputManager::Instance().isKeyPressedOnce(SDL_SCANCODE_W); }
+bool PlayerObject::IsJumping() { return InputManager::Instance().isKeyPressed(SDL_SCANCODE_W); }
 bool PlayerObject::IsCrouching() { return InputManager::Instance().isKeyPressed(SDL_SCANCODE_S); }
 bool PlayerObject::IsFalling() { return false; }
 bool PlayerObject::IsGrounded() { return actionState["OnGround"]; }

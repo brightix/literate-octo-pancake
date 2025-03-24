@@ -15,11 +15,10 @@ public:
 	void setWorld(const nlohmann::json& config);
 	void setPlayer(PlayerObject* h);
 	void setCamera(Camera* camera);
-	void setObjects(std::vector<shared_ptr<BaseObject>>* objects);
-	void addNewObject(const string& s, shared_ptr<BaseObject> newOBject);
+	void addNewObject(const string& s, BaseObject* newOBject);
 
-	vector<shared_ptr<BaseObject>>& getObjects();
-	vector<shared_ptr<BaseObject>>& getGroundObjects();
+	vector<BaseObject*>& getObjects();
+	vector<BaseObject*>& getGroundObjects();
 	//vector<BaseObject*>& getBulletObjects();
 	//vector<BaseObject*>& getPlayerObjects();
 
@@ -51,8 +50,8 @@ private:
 
 	float report_log_time;
 	std::vector<string> errorList;
-	std::vector<shared_ptr<BaseObject>> objects;
-	std::vector<shared_ptr<BaseObject>> GroundObjects;
-	std::vector<shared_ptr<BaseObject>> PlayerObjects;
-	std::vector<shared_ptr<BaseObject>> BulletObjects;
+	std::vector<BaseObject*> objects;
+	std::vector<BaseObject*> GroundObjects;
+	std::vector<BaseObject*> PlayerObjects;
+	std::vector<BaseObject*> BulletObjects;
 };

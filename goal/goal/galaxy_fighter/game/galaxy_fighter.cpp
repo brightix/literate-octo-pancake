@@ -26,16 +26,16 @@ void Galaxy_fighter::loadResource() {
 	player = make_shared<PlayerObject>(config["player_tofu"]);
 
 	camera->setCameraOwner(player.get());
-	gw.addNewObject("player",player);
-	gw.addNewObject("ground",make_shared<GroundObject>(GroundObject(1000, 700, 0.03)));
-	gw.addNewObject("ground", make_shared<GroundObject>(GroundObject(0, 1000, 1)));
+	gw.addNewObject("player",player.get());
+	gw.addNewObject("ground",new GroundObject(1000, 700, 0.03));
+	gw.addNewObject("ground",new GroundObject(0, 1000, 1));
 
 	//objects.push_back(new GroundObject(200, 800, 0.1));
 	//objects.push_back(new GroundObject(400, 750, 0.1));
 }
 
 void Galaxy_fighter::update() {
-	vector<shared_ptr<BaseObject>>& objects = GameWorld::Instance().getObjects();
+	vector<BaseObject*>& objects = GameWorld::Instance().getObjects();
 	//Âß¼­²ã
 	background->render();
 	ui.update();
