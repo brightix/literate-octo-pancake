@@ -14,22 +14,23 @@ bool JumpNode::execute()
 	static float MaxJumpStrength = 15;
 	static float accelerationY = 0.45;
 	auto state = player->getActionState();
-    if (input.isKeyPressed(SDL_SCANCODE_W) && !(*state)["isFall"]) {
-        if ((*state)["isOnGround"] && input.isKeyPressedOnce(SDL_SCANCODE_W)) {
+    if (input.isKeyPressed(SDL_SCANCODE_W) && !(*state)["Fall"]) {
+        if ((*state)["OnGround"] && input.isKeyPressedOnce(SDL_SCANCODE_W)) {
 			attrs->velocityY = -MaxJumpStrength;
-			(*state)["isJump"] = true;
+			(*state)["Jump"] = true;
 		}
 		else {
 			attrs->velocityY += accelerationY * delta;
 			if (attrs->velocityY >= 0) {
 				attrs->velocityY = 0;
-				(*state)["isJump"] = false;
+				(*state)["Jump"] = false;
 			}
 		}
 		attrs->playerY += attrs->velocityY * delta;
+		return true;
     }
 	else {
-		(*state)["isJump"] = false;
+		(*state)["Jump"] = false;
 	}
     return false;
 }

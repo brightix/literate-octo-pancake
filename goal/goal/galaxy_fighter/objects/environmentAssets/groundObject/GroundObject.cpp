@@ -5,7 +5,7 @@
 GroundObject::GroundObject(float x, float y, float scaleFactor) : BaseObject(ObjectType::Ground)
 {
 	float resFactor = Resolution::Instance().getScaleFactor();
-	SDL_FRect trect = { x * resFactor,y * resFactor,100,100 };
+	SDL_FRect trect = { x,y,100,100 };
 	texture = ResourceManager::Instance().getTexture("bk","bk_3.jpg");
 	SDL_GetTextureSize(texture.get(), &trect.w,&trect.h);
 	trect.w *= scaleFactor;
@@ -23,14 +23,16 @@ void GroundObject::render()
 	if (camera.isOnScreen(*worldRect)) {
 		auto showRect = camera.worldToScreen(*worldRect);
 		SDL_RenderTexture(renderer,texture.get(),nullptr, &showRect);
-		SDL_RenderRect(renderer, &showRect);
 	}
-
-
 }
 
 Rect* GroundObject::getHitBox() {
 	return hitBox.get();
+}
+
+shared_ptr<SDL_FRect> GroundObject::getRenderRect()
+{
+	return shared_ptr<SDL_FRect>();
 }
 
 void GroundObject::on_collision(BaseObject* other) {

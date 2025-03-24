@@ -8,7 +8,7 @@ SpritePlayer::SpritePlayer(PlayerObject* player) : player(player)
 {
 	//初始化属性
 	this->texture = player->getTexture();
-	this->actionFrameDelay = player->getActionFrameDelay();
+	//this->actionFrameDelay = player->getActionFrameDelay();
 	
 	//初始化调用
 	this->root = make_unique<ParalleNode>();
@@ -27,8 +27,8 @@ SpritePlayer::SpritePlayer(PlayerObject* player) : player(player)
 	}
 
 	srcrect = make_shared<SDL_FRect>(SDL_FRect({ 1,1,frameWidth,frameHeight }));
-
-	actionState = "NULL";
+	nextAction = "NONE";
+	actionState = "Idle";
 	angle = 0.0;
 	root->addChild(make_shared<display_at_position>(texture, srcrect, player->getRenderRect(), &angle, &attrs->player_orientation));
 }
@@ -44,15 +44,29 @@ void SpritePlayer::setSpriteFrameRect() {
 	auto ss = player->getSpriteSheet();
 	string tfs = TransFormState();
 	if (actionState != tfs) {
-		actionState = tfs;
-		elapsed = 0;
-		curFrame = (*ss)[actionState].startFrame;
+		if (nextAction != "NONE") {
+			actionState = nextAction;
+			nextAction = "NONE";
+			curFrame = (*ss)[actionState].startFrame;
+			elapsed = 0;
+			cout << "执行了预输入" << endl;
+		}
+		else if ((*ss)[actionState].isInterruptible) {
+			actionState = tfs;
+			elapsed = 0;
+			curFrame = (*ss)[actionState].startFrame;
+		}
+		else if ((*ss)[actionState].endFrame - curFrame <= 3) {
+			nextAction = tfs;
+		}
 	}
-	cout << actionState << endl;
+
 	SpriteSheet& curss = (*ss)[actionState];
 	*srcrect = getFrame(curFrame);
 	elapsed += Timer::Instance().getDeltaAdjustTime();
-	if (elapsed >= (*actionFrameDelay)[curFrame]) {
+	if (elapsed >= (*ss)[actionState].actionDelay) {
+		//cout << curFrame << endl;
+		cout << actionState << endl;
 		if (++curFrame >= curss.endFrame) {
 			if (curss.isLoop) {
 				curFrame = curss.startFrame;
@@ -66,43 +80,11 @@ void SpritePlayer::setSpriteFrameRect() {
 }
 
 string SpritePlayer::TransFormState() {
+	auto actionPriority = *player->getActionPriority();
 	auto state = player->getActionState();
-
-	if ((*state)["isAttack"]) {
-		return "Attack";
-	}
-	else if ((*state)["Idle_to_Jump"]) {
-		return "Idle_to_Jump";
-	}
-	else if ((*state)["isJump"]) {
-		return "Jump";
-	}
-	else if ((*state)["Jump_to_Fall"]) {
-		return "Jump_to_Fall";
-	}
-	else if ((*state)["isFall"]) {
-		return "Fall";
-	}
-	else if ((*state)["Fall_to_Idle"]) {
-		return "Fall_to_Idle";
-	}
-	else if ((*state)["Idle_to_Down"]) {
-		return "Idle_to_Down";
-	}
-	else if ((*state)["Down"]) {
-		return "Down";
-	}
-	else if ((*state)["Down_to_Idle"]) {
-		return "Down_to_Idle";
-	}
-	else if ((*state)["Idle_to_Run"]) {
-		return "Idle_to_Run";
-	}
-	else if ((*state)["isRun"]) {
-		return "Run";
-	}
-	else if ((*state)["Run_to_Idle"]) {
-		return "Run_to_Idle";
+	for (auto action : actionPriority)
+	{
+		if ((*state)[action]) return action;
 	}
 	return "Idle";
 }

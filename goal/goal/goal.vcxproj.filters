@@ -114,9 +114,6 @@
     <ClCompile Include="galaxy_fighter\objects\BaseObject.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="galaxy_fighter\objects\playerObject\PlayerState.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="galaxy_fighter\objects\playerObject\SpritePlayer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -174,6 +171,12 @@
     <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_player\Down\Down.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="galaxy_fighter\FSM\Player\TransitionState.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\FSM\Player\PlayerState.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="galaxy_fighter\core\inputManager.h">
@@ -213,9 +216,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="gameObject\gameObject.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="galaxy_fighter\core\Resolution.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="menu.h">
@@ -278,9 +278,6 @@
     <ClInclude Include="galaxy_fighter\objects\BaseObject.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="galaxy_fighter\objects\playerObject\PlayerState.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="galaxy_fighter\objects\playerObject\SpritePlayer.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -336,6 +333,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_player\Down\Down.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\FSM\Player\PlayerState.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\FSM\Player\TransitionState.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\core\Resolution.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

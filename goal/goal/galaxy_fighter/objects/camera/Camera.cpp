@@ -15,6 +15,10 @@ Camera::Camera() {
 	world = &windowRect;
 }
 
+void Camera::setViewport(SDL_FRect curWindowRect) {
+	viewport = curWindowRect;
+}
+
 SDL_FRect* Camera::getViewport() { return &viewport; }
 
 void Camera::setCameraOwner(BaseObject* owner) {

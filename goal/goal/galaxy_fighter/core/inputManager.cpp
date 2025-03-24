@@ -14,14 +14,13 @@ bool InputManager::update(const SDL_Event& e) {
 	case SDL_EVENT_QUIT:
 		return false;
 	case SDL_EVENT_KEY_DOWN:
-		
 		if (curKey.state == IDLE || curKey.state == RELEASED) {
 			curKey.state = PRESSED;
 			curKey.pressTime = now;
 		}
 		break;
 	case SDL_EVENT_KEY_UP:
-		curKey.state = RELEASED;
+		curKey.state = JUST_RELEASED;
 		curKey.releaseTime = now;
 		break;
 	case SDL_EVENT_MOUSE_MOTION:
@@ -63,9 +62,13 @@ void InputManager::postUpdate() {
 				info.state = HELD;
 			}
 		}
-		if (info.state == RELEASED) {
+		else if (info.state == JUST_RELEASED) {
+			info.state = RELEASED;
+		}
+		else if (info.state == RELEASED) {
 			info.state = IDLE;
 		}
+
 	}
 }
 
@@ -129,10 +132,14 @@ void InputManager::checkAllKeyEvents() {
 	if (now - last_frame_select_time >= FRAME_SELECTED_THRESHOLD) {
 		for (SDL_Scancode i = SDL_SCANCODE_1;i <= SDL_SCANCODE_4;++i) {
 			if (isKeyPressed(i)) {
-				Timer::Instance().selectFrame(i - SDLK_1);
+				Timer::Instance().selectFrame(i - SDL_SCANCODE_1);
 				last_frame_select_time = now;
 				break;
 			}
+		}
+		if (isKeyPressed(SDL_SCANCODE_5)) {
+			RendererManager::Instance().switchScreenDisplayMove();
+			last_frame_select_time = now;
 		}
 	}
 }

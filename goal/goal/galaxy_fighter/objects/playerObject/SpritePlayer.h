@@ -20,6 +20,7 @@ class SpritePlayer{
 	double angle;
 	float elapsed = 0.0;
 	short curFrame = 0;
+	std::string nextAction;
 	std::string actionState;
 public:
 	//≥ı ºªØ

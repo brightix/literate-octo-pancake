@@ -11,8 +11,11 @@ static void from_json(const json& j, PlayerAttrs& p) {
 	p.playerY = j.value("playerY", 0.0f);
 	p.velocityX = j.value("velocityX", 0.0f);
 	p.velocityY = j.value("velocityY", 0.0f);
+	p.MaxRunStrength = j.value("MaxRunStrength", 5.0f);
+	p.MaxJumpStrength = j.value("MaxJumpStrength", 10.0f);
 	p.gravity = j.value("gravity", 0.4f);
-	p.acceleration = j.value("acceleration",1.0f);
+	p.accelerationX = j.value("accelerationX",1.0f);
+	p.accelerationY = j.value("accelerationY", 1.0f);
 	p.friction = j.value("friction", 1.0f);
 	p.playerHP = j.value("playerHP", 5.0f);
 	p.player_move_speed = j.value("player_move_speed", 10.0f);
@@ -40,54 +43,64 @@ PlayerObject::PlayerObject(const json& config) : BaseObject(ObjectType::Player){
 
 	root = make_shared<ParalleNode>();
 	root->addChild(make_shared<FallNode>(this));
-	root->addChild(make_shared<JumpNode>(this));
-	root->addChild(make_shared<DownNode>(this));
 	root->addChild(make_shared<MoveNode>(this));
+
+	shared_ptr<Selector> selector = make_shared<Selector>();
+	selector->addChild(make_shared<JumpNode>(this));
+	selector->addChild(make_shared<DownNode>(this));
+	root->addChild(selector);
+
+
 	actionState = {
 		{"isAttack",false},
-		{"isJump",false},
-		{"isRun",false},
-		{"isFall",false},
-		{"isOnGround",false},
-		{"Down",false},
-
-
+		{"Idle_to_Jump",false},
+		{"Jump",false},
 		{"Jump_to_Fall",false},
+		{"Fall",false},
 		{"Fall_to_Idle",false},
-		{"Idle_to_Run",false},
-		{"Run_to_Idle",false},
 		{"Idle_to_Down",false},
+		{"Down",false},
 		{"Down_to_Idle",false},
-		{"wink",false}
+		{"Idle_to_Run",false},
+		{"Run",false},
+		{"Run_to_Idle",false},
+		{"wink",false},
+		{"OnGround",false},
 	};
 	//spriteSheet
 	spriteSheet = make_shared<unordered_map<string,SpriteSheet>>();
+	actionPriority = make_shared<vector<string>>();
 	for (auto& [key,val] : config["spriteSheet"].items()) {
-		(*spriteSheet)[key] = { val["startFrame"],val["endFrame"],val["isLoop"],val["isInterruptible"] };
+		(*spriteSheet)[key] = { val["startFrame"],val["endFrame"],val["actionDelay"],val["isLoop"],val["isInterruptible"]};
 	}
-
 	//actionFrameDelay
 	vector<float> actionframedelay = {};
 	actionFrameDelay = make_shared<std::vector<float>>(actionframedelay);
-	for (auto & val : config["actionFrameDelay"]) {
-		actionFrameDelay->push_back(val);
-	}
+	//for (auto & val : config["actionFrameDelay"]) {
+	//	actionFrameDelay->push_back(val);
+	//}
 	sprite = make_shared<SpritePlayer>(this);
+	currentState = new IdleState;
+	loadActionFrame();
 }
 
 void PlayerObject::update() {
-	this->root->execute();
-
+	//this->root->execute();
+	currentState->Update(*this);
+	//if (!IsGrounded()) {
+	//	attrs->playerY += 10;
+	//}
+	float delta = Timer::Instance().getDeltaAdjustTime();
+	this->attrs->playerX += attrs->velocityX * delta;
+	this->attrs->playerY += attrs->velocityY * delta;
 	this->hitBox->rect.x = attrs->playerX;
 	this->hitBox->rect.y = attrs->playerY;
 }
 
 void PlayerObject::render()
 {
-	sprite->update();
-	auto r = RendererManager::Instance().getRenderer();
-	SDL_SetRenderDrawColor(r, 255, 255, 0, 0);
-	SDL_RenderRect(r, renderRect.get());
+	//sprite->update();
+	currentState->Render(*this);
 }
 
 void PlayerObject::refreshRenderRect() {
@@ -100,28 +113,20 @@ void PlayerObject::refreshRenderRect() {
 }
 
 void PlayerObject::resetActionState() {
-	actionState["isOnGround"] = false;
+	actionState["OnGround"] = false;
 }
 
 
 
-shared_ptr<PlayerAttrs> PlayerObject::getAttrs()
-{
-	return attrs;
-}
+shared_ptr<PlayerAttrs> PlayerObject::getAttrs() { return attrs; }
 
-shared_ptr<SDL_Texture> PlayerObject::getTexture() {
-	return texture;
-}
+shared_ptr<SDL_Texture> PlayerObject::getTexture() { return texture; }
 
-unordered_map<string,bool>* PlayerObject::getActionState()
-{
-	return &actionState;
-}
+unordered_map<string,bool>* PlayerObject::getActionState(){ return &actionState;}
 
-Rect* PlayerObject::getHitBox() {
-	return hitBox.get();
-}
+shared_ptr<vector<string>> PlayerObject::getActionPriority() { return actionPriority; }
+
+Rect* PlayerObject::getHitBox() { return hitBox.get(); }
 
 shared_ptr<SDL_FRect> PlayerObject::getRenderRect() {
 	auto& camera = Camera::Instance();
@@ -132,15 +137,10 @@ shared_ptr<SDL_FRect> PlayerObject::getRenderRect() {
 	return renderRect;
 }
 
-shared_ptr<vector<float>> PlayerObject::getActionFrameDelay()
-{
-	return actionFrameDelay;
-}
+shared_ptr<vector<float>> PlayerObject::getActionFrameDelay() { return actionFrameDelay; }
 
-shared_ptr<unordered_map<std::string, SpriteSheet>> PlayerObject::getSpriteSheet()
-{
-	return spriteSheet;
-}
+shared_ptr<unordered_map<std::string, SpriteSheet>> PlayerObject::getSpriteSheet() { return spriteSheet; }
+
 
 void PlayerObject::on_collision(BaseObject* other) {
 
@@ -185,7 +185,7 @@ void PlayerObject::on_collision(BaseObject* other) {
 				if (playerBottom - groundTop < groundBottom - playerTop) {
 					// 玩家从下方碰撞地面
 					attrs->playerY = groundTop - rect.h;
-					actionState["isOnGround"] = true;
+					actionState["OnGround"] = true;
 				}
 				else {
 					// 玩家从上方碰撞地面
@@ -222,6 +222,86 @@ void PlayerObject::setHitBox(string action) {
 	}
 }
 
+//获取玩家属性
+float PlayerObject::getPositionX() { return attrs->playerX; }
+float PlayerObject::getPositionY() { return attrs->playerY; }
+
+
+float PlayerObject::getVelocityX() { return attrs->velocityX; }
+float PlayerObject::getVelocityY() { return attrs->velocityY; }
+float PlayerObject::getAccelerationX() { return attrs->accelerationX; }
+float PlayerObject::getAccelerationY() { return attrs->accelerationY; }
+
+int PlayerObject::getOrientation() { return attrs->player_orientation; }
+float PlayerObject::getGravity() { return attrs->gravity; }
+float PlayerObject::getMaxRunStrength() { return attrs->MaxRunStrength; }
+float PlayerObject::getMaxJumpStrength() { return attrs->MaxJumpStrength; }
+float PlayerObject::getFriction() { return attrs->friction; }
+float PlayerObject::getMaxLightAttackRange() { return 100; }
+
+//玩家数据计算
+void PlayerObject::setVelocityX(float val) { attrs->velocityX = val; }
+void PlayerObject::setVelocityY(float val) { attrs->velocityY = val; }
+void PlayerObject::setOrientation(float val) { attrs->player_orientation = val; }
+
+//检测输入
+bool PlayerObject::IsMovingLeft() { return InputManager::Instance().isKeyPressed(SDL_SCANCODE_A); }
+bool PlayerObject::IsMovingRight() { return InputManager::Instance().isKeyPressed(SDL_SCANCODE_D); }
+bool PlayerObject::IsMoving() { return InputManager::Instance().isKeyPressed(SDL_SCANCODE_A) || InputManager::Instance().isKeyPressed(SDL_SCANCODE_D); }
+bool PlayerObject::IsJumping() { return InputManager::Instance().isKeyPressed(SDL_SCANCODE_W); }
+bool PlayerObject::IsCrouching() { return InputManager::Instance().isKeyPressed(SDL_SCANCODE_S); }
+bool PlayerObject::IsFalling() { return false; }
+bool PlayerObject::IsGrounded() { return actionState["OnGround"]; }
+bool PlayerObject::IsLightAttack() { return InputManager::Instance().isKeyPressed(SDL_SCANCODE_J); }
+
+
+//玩家状态切换
+void PlayerObject::ChangeState(PlayerState* newState) {
+	currentState->Exit(*this);
+	delete currentState;
+	currentState = newState;
+	currentState->Enter(*this);
+}
+
+//渲染
+
+void PlayerObject::loadActionFrame() {
+	float textureWidth, textureHeight;//整张大小
+	SDL_GetTextureSize(texture.get(), &textureWidth, &textureHeight);
+
+	float frameWidth = attrs->player_sprite_frame_width;
+	float frameHeight = attrs->player_sprite_frame_height;//单帧大小
+
+	for (int row = 0;row * frameHeight < textureHeight;row++) {
+		for (int col = 0;col * frameWidth < textureWidth;col++) {
+			frames.push_back({ frameWidth * col,frameHeight * row, frameWidth,frameHeight });//水平排列的精灵表
+		}
+	}
+}
+
+SDL_FRect* PlayerObject::getActionFrameRect() {
+	elapsed += Timer::Instance().getDeltaAdjustTime();
+	if (elapsed >= (*spriteSheet)[currentState->GetState()].actionDelay) {
+
+		if (++curFrame >= (*spriteSheet)[currentState->GetState()].endFrame) {
+			setActionFrameStart();
+		}
+		if (curFrame >= frames.size()) {
+			cout << "动画出界了" << endl;
+		}
+		elapsed = 0;
+	}
+
+	return &frames[curFrame];
+}
+
+void PlayerObject::setActionFrameStart() {
+	curFrame = (*spriteSheet)[currentState->GetState()].startFrame;
+}
+
+//void PlayerObject::Update() {
+//	currentState->Update(*this);
+//}
 
 
 

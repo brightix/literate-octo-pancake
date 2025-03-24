@@ -29,10 +29,14 @@ public:
 	void funcDeltaEnd();
 
 	int getFrame();
+	int getCurFrame();
 	bool getRandomBool(double probability);
 	double enemy_spawn_clock;
 	double secondTimer;
 	
+	void startCountTimer(std::string task);
+	void returnCountTimer(std::string task);
+
 	Timer(const Timer&) = delete;
 	Timer& operator=(const Timer&) = delete;
 protected:
@@ -48,7 +52,7 @@ private:
 	LARGE_INTEGER pauseTime;
 
 
-	Uint64 ticks;//时间线
+	double ticks;//时间线
 	double deltaTime;//刷新一帧所需要的时间
 	bool isPause = false;
 
@@ -59,18 +63,10 @@ private:
 	double refreshTime;
 
 	vector<double> frameTable;
+	int curFrameLevel;
 	void init();
+	
+	//计时器
+	std::unordered_map<string, LARGE_INTEGER> countTimer;
 };
 
-
-
-//缓冲器
-typedef struct Buffer {
-	Buffer();
-	//~Buffer();
-	TCHAR heroBloodText[20];
-	TCHAR fpsText[20];//fps缓冲数组
-	TCHAR scoreText[20];//得分文本缓冲数组
-private:
-	void init();
-}Buffer;

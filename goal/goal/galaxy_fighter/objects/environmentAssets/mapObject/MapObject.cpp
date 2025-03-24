@@ -19,9 +19,14 @@ MapObject::MapObject(const json& config){
 	context->initData("angle",angle);
 
 	//初始化地图矩形
+	float resScale = Resolution::Instance().getScaleFactor();
 	auto texture = context->getData<SDL_Texture>("texture").get();
 	SDL_FRect wholeRect = { 0,0,0,0};
 	SDL_GetTextureSize(texture, &wholeRect.w, &wholeRect.h);
+	wholeRect.x *= resScale;
+	wholeRect.y *= resScale;
+	wholeRect.w *= resScale;
+	wholeRect.h *= resScale;
 	context->initData("wholeRect",make_shared<SDL_FRect>(wholeRect));
 
 	root = make_unique<ParalleNode>();

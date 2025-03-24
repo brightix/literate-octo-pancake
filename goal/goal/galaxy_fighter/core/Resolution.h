@@ -19,10 +19,9 @@ public:
 private:
 	Resolution();
 	~Resolution();
-	//·Ö±æÂÊ
+
 	short curRes;
 	bool isLandScape;
 	SDL_FRect windowRect;
 	std::vector<std::pair<float, float>> resolution;
 };
-

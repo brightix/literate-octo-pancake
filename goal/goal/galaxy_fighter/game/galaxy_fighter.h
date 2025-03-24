@@ -23,5 +23,6 @@ private:
 	Camera* camera;
 	QuadTree qtree;
 	UI ui;
+	bool isDevelopmentEnable = false;
 };
 

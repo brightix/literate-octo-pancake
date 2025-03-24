@@ -15,7 +15,7 @@ bool MoveNode::execute() {
     }
     if (dx) {
         //ÓÐÊäÈë
-        (*state)["isRun"] = true;
+        (*state)["Run"] = true;
         static float MaxRunStrength = 5;
 
         if (attrs->player_orientation != dx || attrs->velocityX == 0) {
@@ -23,7 +23,7 @@ bool MoveNode::execute() {
             attrs->player_orientation = dx;
         }
 
-        attrs->velocityX *= exp(attrs->acceleration * delta);
+        attrs->velocityX *= exp(attrs->accelerationX * delta);
         attrs->velocityX = clamp(attrs->velocityX,-MaxRunStrength,MaxRunStrength);
     }
     else {
@@ -42,7 +42,7 @@ bool MoveNode::execute() {
         else {
             attrs->velocityX = 0;
         }
-        (*state)["isRun"] = false;
+        (*state)["Run"] = false;
     }
     attrs->playerX += attrs->velocityX;
     return false;

@@ -12,12 +12,13 @@ bool DownNode::execute()
 	auto attrs = player->getAttrs();
 	float delta = Timer::Instance().getVelocityFactor();
 	auto state = player->getActionState();
-	if (input.isKeyPressed(SDL_SCANCODE_S) && (*state)["isOnGround"]) {
+	if (input.isKeyPressed(SDL_SCANCODE_S) && (*state)["OnGround"]) {
 		if (input.isKeyPressedOnce(SDL_SCANCODE_S)) {
 			(*state)["Idle_to_Down"] = true;
 			(*state)["Down"] = true;
 			//player->setHitBox("Crouching");
 		}
+		return true;
 	}
 	else {
 		if ((*state)["Down"]) {

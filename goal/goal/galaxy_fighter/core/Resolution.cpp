@@ -8,7 +8,7 @@ Resolution& Resolution::Instance() {
 
 Resolution::Resolution() {
 
-	curRes = 2;
+	curRes = 0;
 	
 	resolution = { { 720, 405 }, { 1280,720 }, { 1920,1080 }, {2560,1440} };
 	isLandScape = true;
@@ -25,6 +25,8 @@ void Resolution::setResolution(short level) {
 	SDL_SetWindowSize(RendererManager::Instance().getWindow(), resolution[level].first, resolution[level].second);
 	windowRect.w = resolution[level].first;
 	windowRect.h = resolution[level].second;
+	Camera::Instance().setViewport(windowRect);
+
 	cout << "分辨率更改为" << windowRect.w << "x" << windowRect.h << endl;
 
 }
@@ -38,6 +40,6 @@ void Resolution::setLandScape(bool b) { isLandScape = b; }
 bool Resolution::getIsLandScape() { return isLandScape; }
 
 float Resolution::getScaleFactor() {
-	return 	getWindowRect().h/1080;
+	return 	windowRect.h/1080.0f;
 }
 

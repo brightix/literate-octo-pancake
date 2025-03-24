@@ -117,12 +117,12 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\21811\OneDrive\Desktop\literate-octo-pancake\goal\goal\galaxy_fighter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\21811\Desktop\literate-octo-pancake\goal\goal\galaxy_fighter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_ttf.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -136,19 +136,20 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\21811\OneDrive\Desktop\literate-octo-pancake\goal\goal\galaxy_fighter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\21811\Desktop\literate-octo-pancake\goal\goal\galaxy_fighter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_ttf.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_player\Down\Down.cpp" />
     <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_player\display_at_position\display_at_position.cpp" />
+    <ClCompile Include="galaxy_fighter\FSM\Player\PlayerState.cpp" />
     <ClCompile Include="galaxy_fighter\objects\UI\esc\Esc_interface.cpp" />
     <ClCompile Include="galaxy_fighter\objects\UI\esc\Esc_button.cpp" />
     <ClCompile Include="galaxy_fighter\objects\UI\component.cpp" />
@@ -199,17 +200,18 @@
     <ClCompile Include="galaxy_fighter\BehaviorTree\Composite\Selector.cpp" />
     <ClCompile Include="galaxy_fighter\BehaviorTree\Composite\Sequence.cpp" />
     <ClCompile Include="galaxy_fighter\BehaviorTree\paralle\ParalleNode.cpp" />
-    <ClCompile Include="galaxy_fighter\objects\playerObject\PlayerState.cpp" />
     <ClCompile Include="galaxy_fighter\objects\playerObject\SpritePlayer.cpp" />
     <ClCompile Include="galaxy_fighter\utils\transformUtils.cpp" />
     <ClCompile Include="galaxy_fighter\BehaviorTree\BTAction_player\move\MoveNode.cpp" />
     <ClCompile Include="galaxy_fighter\core\physics\QuadTree.cpp" />
     <ClCompile Include="galaxy_fighter\objects\UI\UI.cpp" />
     <ClCompile Include="galaxy_fighter\objects\UI\UIManager\UIManager.cpp" />
+    <ClCompile Include="galaxy_fighter\FSM\Player\TransitionState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_player\Down\Down.h" />
     <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_player\display_at_position\display_at_position.h" />
+    <ClInclude Include="galaxy_fighter\core\Resolution.h" />
     <ClInclude Include="galaxy_fighter\objects\UI\esc\Esc_interface.h" />
     <ClInclude Include="galaxy_fighter\objects\UI\esc\Esc_button.h" />
     <ClInclude Include="galaxy_fighter\objects\UI\component.h" />
@@ -251,17 +253,17 @@
     <ClInclude Include="galaxy_fighter\objects\MainMenuObject\MenuText.h" />
     <ClInclude Include="galaxy_fighter\objects\MainMenuObject\MenuImage.h" />
     <ClInclude Include="galaxy_fighter\objects\MainMenuObject\MenuSound.h" />
-    <ClInclude Include="galaxy_fighter\core\Resolution.h" />
     <ClInclude Include="galaxy_fighter\BehaviorTree\Composite\Selector.h" />
     <ClInclude Include="galaxy_fighter\BehaviorTree\Composite\Sequence.h" />
     <ClInclude Include="galaxy_fighter\BehaviorTree\paralle\ParalleNode.h" />
-    <ClInclude Include="galaxy_fighter\objects\playerObject\PlayerState.h" />
     <ClInclude Include="galaxy_fighter\objects\playerObject\SpritePlayer.h" />
     <ClInclude Include="galaxy_fighter\utils\transformUtils.h" />
     <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_player\move\MoveNode.h" />
     <ClInclude Include="galaxy_fighter\core\physics\QuadTree.h" />
     <ClInclude Include="galaxy_fighter\objects\UI\UI.h" />
     <ClInclude Include="galaxy_fighter\objects\UI\UIManager\UIManager.h" />
+    <ClInclude Include="galaxy_fighter\FSM\Player\PlayerState.h" />
+    <ClInclude Include="galaxy_fighter\FSM\Player\TransitionState.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />

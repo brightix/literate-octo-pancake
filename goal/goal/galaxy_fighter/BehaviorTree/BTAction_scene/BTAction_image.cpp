@@ -47,7 +47,8 @@ bool display_background::execute() {
 	if (SDL_RenderTextureRotated(
 			RendererManager::Instance().getRenderer(),//渲染器
 			context->getData<SDL_Texture>("texture").get(),//纹理
-			camera->getViewport(), &Resolution::Instance().getWindowRect(),//相机视野
+			camera->getViewport(),//相机视野
+			&Resolution::Instance().getWindowRect(),
 			*context->getData<double>("angle"),//旋转角度
 			nullptr,//旋转中心
 			SDL_FLIP_NONE//是否翻转

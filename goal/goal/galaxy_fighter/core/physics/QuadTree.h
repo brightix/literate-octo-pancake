@@ -1,13 +1,13 @@
 #pragma once
 #include "../../objects/BaseObject.h"
 
-
-
 class Rect {
 public:
 	SDL_FRect rect;
-	Rect() { rect = { 100,100,100,100 }; }
-	Rect(SDL_FRect rect) : rect(rect) {}
+	SDL_Color color;
+	Rect() : color({ 255,255,0,255 }) { rect = { 100,100,100,100 }; }
+	Rect(SDL_FRect rect) : rect(rect), color({ 255,255,0,255 }) {}
+	Rect(SDL_FRect rect, SDL_Color color) : rect(rect), color(color) {}
 	bool intersects(Rect& other) {
 		SDL_FRect& otherR = other.rect;
 		return !(rect.x + rect.w < otherR.x ||
@@ -15,10 +15,13 @@ public:
 			rect.y + rect.h < otherR.y ||
 			rect.y > otherR.y + otherR.h);
 	}
-
-	bool contains(float px,float py) {
+	void setHitBoxColor(SDL_Color& color) {
+		this->color = color;
+	}
+	bool contains(float px, float py) {
 		return px >= rect.x && px <= rect.x + rect.w && py >= rect.y && py <= rect.y + rect.h;
 	}
+
 };
 
 class QuadTree
@@ -51,7 +54,7 @@ public:
 		float halfHeight = bounds.rect.h / 2;
 		float x = bounds.rect.x;
 		float y = bounds.rect.y;
-		
+
 		node[0] = new QuadTree(level + 1, Rect({ x,y,halfWidth,halfHeight }));
 		node[1] = new QuadTree(level + 1, Rect({ x + halfWidth,y,halfWidth,halfHeight }));
 		node[2] = new QuadTree(level + 1, Rect({ x,y + halfHeight,halfWidth,halfHeight }));
@@ -105,34 +108,37 @@ public:
 
 			}
 		}
-    }
+	}
 
-	void retrieve(std::vector<BaseObject*>& returnObjects,BaseObject* obj) {
+	void retrieve(std::vector<BaseObject*>& returnObjects, BaseObject* obj) {
 		int idx = getIndex(obj);
 		if (node[0]) {
 			if (idx == -1) {
 				for (auto n : node) {
-					n->retrieve(returnObjects,obj);
+					n->retrieve(returnObjects, obj);
 				}
 			}
 			else {
 				node[idx]->retrieve(returnObjects, obj);
 			}
 		}
-		returnObjects.insert(returnObjects.begin(),objects.begin(),objects.end());
+		returnObjects.insert(returnObjects.begin(), objects.begin(), objects.end());
 	}
 
-	void update_collision(std::vector<BaseObject*>& vObjects) {
+	void update_collision(std::vector<BaseObject*>& objects) {
 		this->clear();
-		for (auto o : vObjects) {
+		for (auto o : objects) {
 			this->insert(o);
 		}
-		for (auto obj : vObjects) {
+		for (auto obj : objects) {
 			if (obj->getObjectType() == ObjectType::Ground) {
 				continue;
 			}
+			if (obj->getObjectType() == ObjectType::Bullet) {
+				//¼ì²âÊÇ·ñ³ö½ç
+			}
 			std::vector<BaseObject*> possibleCollision;
-			this->retrieve(possibleCollision,obj);
+			this->retrieve(possibleCollision, obj);
 			for (auto other : possibleCollision) {
 				if (obj == other) continue;
 				if (obj->getHitBox()->intersects(*other->getHitBox())) {
@@ -141,5 +147,28 @@ public:
 			}
 		}
 	}
+};
+
+class QuadTreeManager {
+
+public:
+	static QuadTreeManager& Instance() {
+		static QuadTreeManager instance;
+		return instance;
+	}
+
+	void init(SDL_FRect range) {
+		qtree = QuadTree(0, Rect(range));
+	}
+
+	QuadTree& getQtree() {
+		return qtree;
+	}
+	QuadTreeManager(QuadTreeManager&) = delete;
+	QuadTreeManager& operator=(const QuadTreeManager&) = delete;
+private:
+	QuadTreeManager() {}
+	~QuadTreeManager() = default;
+	QuadTree qtree;
 };
 

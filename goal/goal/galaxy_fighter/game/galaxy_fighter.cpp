@@ -13,6 +13,7 @@ Galaxy_fighter::Galaxy_fighter(){
 
 void Galaxy_fighter::loadResource() {
 	ResourceManager& resource = ResourceManager::Instance();
+	GameWorld& gw = GameWorld::Instance();
 	ifstream file("config.json");
 	json config;
 	file >> config;
@@ -24,14 +25,16 @@ void Galaxy_fighter::loadResource() {
 	player = make_shared<PlayerObject>(config["player_tofu"]);
 
 	camera->setCameraOwner(player.get());
-	objects.push_back(new GroundObject(200, 800, 0.1));
-	objects.push_back(new GroundObject(1000, 700, 0.03));
-	objects.push_back(new GroundObject(400, 750, 0.1));
-	objects.push_back(new GroundObject(0,1000,1));
-	objects.push_back(player.get());
+	gw.addNewObject("player",player.get() );
+	gw.addNewObject("ground",new GroundObject(1000, 700, 0.03));
+	gw.addNewObject("ground", new GroundObject(0, 1000, 1));
+
+	//objects.push_back(new GroundObject(200, 800, 0.1));
+	//objects.push_back(new GroundObject(400, 750, 0.1));
 }
 
 void Galaxy_fighter::update() {
+	vector<BaseObject*>& objects = GameWorld::Instance().getObjects();
 	//逻辑层
 	background->render();
 	ui.update();
@@ -40,12 +43,14 @@ void Galaxy_fighter::update() {
 		background->update();
 		player->update();
 		player->resetActionState();
-		qtree.update_collision(objects);
-		player->refreshRenderRect();
+		QuadTreeManager::Instance().getQtree().update_collision(objects);
+
 		camera->update();
+		player->refreshRenderRect();
 	}
 
-	RendererManager::Instance().renderTexture("player","girl_1_normal.png",1);//精神堡垒
+	//RendererManager::Instance().renderTexture("player","girl_1_normal.png",1);//精神堡垒
+
 	for (auto o : objects) {
 		o->render();
 	}
@@ -56,7 +61,8 @@ void Galaxy_fighter::loaaGameWorld() {
 	GameWorld& gw = GameWorld::Instance();
 	gw.setCamera(camera);
 	gw.setPlayer(player.get());
-	qtree = QuadTree(0, Camera::Instance().getCameraRange());
+	//gw.setObjects(&objects);
+	//qtree = QuadTree(0, Camera::Instance().getCameraRange());
 }
 
 void Galaxy_fighter::play(){
@@ -101,9 +107,16 @@ void Galaxy_fighter::play(){
 
 
 		update();
+		if (input.isKeyReleased(SDL_SCANCODE_F1)) {
+			isDevelopmentEnable = !isDevelopmentEnable;
+		}
+		if (isDevelopmentEnable) {
+			gw.developmentMode();
+		}
+
+		input.checkAllKeyEvents();
 
 
-		gw.show_log_on_screen();
 		SDL_RenderPresent(renderer);
 
 		//日志输出

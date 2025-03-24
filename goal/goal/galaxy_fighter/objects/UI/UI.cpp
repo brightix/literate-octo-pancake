@@ -3,7 +3,7 @@
 
 UI::UI()
 {
-	texture = ResourceManager::Instance().getTexture("","").get();
+	//texture = ResourceManager::Instance().getTexture("","").get();
 	windowRect = Resolution::Instance().getWindowRect();
 	components.emplace_back(new Esc_button());
 }

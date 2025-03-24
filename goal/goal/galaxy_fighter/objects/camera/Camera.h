@@ -9,6 +9,9 @@ public:
 	void setCameraOwner(BaseObject* owner);//设置跟随目标
 
 	void setCameraRange(SDL_FRect* rect);//将地图矩形传过来
+	void setViewport(SDL_FRect curWindowRect);
+
+
 	SDL_FRect& getCameraRange();
 
 	std::pair<bool, bool>& ownerxyCrashedState();
@@ -25,6 +28,7 @@ public:
 private:
 
 	Camera();
+
 	~Camera() = default;
 	std::pair<bool, bool> isxyCrashed;
 	BaseObject* owner;

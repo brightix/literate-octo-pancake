@@ -23,9 +23,12 @@
             "playerY": 0,
             "velocityX": 0.0,
             "velocityY": 0.0,
-            "gravity": 0.5,
-            "acceleration": 0.6,
-            "friction": 0.7,
+            "MaxRunStrength": 400.0,
+            "MaxJumpStrength": 2000,
+            "gravity": 2500,
+            "accelerationX": 4000,
+            "accelerationY": 4000,
+            "friction": 10,
             "playerHP": 5,
             "player_move_speed": 5,
             "player_render_width": 128,
@@ -34,7 +37,6 @@
             "player_sprite_frame_height": 192,
             "player_sprite_frame": 1,
             "player_orientation": 1
-
         },
         "texture": {
             "catalog": "player",
@@ -42,122 +44,97 @@
             "angle": 0.0
         },
         "actionFrameDelay": [
-            600,
-            200,
-            200,
-            200,
-            200,
-            1000,
-            200,
-            200,
-            240,
-            88,
-            240,
-            200,
-            200,
-            200,
-            200,
-            200,
-            200,
-            200,
-            200,
-            200,
-            200,
-            200,
-            200,
-            200,
-            200,
-            100,
-            100,
-            100,
-            100,
-            100,
-            100,
-            100,
-            100,
-            100,
-            100,
-            100,
-            100,
-            100
         ],
         "spriteSheet": {
-            "Idle": {
-                "startFrame": 0,
-                "endFrame": 1,
-                "isLoop": true,
-                "isInterruptible": true
-            },
             "Idle_to_Jump": {
-                "startFrame": 2,
-                "endFrame": 3,
+                "startFrame": 4,
+                "endFrame": 5,
+                "actionDelay": 0.166,
                 "isLoop": false,
                 "isInterruptible": false
             },
             "Jump": {
-                "startFrame": 4,
-                "endFrame": 4,
+                "startFrame": 6,
+                "endFrame": 6,
+                "actionDelay": 0.166,
                 "isLoop": true,
-                "isInterruptible": false
+                "isInterruptible": true
             },
             "Jump_to_Fall": {
-                "startFrame": 5,
-                "endFrame": 5,
+                "startFrame": 7,
+                "endFrame": 7,
+                "actionDelay": 0.166,
                 "isLoop": false,
-                "isInterruptible": false
+                "isInterruptible": true
             },
             "Fall": {
-                "startFrame": 6,
-                "endFrame": 7,
+                "startFrame": 8,
+                "endFrame": 11,
+                "actionDelay": 0.166,
                 "isLoop": true,
                 "isInterruptible": true
             },
             "Fall_to_Idle": {
-                "startFrame": 8,
-                "endFrame": 10,
+                "startFrame": 12,
+                "endFrame": 14,
+                "actionDelay": 0.166,
                 "isLoop": false,
                 "isInterruptible": false
             },
             "Idle_to_Run": {
-                "startFrame": 11,
-                "endFrame": 11,
-                "isLoop": false,
-                "isInterruptible": true
-            },
-            "Run": {
-                "startFrame": 11,
-                "endFrame": 19,
-                "isLoop": true,
-                "isInterruptible": true
-            },
-            "Run_to_Idle": {
-                "startFrame": 19,
-                "endFrame": 19,
+                "startFrame": 12,
+                "endFrame": 14,
+                "actionDelay": 0.166,
                 "isLoop": false,
                 "isInterruptible": true
             },
             "Idle_to_Down": {
-                "startFrame": 20,
-                "endFrame": 23,
+                "startFrame": 25,
+                "endFrame": 30,
+                "actionDelay": 0.166,
                 "isLoop": false,
                 "isInterruptible": false
             },
             "Down": {
-                "startFrame": 24,
-                "endFrame": 24,
+                "startFrame": 31,
+                "endFrame": 31,
+                "actionDelay": 0.166,
                 "isLoop": true,
-                "isInterruptible": false
+                "isInterruptible": true
             },
             "Down_to_Idle": {
-                "startFrame": 24,
-                "endFrame": 29,
+                "startFrame": 31,
+                "endFrame": 37,
+                "actionDelay": 0.166,
                 "isLoop": false,
                 "isInterruptible": false
             },
-            "wink": {
-                "startFrame": 29,
-                "endFrame": 35,
+            "Move": {
+                "startFrame": 15,
+                "endFrame": 24,
+                "actionDelay": 0.132,
+                "isLoop": true,
+                "isInterruptible": true
+            },
+            "Run_to_Idle": {
+                "startFrame": 26,
+                "endFrame": 26,
+                "actionDelay": 0.166,
                 "isLoop": false,
+                "isInterruptible": true
+            },
+            "wink": {
+                "startFrame": 37,
+                "endFrame": 43,
+                "actionDelay": 0.166,
+                "isLoop": false,
+                "isInterruptible": true
+            },
+            "Idle": {
+                "startFrame": 0,
+                "endFrame": 3,
+                "actionDelay": 0.600,
+                "isLoop": true,
                 "isInterruptible": true
             }
         },

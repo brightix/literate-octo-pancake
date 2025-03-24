@@ -3,7 +3,7 @@
 #include <unordered_map>
 
 enum KeyState {
-	IDLE,HELD,PRESSED,RELEASED
+	IDLE,HELD,PRESSED,RELEASED,JUST_RELEASED
 };
 
 struct KeyInfo {
@@ -64,5 +64,5 @@ private:
 
 	const Uint64 LONG_PRESS_THRESHOLD = 500;
 	Uint64 last_frame_select_time;
-	const Uint64 FRAME_SELECTED_THRESHOLD = 500;
+	const Uint64 FRAME_SELECTED_THRESHOLD = 1;
 };

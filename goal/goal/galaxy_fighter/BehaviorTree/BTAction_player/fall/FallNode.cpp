@@ -11,9 +11,9 @@ bool FallNode::execute()
 	float delta = Timer::Instance().getVelocityFactor();
 	auto state = player->getActionState();
 	auto& input = InputManager::Instance();
-	if (!(*state)["isOnGround"] && !(*state)["isJump"]) {
-		if (!(*state)["isFall"]) {
-			(*state)["isFall"] = true;
+	if (!(*state)["OnGround"] && !(*state)["Jump"]) {
+		if (!(*state)["Fall"]) {
+			(*state)["Fall"] = true;
 			attrs->velocityY = 0;
 		}
 		else {
@@ -23,7 +23,7 @@ bool FallNode::execute()
 		attrs->playerY += attrs->velocityY * delta;
 	}
 	else {
-		(*state)["isFall"] = false;
+		(*state)["Fall"] = false;
 	}
 	return false;
 }

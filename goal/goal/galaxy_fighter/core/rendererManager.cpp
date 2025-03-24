@@ -9,6 +9,11 @@ SDL_Renderer* RendererManager::getRenderer() { return renderer; }
 
 SDL_Window* RendererManager::getWindow() { return window; }
 
+void RendererManager::setWindowSize(float newWidth,float newHeight) {
+	SDL_SetWindowSize(window, newWidth, newHeight);
+}
+
+
 bool RendererManager::init(SDL_Window* window) {
 	if (!window) return false;
 	renderer = SDL_CreateRenderer(window, "opengl");
@@ -56,9 +61,22 @@ void RendererManager::renderTexture(const std::string& catalog, const std::strin
 	SDL_RenderTexture(renderer, texture.get(), nullptr, &rect);
 }
 
+void RendererManager::switchScreenDisplayMove() {
+	if (SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN) {
+		SDL_SetWindowFullscreen(window,0);
+	}
+	else {
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+		SDL_SetRenderLogicalPresentation(renderer,1920,1080, SDL_LOGICAL_PRESENTATION_LETTERBOX);
+	}
+
+}
+
+
 RendererManager::RendererManager(){
 	renderer = nullptr;
-	window = SDL_CreateWindow("ÒøºÓ¶¹¸¯¿éÓÂ´³ÆáºÚÎÚ¶ûÂ·Ææ", swidth, sheight, SDL_WINDOW_MAXIMIZED);
+	auto& win = Resolution::Instance().getWindowRect();
+	window = SDL_CreateWindow("ÒøºÓ¶¹¸¯¿éÓÂ´³ÆáºÚÎÚ¶ûÂ·Ææ", win.w, win.h, SDL_WINDOW_MAXIMIZED);//SDL_WINDOW_MAXIMIZED
 	init(window);
 	SDL_SetRenderDrawColor(renderer,0,0,0,255);
 }

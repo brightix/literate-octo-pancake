@@ -14,7 +14,8 @@ public:
     GroundObject(float x,float y,float scaleFactor);
     void update() override;
     void render() override;
-    Rect* getHitBox();
+    Rect* getHitBox() override ;
+    std::shared_ptr<SDL_FRect> getRenderRect() override ;
     void on_collision(BaseObject* other);
 };
 
