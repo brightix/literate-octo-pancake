@@ -6,11 +6,6 @@
 #include "../objects/UI/UIManager/UIManager.h"
 using json = nlohmann::json;
 
-Galaxy_fighter::Galaxy_fighter(){
-	camera = &Camera::Instance();
-	Resolution::Instance().setResolution(2);
-}
-
 void Galaxy_fighter::loadResource() {
 	ResourceManager& resource = ResourceManager::Instance();
 	GameWorld& gw = GameWorld::Instance();
@@ -27,10 +22,18 @@ void Galaxy_fighter::loadResource() {
 
 	camera->setCameraOwner(player.get());
 	gw.addNewObject("player",player.get());
-	gw.addNewObject("ground",new GroundObject(1000, 700, 0.03));
-	gw.addNewObject("ground",new GroundObject(0, 1000, 1));
+	gw.addNewObject("ground", new GroundObject(0, 1000, 1));
+	gw.addNewObject("ground", new GroundObject(300, 700, 0.03));
 
-	//objects.push_back(new GroundObject(200, 800, 0.1));
+	gw.addNewObject("ground", new GroundObject(-3400,0, 1));
+	gw.addNewObject("ground", new GroundObject(1500, 500, 1));
+	gw.addNewObject("ground", new GroundObject(1500, 400, 0.1));
+	gw.addNewObject("ground", new GroundObject(1200, 800, 0.1));
+	gw.addNewObject("ground", new GroundObject(800, 600, 0.1));
+	gw.addNewObject("ground", new GroundObject(1200, 400, 0.1));
+	gw.addNewObject("ground", new GroundObject(300, 400, 0.1));
+
+	gw.addNewObject("ground", new GroundObject(200, 800, 0.1));
 	//objects.push_back(new GroundObject(400, 750, 0.1));
 }
 
@@ -38,9 +41,11 @@ void Galaxy_fighter::update() {
 	vector<BaseObject*>& objects = GameWorld::Instance().getObjects();
 	//逻辑层
 	background->render();
-	ui.update();
+
 	UIManager& uiManager = UIManager::Instance();
+	uiManager.refreshEscButton();
 	if (uiManager.isUiStackEmpty()) {
+		ui.update();
 		background->update();
 		player->update();
 		player->resetActionState();
@@ -50,22 +55,13 @@ void Galaxy_fighter::update() {
 		player->refreshRenderRect();
 	}
 
-	//RendererManager::Instance().renderTexture("player","girl_1_normal.png",1);//精神堡垒
-
 	for (auto o : objects) {
 		o->render();
 	}
+	checkDevelopmentMode();
 	uiManager.update();
 }
 
-void Galaxy_fighter::loaaGameWorld() {
-	GameWorld& gw = GameWorld::Instance();
-	gw.setCamera(camera);
-	gw.setPlayer(player.get());
-	//gw.setObjects(&objects);
-	QuadTreeManager::Instance().init(Camera::Instance().getCameraRange());
-	//qtree = QuadTree(0, Camera::Instance().getCameraRange());
-}
 
 void Galaxy_fighter::play(){
 	Camera& camera = Camera::Instance();
@@ -80,28 +76,26 @@ void Galaxy_fighter::play(){
 
 
 
-
-
 	bool running = true;
 	loadResource();
 	loaaGameWorld();
+	bool isInfiniteFrame = false;
 	while (running) {
 		timer.update();
 		SDL_Event event;
 		//处理输入
+		input.postUpdate();
 		while (SDL_PollEvent(&event)) {
 			if (!input.update(event)) {
 				running = false;
 				break;
 			}
 		}
-		input.postUpdate();
 		if (!running) {
 			//保存数据
 			break;
 		}
 
-		input.isSpacePressed();
 		input.checkAllKeyEvents();
 
 		//渲染部分
@@ -109,22 +103,41 @@ void Galaxy_fighter::play(){
 
 
 		update();
-		if (input.isKeyReleased(SDL_SCANCODE_F1)) {
-			isDevelopmentEnable = !isDevelopmentEnable;
-		}
-		if (isDevelopmentEnable) {
-			gw.developmentMode();
-		}
-
-		input.checkAllKeyEvents();
 
 
 		SDL_RenderPresent(renderer);
 
-		//日志输出
-		gw.show_log();
 
+		//日志输出
+		
 		//动态调整帧率
 		timer.sleep(timer.getRefreshTime());
 	}
+}
+
+Galaxy_fighter::Galaxy_fighter() {
+	InputManager::Instance().switchToEnglishInput();
+	camera = &Camera::Instance();
+	Resolution::Instance().setResolution(2);
+	std::ios::sync_with_stdio(false);
+}
+
+void Galaxy_fighter::checkDevelopmentMode() {
+	InputManager& input = InputManager::Instance();
+	if (input.isKeyPressedOnce(SDL_SCANCODE_F1)) {
+		isDevelopmentEnable = !isDevelopmentEnable;
+	}
+	if (!isDevelopmentEnable) {
+		auto& gw = GameWorld::Instance();
+		gw.developmentMode();
+		gw.show_log();
+	}
+}
+
+
+void Galaxy_fighter::loaaGameWorld() {
+	GameWorld& gw = GameWorld::Instance();
+	gw.setCamera(camera);
+	gw.setPlayer(player.get());
+	QuadTreeManager::Instance().init(Camera::Instance().getCameraRange());
 }

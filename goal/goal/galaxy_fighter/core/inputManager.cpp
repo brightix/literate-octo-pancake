@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "inputManager.h"
+#include "InputManager.h"
 
 
 InputManager& InputManager::Instance() {
@@ -9,18 +9,20 @@ InputManager& InputManager::Instance() {
 
 bool InputManager::update(const SDL_Event& e) {
 	Uint64 now = Timer::Instance().getTicks();
-	KeyInfo& curKey = keys[e.key.scancode];
+	SDL_Scancode KeyId = e.key.scancode;
+	KeyInfo& curKey = keys[KeyId];
 	switch (e.type) {
 	case SDL_EVENT_QUIT:
 		return false;
 	case SDL_EVENT_KEY_DOWN:
-		if (curKey.state == IDLE || curKey.state == RELEASED) {
+		if (curKey.state == IDLE) {
+			inputBuffer.addInput(KeyId);
 			curKey.state = PRESSED;
 			curKey.pressTime = now;
 		}
 		break;
 	case SDL_EVENT_KEY_UP:
-		curKey.state = JUST_RELEASED;
+		curKey.state = RELEASED;
 		curKey.releaseTime = now;
 		break;
 	case SDL_EVENT_MOUSE_MOTION:
@@ -33,12 +35,49 @@ bool InputManager::update(const SDL_Event& e) {
 	case SDL_EVENT_MOUSE_BUTTON_UP:
 		handleMouseButtonUp(e.button.button,mouse,now);
 		break;
-		//case SDL_EVENT_WINDOW_FOCUS_GAINED
+	case SDL_EVENT_MOUSE_WHEEL:
+		mouse.wheelY = e.wheel.y;
+		break;
 	default:
-		SDL_Log("input erro %d",e.type);
+		break;
 	}
 	return true;
 }
+
+
+
+//bool InputManager::update(const SDL_Event& e) {
+//	Uint64 now = Timer::Instance().getTicks();
+//	KeyInfo& curKey = keys[e.key.scancode];
+//	switch (e.type) {
+//	case SDL_EVENT_QUIT:
+//		return false;
+//	case SDL_EVENT_KEY_DOWN:
+//		if (curKey.state == IDLE || curKey.state == RELEASED) {
+//			curKey.state = PRESSED;
+//			curKey.pressTime = now;
+//		}
+//		break;
+//	case SDL_EVENT_KEY_UP:
+//		curKey.state = JUST_RELEASED;
+//		curKey.releaseTime = now;
+//		break;
+//	case SDL_EVENT_MOUSE_MOTION:
+//		mouse.x = e.motion.x;
+//		mouse.y = e.motion.y;
+//		break;
+//	case SDL_EVENT_MOUSE_BUTTON_DOWN:
+//		handleMouseButtonDown(e.button.button, mouse, now);
+//		break;
+//	case SDL_EVENT_MOUSE_BUTTON_UP:
+//		handleMouseButtonUp(e.button.button,mouse,now);
+//		break;
+//		//case SDL_EVENT_WINDOW_FOCUS_GAINED
+//	default:
+//		SDL_Log("input erro %d",e.type);
+//	}
+//	return true;
+//}
 
 void InputManager::handleMouseButtonDown(Uint8 buttonId,MouseInfo& mouse, Uint64 now) {
 	auto& btn = mouse.button.at(buttonId);
@@ -58,18 +97,17 @@ void InputManager::postUpdate() {
 	Uint64 now = Timer::Instance().getTicks();
 	for (auto& [key, info] : keys) {
 		if (info.state == PRESSED) {
-			if (now - info.pressTime >= LONG_PRESS_THRESHOLD) {
-				info.state = HELD;
-			}
+			info.state = HELD;
 		}
-		else if (info.state == JUST_RELEASED) {
-			info.state = RELEASED;
-		}
+		//else if (info.state == JUST_RELEASED) {
+		//	info.state = RELEASED;
+		//}
 		else if (info.state == RELEASED) {
 			info.state = IDLE;
 		}
 
 	}
+	mouse.wheelY = 0;
 }
 
 
@@ -78,7 +116,16 @@ bool InputManager::isKeyPressed(SDL_Scancode key) { return keys[key].state == PR
 bool InputManager::isKeyPressedOnce(SDL_Scancode key) { return keys[key].state == PRESSED; }
 bool InputManager::isKeyHeld(SDL_Scancode key) { return keys[key].state == HELD; }
 bool InputManager::isKeyReleased(SDL_Scancode key) { return keys[key].state == RELEASED; }
+Uint64 InputManager::getLastPressdTime(SDL_Scancode key) {
+	return keys[key].releaseTime;
+}
 
+//»º³å¼üÎ»
+	//bool InputManager::isKeyIdle(SDL_Scancode key) { return keys[key].state == IDLE; }
+	bool InputManager::isKeyPressedBuffered(SDL_Scancode key) { return inputBuffer.isBuffered(key); }
+	//bool InputManager::isKeyPressedOnce(SDL_Scancode key) { return keys[key].state == PRESSED; }
+	//bool InputManager::isKeyHeld(SDL_Scancode key) { return keys[key].state == HELD; }
+	//bool InputManager::isKeyReleased(SDL_Scancode key) { return keys[key].state == RELEASED; }
 
 //* * * Êó±ê * * *
 
@@ -87,15 +134,23 @@ bool InputManager::isMouseButtonPressed(Uint8 buttonId) { return mouse.button.at
 bool InputManager::isMouseButtonHeld(Uint8 buttonId) { return mouse.button.at(buttonId).state == HELD; }
 bool InputManager::isMouseButtonReleased(Uint8 buttonId) { return mouse.button.at(buttonId).state == RELEASED; }
 
-void InputManager::getMousexy(int& x,int& y) {
-	x = mouse.x;
-	y = mouse.y;
+bool InputManager::isMouseWheelYScrollUp() { return mouse.wheelY > 0; }
+bool InputManager::isMouseWheelYScrollDown() { return mouse.wheelY < 0; }
+int InputManager::isMouseWheelYScrolled() { return mouse.wheelY; }
+
+pair<int, int> InputManager::getMousexy() { return { mouse.x, mouse.y }; }
+pair<float, float> InputManager::getRelativeMousexy() {
+	float x, y;
+	SDL_GetRelativeMouseState(&x,&y);
+	return { x,y };
+}
+
+void InputManager::setRelativeMouseMode(bool b) {
+	SDL_SetWindowRelativeMouseMode(RendererManager::Instance().getWindow(),b);
 }
 
 bool InputManager::isPointInRect(SDL_FRect& rect) {
 	if (isMouseButtonPressed(SDL_BUTTON_LEFT) && rect.x <= mouse.x && mouse.x <= rect.x + rect.w && rect.y <= mouse.y && mouse.y <= rect.y + rect.h) {
-		cout << "Í¼Æ¬x" << rect.x << "Í¼Æ¬y:" << rect.y << endl;
-		cout << "Êó±êx" << mouse.x << "Êó±êy:" << mouse.y << endl;
 		return true;
 	}
 	return false;
@@ -142,6 +197,11 @@ void InputManager::checkAllKeyEvents() {
 			last_frame_select_time = now;
 		}
 	}
+}
+
+void InputManager::switchToEnglishInput() {
+	keybd_event(VK_SHIFT,0,0,0);
+	keybd_event(VK_SHIFT,0,KEYEVENTF_KEYUP,0);
 }
 
 InputManager::InputManager() {

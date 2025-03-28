@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "timer.h"
+#include "Timer.h"
 
 Timer& Timer::Instance() {
 	static Timer instance;
@@ -14,12 +14,12 @@ void Timer::update() {
 	QueryPerformanceCounter(&currentTime);
 
 	//等于两帧之差
-	deltaTime = (float)(currentTime.QuadPart - lastTime.QuadPart) / frequency.QuadPart;
+	deltaTime = (double)(currentTime.QuadPart - lastTime.QuadPart) / frequency.QuadPart;
 
 	ticks += deltaTime;
 }
 
-Uint64 Timer::getTicks() const {
+double Timer::getTicks() const {
 	return ticks;
 }
 
@@ -35,19 +35,21 @@ double Timer::getVelocityFactor() {
 	return (deltaTime / BASE_FRAME_TIME)*globalSpeed;
 }
 
-const void Timer::sleep(double duration) {
+void Timer::sleep(double duration) {
 	LARGE_INTEGER preTime,curTime;
 	QueryPerformanceCounter(&preTime);
 
 	double delta = 0;
-	while (duration - delta > 0.003) {
+	timeBeginPeriod(1);
+	while (duration - delta > 0.002) {
 		Sleep(1);
 		QueryPerformanceCounter(&curTime);
-		delta = (float)(curTime.QuadPart - preTime.QuadPart) / frequency.QuadPart;
+		delta = (double)(curTime.QuadPart - preTime.QuadPart) / frequency.QuadPart;
 	}
+	timeEndPeriod(1);
 	while (delta < duration) {
 		QueryPerformanceCounter(&curTime);
-		delta = (float)(curTime.QuadPart - preTime.QuadPart) / frequency.QuadPart;
+		delta = (double)(curTime.QuadPart - preTime.QuadPart) / frequency.QuadPart;
 	}
 }
 
@@ -56,15 +58,18 @@ const void Timer::sleep(double duration) {
 double Timer::getRefreshTime() {
 	LARGE_INTEGER t;
 	QueryPerformanceCounter(&t);
-	double adjustedSleepTime = refreshTime - (float)(t.QuadPart - currentTime.QuadPart) / frequency.QuadPart;
-	return adjustedSleepTime > 0.0 ? adjustedSleepTime : 0.0;
+	double interval = (double)(t.QuadPart - currentTime.QuadPart) / frequency.QuadPart;
+	double adjustedSleepTime = refreshTime - interval;
 
+	return adjustedSleepTime > 0.0 ? adjustedSleepTime : 0.0;
 }
 
 void Timer::selectFrame(int level) {
 	curFrameLevel = level;
-	if(0 <= level && level < frameTable.size())
-		refreshTime = 1/frameTable[curFrameLevel];
+	if (0 <= level && level < frameTable.size()) {
+		refreshTime = 1.0/frameTable[curFrameLevel];
+		cout << refreshTime << endl;
+	}
 	else {
 		GameWorld::Instance().addError("设置帧率越界");
 	}
@@ -73,10 +78,6 @@ void Timer::selectFrame(int level) {
 void Timer::reset() {
 	QueryPerformanceFrequency(&frequency);
 	ticks = 0;
-}
-
-void Timer::myPrint(string str, double val) {
-	cout << str << val << endl;
 }
 
 void Timer::startCountTimer(string task) {
@@ -97,11 +98,19 @@ void Timer::returnCountTimer(string task) {
 
 	LARGE_INTEGER endTimer;
 	QueryPerformanceCounter(&endTimer);
-	float time = (endTimer.QuadPart - countTimer[task].QuadPart) * 1000.0 / frequency.QuadPart;
+	double time = (endTimer.QuadPart - countTimer[task].QuadPart) * 1000.0 / frequency.QuadPart;
 	cout << task << " 的计时结果为" << time << endl;
 }
 
+void Timer::start() {
+	QueryPerformanceCounter(&startTimer);
+}
 
+double Timer::end() {
+	LARGE_INTEGER endTimer;
+	QueryPerformanceCounter(&endTimer);
+	return (double)(endTimer.QuadPart - startTimer.QuadPart) / frequency.QuadPart;
+}
 
 void Timer::pause() {
 	if (!isPause) {
@@ -121,12 +130,30 @@ void Timer::resume() {
 
 bool Timer::getIsPause() { return isPause; }
 
-//int Timer::getFrame() {
-//	return 1000 / refreshTime;
-//}
 
 int Timer::getCurFrame() {
 	return frameTable[curFrameLevel];
+}
+
+double Timer::printDeltaFromBeginToNow() {
+	LARGE_INTEGER now;
+	QueryPerformanceCounter(&now);
+	double res = (double)(now.QuadPart - currentTime.QuadPart) / frequency.QuadPart;
+	return res;
+}
+
+void Timer::IsSomthingWorngHere() {
+	LARGE_INTEGER now;
+	QueryPerformanceCounter(&now);
+	double res = (double)(now.QuadPart - currentTime.QuadPart) / frequency.QuadPart;
+	if (res > refreshTime) {
+		cout << "here is the point" << endl;
+	}
+}
+
+void Timer::showFps() {
+	TextRenderer& TRenderer = TextRenderer::Instance();
+	TRenderer.renderText(0, 0, TRenderer.getTextTexture(to_string((int)(1 / getDeltaAdjustTime())), "pingfang", 20).get());
 }
 
 Timer::Timer() {
@@ -146,7 +173,4 @@ void Timer::init() {
 	selectFrame(1);
 	enemy_spawn_clock = 0;
 	secondTimer = 1000;
-
 }
-
-

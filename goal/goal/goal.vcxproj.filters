@@ -15,19 +15,19 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="galaxy_fighter\core\inputManager.cpp">
+    <ClCompile Include="galaxy_fighter\core\InputManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="galaxy_fighter\core\rendererManager.cpp">
+    <ClCompile Include="galaxy_fighter\core\RendererManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="galaxy_fighter\core\resourceManager.cpp">
+    <ClCompile Include="galaxy_fighter\core\ResourceManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="galaxy_fighter\core\statistics.cpp">
+    <ClCompile Include="galaxy_fighter\core\Statistics.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="galaxy_fighter\core\timer.cpp">
+    <ClCompile Include="galaxy_fighter\core\Timer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="galaxy_fighter\game\galaxy_fighter.cpp">
@@ -36,7 +36,7 @@
     <ClCompile Include="galaxy_fighter\game\gameWorld.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="galaxy_fighter\core\textRenderer.cpp">
+    <ClCompile Include="galaxy_fighter\core\TextRenderer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="galaxy_fighter\objects\playerObject\playerObject.cpp">
@@ -84,7 +84,7 @@
     <ClCompile Include="galaxy_fighter\BehaviorTree\Decorator\condition_decorator.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="galaxy_fighter\BehaviorTree\utils\BTMath.cpp">
+    <ClCompile Include="galaxy_fighter\utils\Math.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="galaxy_fighter\BehaviorTree\Decorator\Decorator.cpp">
@@ -180,21 +180,54 @@
     <ClCompile Include="galaxy_fighter\objects\playerObject\AttackBox.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="galaxy_fighter\FSM\Player\SubState.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\core\ColorManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="galaxy_fighter\utils\CircularQueue.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MapCreator\MapCreator.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MapCreator\CreatorComponent.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MapCreator\WorldWindow.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MapCreator\ToolsWindow.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MapCreator\AssetsWindow.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MapCreator\CreatorCamera\CreatorCamera.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MapCreator\CreatorElements\ScrollBar.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MapCreator\CreatorElements\CreatorElements.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="galaxy_fighter\core\inputManager.h">
+    <ClInclude Include="galaxy_fighter\core\InputManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="galaxy_fighter\core\rendererManager.h">
+    <ClInclude Include="galaxy_fighter\core\RendererManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="galaxy_fighter\core\resourceManager.h">
+    <ClInclude Include="galaxy_fighter\core\ResourceManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="galaxy_fighter\core\statistics.h">
+    <ClInclude Include="galaxy_fighter\core\Statistics.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="galaxy_fighter\core\timer.h">
+    <ClInclude Include="galaxy_fighter\core\Timer.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="galaxy_fighter\game\galaxy_fighter.h">
@@ -203,7 +236,7 @@
     <ClInclude Include="galaxy_fighter\game\gameWorld.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="galaxy_fighter\core\textRenderer.h">
+    <ClInclude Include="galaxy_fighter\core\TextRenderer.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="galaxy_fighter\objects\playerObject\playerObject.h">
@@ -251,7 +284,7 @@
     <ClInclude Include="galaxy_fighter\BehaviorTree\Decorator\condition_decorator.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="galaxy_fighter\BehaviorTree\utils\BTMath.h">
+    <ClInclude Include="galaxy_fighter\utils\Math.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="galaxy_fighter\BehaviorTree\Decorator\Decorator.h">
@@ -348,6 +381,39 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="galaxy_fighter\objects\playerObject\AttackBox.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\core\ColorManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\FSM\Player\SubState.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\utils\CircularQueue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MapCreator\MapCreator.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MapCreator\CreatorComponent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MapCreator\WorldWindow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MapCreator\ToolsWindow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MapCreator\AssetsWindow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MapCreator\CreatorCamera\CreatorCamera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MapCreator\CreatorElements\ScrollBar.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MapCreator\CreatorElements\CreatorElements.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

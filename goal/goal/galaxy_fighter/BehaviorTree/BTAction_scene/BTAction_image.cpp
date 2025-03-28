@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "BTAction_image.h"
-#include "../utils/BTMath.h"
+#include "../../utils/Math.h"
 #include "../BehaviorRegistry.h"
 
 using namespace BTAction_image;
@@ -81,10 +81,10 @@ bool scaling_up_hovering::execute() {
 		elapsed = clamp(elapsed, 0.0f, (float)duration);
 	}
 	float t = elapsed / duration;
-	curScaleFactor = BTMath::Lerp(1.0, scaleFactor, t);
+	curScaleFactor = Math::Lerp(1.0, scaleFactor, t);
 	//平滑动画
-	float neww = originalSize.w * (1 + (scaleFactor - 1.0f) * BTMath::SmoothStep(t));
-	float newh = originalSize.h * (1 + (scaleFactor - 1.0f) * BTMath::SmoothStep(t));
+	float neww = originalSize.w * (1 + (scaleFactor - 1.0f) * Math::SmoothStep(t));
+	float newh = originalSize.h * (1 + (scaleFactor - 1.0f) * Math::SmoothStep(t));
 
 	//线性动画
 	//float neww = originalSize.w * curScaleFactor;

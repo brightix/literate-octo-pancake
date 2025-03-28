@@ -13,13 +13,22 @@ public:
 
 	void popUI();
 
-	bool isUiStackEmpty();
+	void refreshEscButton();
+	void EscUIHasPushed();
 
+	bool isUiStackEmpty();
 	void update();
+
+
+	bool IsQuit();
+	
+	
+	
 	UIManager(const UIManager&) = delete;
 	UIManager& operator=(const UIManager&) = delete;
 private:
 	UIManager() = default;
 	~UIManager() = default;
+	bool escUIHasPushed = false;
 };
 

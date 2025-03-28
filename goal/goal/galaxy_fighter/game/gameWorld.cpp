@@ -68,7 +68,7 @@ void GameWorld::show_log() {
 		if (player)
 		{
 			cout << "| 玩家坐标x  :" << (short)player->getAttrs()->playerX << ", y:" << (short)player->getAttrs()->playerY << endl;
-			cout << "| 玩家状态   :" << player->getCurrentState() << endl;
+			cout << "| 玩家状态   :" << player->getCurrentStateName() << endl;
 		}
 		if(camera)
 			cout << "| 相机坐标x  :" << (short)camera->getViewport()->x << ", y:" << (short)camera->getViewport()->y << endl;
@@ -77,51 +77,57 @@ void GameWorld::show_log() {
 		report_log_time = 0;
 	}
 }
-
 void GameWorld::show_log_on_screen() {
 	TextRenderer& textRenderer = TextRenderer::Instance();
 	Timer& t = Timer::Instance();
 	SDL_Renderer* renderer = RendererManager::Instance().getRenderer();
-	SDL_Texture* texture;
 	textRenderer.setColor(200,200,200,255);
 	int i = 0;
-	
+	std::unique_ptr<SDL_Texture,decltype(&SDL_DestroyTexture)> texture = textRenderer.getTextTexture(" ","pingfang", 30);
 	//帧率
-	int frameCount = (int)(1 / t.getDeltaTime());
-	texture = textRenderer.getTextTexture("帧数:" + to_string(frameCount), "pingfang", 30);
-	SDL_FRect dstRect = { 0,i++ * log_interval,0,0 };
-	SDL_GetTextureSize(texture, &dstRect.w, &dstRect.h);
-	SDL_RenderTexture(renderer, texture, nullptr, &dstRect);
-	if (frameCount < Timer::Instance().getCurFrame()*0.9) {
-		addError("帧数波动, 出现 " + to_string(frameCount) + "帧");
+	int frameCount = (int)(1.0 / t.getDeltaAdjustTime());
+	report_frame_time += t.getDeltaAdjustTime();
+	if (report_frame_time >= 0.5) {
+		delay_frame = frameCount;
+		report_frame_time = 0.0f;
 	}
+	texture = textRenderer.getTextTexture("帧数:" + to_string(delay_frame), "pingfang", 30);
+	SDL_FRect dstRect = { 0,i++ * log_interval,0,0 };
+	SDL_GetTextureSize(texture.get(), &dstRect.w, &dstRect.h);
+	SDL_RenderTexture(renderer, texture.get(), nullptr, &dstRect);
+
 	//玩家信息
 	if (player) {
 		auto resolution = Resolution::Instance().getWindowRect();
 		texture = textRenderer.getTextTexture("玩家坐标 x:" + to_string((int)player->getAttrs()->playerX) + ", y : " + to_string((int)player->getAttrs()->playerY), "pingfang",30);
 
 		SDL_FRect dstRect = {0,i++*log_interval,0,0};
-		SDL_GetTextureSize(texture,&dstRect.w,&dstRect.h);
-		SDL_RenderTexture(renderer, texture,nullptr,&dstRect);
+		SDL_GetTextureSize(texture.get(),&dstRect.w,&dstRect.h);
+		SDL_RenderTexture(renderer, texture.get(),nullptr,&dstRect);
 
-
-		texture = textRenderer.getTextTexture("每秒移速 :" + to_string((int)player->getVelocityX()), "pingfang", 30);
+		texture = textRenderer.getTextTexture("每秒操控移速 :" + to_string((int)player->getMoveVelocityX()), "pingfang", 30);
 		dstRect = { 0,i++ * log_interval,0,0 };
-		SDL_GetTextureSize(texture, &dstRect.w, &dstRect.h);
+		SDL_GetTextureSize(texture.get(), &dstRect.w, &dstRect.h);
 		dstRect.x = resolution.w - dstRect.w;
-		SDL_RenderTexture(renderer, texture, nullptr, &dstRect);
+		SDL_RenderTexture(renderer, texture.get(), nullptr, &dstRect);
+
+		texture = textRenderer.getTextTexture("每秒事件移速 :" + to_string((int)player->getEventVelocityX()), "pingfang", 30);
+		dstRect = { 0,i++ * log_interval,0,0 };
+		SDL_GetTextureSize(texture.get(), &dstRect.w, &dstRect.h);
+		dstRect.x = resolution.w - dstRect.w;
+		SDL_RenderTexture(renderer, texture.get(), nullptr, &dstRect);
 
 		texture = textRenderer.getTextTexture("每秒掉落速度 :" + to_string((int)player->getVelocityY()), "pingfang", 30);
 		dstRect = { 0,i++ * log_interval,0,0 };
-		SDL_GetTextureSize(texture, &dstRect.w, &dstRect.h);
+		SDL_GetTextureSize(texture.get(), &dstRect.w, &dstRect.h);
 		dstRect.x = resolution.w - dstRect.w;
-		SDL_RenderTexture(renderer, texture, nullptr, &dstRect);
+		SDL_RenderTexture(renderer, texture.get(), nullptr, &dstRect);
 
-		texture = textRenderer.getTextTexture("状态 :" + player->getCurrentState(), "pingfang", 30);
+		texture = textRenderer.getTextTexture("状态 :" + player->getCurrentStateName(), "pingfang", 30);
 		dstRect = { 0,i++ * log_interval,0,0 };
-		SDL_GetTextureSize(texture, &dstRect.w, &dstRect.h);
+		SDL_GetTextureSize(texture.get(), &dstRect.w, &dstRect.h);
 		dstRect.x = resolution.w - dstRect.w;
-		SDL_RenderTexture(renderer, texture, nullptr, &dstRect);
+		SDL_RenderTexture(renderer, texture.get(), nullptr, &dstRect);
 	}
 	if (!errorList.empty()) {
 		printError();
@@ -130,23 +136,28 @@ void GameWorld::show_log_on_screen() {
 }
 
 void GameWorld::developmentMode() {
-
 	//玩家碰撞箱
 	auto r = RendererManager::Instance().getRenderer();
+
 	for (auto it = objects.begin();it != objects.end();it++) {
 		Rect* hitBox = (*it)->getHitBox();
 		SDL_SetRenderDrawColor(r, hitBox->color.r, hitBox->color.g, hitBox->color.b, hitBox->color.a);
 		SDL_FRect rect = camera->worldToScreen(hitBox->rect);
-		SDL_RenderRect(r, &rect);
-	}
+		SDL_FRect HitRect;
 
+		for (int i = 0;i < 3;i++) {
+			HitRect = { rect.x + i,rect.y + i,rect.w - 2*i,rect.h - 2*i };
+			SDL_RenderRect(r, &HitRect);
+		}
+	}
 
 	//辅助线
 	SDL_SetRenderDrawBlendMode(r, SDL_BLENDMODE_BLEND);
 	Resolution& resolution = Resolution::Instance();
 	float width = resolution.getWindowRect().w;
 	float height = resolution.getWindowRect().h;
-	SDL_SetRenderDrawColor(r, 0, 191, 255, 150);
+	auto color = ColorManager::Instance().getColor(SubLineColor);
+	SDL_SetRenderDrawColor(r, color.r, color.g, color.b, color.a);
 	SDL_RenderLine(r, width/2, 0, width/2, height);//居中垂直线
 	SDL_RenderLine(r, 0, height / 2, width, height /2);//居中水平线
 

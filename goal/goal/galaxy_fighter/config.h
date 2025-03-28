@@ -1,4 +1,10 @@
 #pragma once
+#include <format>
+#include <string>
+
+#define TO_STRING_2(x) std::format("{:.2f}",x)
+#define TO_STRING_3(x) std::format("{:.3f}",x)
+
 
 //宽高
 constexpr int swidth = 1920;
@@ -20,3 +26,4 @@ constexpr double globalSpeed = 1.0f;
 
 //日志打印时间
 constexpr double LOG_TIME_INTERVAL = 1;
+

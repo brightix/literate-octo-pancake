@@ -18,16 +18,20 @@
 #include <stack>
 #include <chrono>
 #include <mmsystem.h>
+#include <thread>
+#include <cmath>
+
 
 #include "config.h"
-#include "game/gameWorld.h"
-#include "utils/random_utils.h"
-#include "core/rendererManager.h"
-#include "core/resourceManager.h"
+#include "game/GameWorld.h"
+#include "utils/Random_utils.h"
+#include "core/RendererManager.h"
+#include "core/ResourceManager.h"
 #include "core/timer.h"
-#include "core/statistics.h"
-#include "core/inputManager.h"
-#include "core/textRenderer.h"
+#include "core/Statistics.h"
+#include "core/InputManager.h"
+#include "core/TextRenderer.h"
 #include "core/Resolution.h"
 #include "./objects/camera/Camera.h"
+#include "core/ColorManager.h"
 

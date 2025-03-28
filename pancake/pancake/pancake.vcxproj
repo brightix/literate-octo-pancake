@@ -115,6 +115,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>C:\Users\21811\Desktop\literate-octo-pancake\goal\goal\galaxy_fighter;C:\Users\21811\Desktop\literate-octo-pancake\pancake\pancake;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,6 +134,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>C:\Users\21811\Desktop\literate-octo-pancake\goal\goal\galaxy_fighter;C:\Users\21811\Desktop\literate-octo-pancake\pancake\pancake;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -143,6 +145,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\goal\goal\galaxy_fighter\core\BlackBoard.cpp" />
+    <ClCompile Include="..\..\goal\goal\galaxy_fighter\core\ColorManager.cpp" />
+    <ClCompile Include="..\..\goal\goal\galaxy_fighter\core\Context.cpp" />
+    <ClCompile Include="..\..\goal\goal\galaxy_fighter\core\InputManager.cpp" />
+    <ClCompile Include="..\..\goal\goal\galaxy_fighter\core\RendererManager.cpp" />
+    <ClCompile Include="..\..\goal\goal\galaxy_fighter\core\Resolution.cpp" />
+    <ClCompile Include="..\..\goal\goal\galaxy_fighter\core\ResourceManager.cpp" />
+    <ClCompile Include="..\..\goal\goal\galaxy_fighter\core\Statistics.cpp" />
+    <ClCompile Include="..\..\goal\goal\galaxy_fighter\core\TextRenderer.cpp" />
+    <ClCompile Include="..\..\goal\goal\galaxy_fighter\core\Timer.cpp" />
     <ClCompile Include="game\Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="game\Scene\MenuScene.cpp" />
@@ -154,6 +166,16 @@
     <ClCompile Include="game\Scene\Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\goal\goal\galaxy_fighter\core\BlackBoard.h" />
+    <ClInclude Include="..\..\goal\goal\galaxy_fighter\core\ColorManager.h" />
+    <ClInclude Include="..\..\goal\goal\galaxy_fighter\core\Context.h" />
+    <ClInclude Include="..\..\goal\goal\galaxy_fighter\core\InputManager.h" />
+    <ClInclude Include="..\..\goal\goal\galaxy_fighter\core\RendererManager.h" />
+    <ClInclude Include="..\..\goal\goal\galaxy_fighter\core\Resolution.h" />
+    <ClInclude Include="..\..\goal\goal\galaxy_fighter\core\ResourceManager.h" />
+    <ClInclude Include="..\..\goal\goal\galaxy_fighter\core\Statistics.h" />
+    <ClInclude Include="..\..\goal\goal\galaxy_fighter\core\TextRenderer.h" />
+    <ClInclude Include="..\..\goal\goal\galaxy_fighter\core\Timer.h" />
     <ClInclude Include="game\Game.h" />
     <ClInclude Include="game\Scene\MenuScene.h" />
     <ClInclude Include="pch.h" />

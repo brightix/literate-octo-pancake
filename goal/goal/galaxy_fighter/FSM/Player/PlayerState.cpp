@@ -3,6 +3,7 @@
 
 void move(PlayerObject& player);
 void demove(PlayerObject& player);
+void deEventMove(PlayerObject& player);
 void render(PlayerObject& player);
 void fall(PlayerObject& player);
 void jump(PlayerObject& player,float strength);
@@ -23,19 +24,22 @@ void IdleState::Enter(PlayerObject& player)
 void IdleState::Update(PlayerObject& player)
 {
 	if (player.IsLightAttack()) {
-		player.ChangeState(new  LightAttack);
+		player.ChangeState(new LightAttack);
 	}
 	else if (player.IsMoving()) {
 		player.ChangeState(new Move);
 	}
 	else if (!player.IsGrounded()) {
-		player.ChangeState(new  Fall);
+		player.ChangeState(new Fall);
 	}
-	else if (player.IsJumping()) {
+	else if (player.IsJumpingOnce()) {
 		player.ChangeState(new Jump);
 	}
-	else if(player.getVelocityX() != 0){
+	if(player.getMoveVelocityX() != 0){
 		demove(player);
+	}
+	if (player.getEventVelocityX() != 0) {
+		deEventMove(player);
 	}
 }
 
@@ -71,13 +75,17 @@ void Move::Update(PlayerObject& player)
 	else if (!player.IsGrounded()) {
 		player.ChangeState(new Fall);
 	}
-	else if (player.IsJumping()) {
+	else if (player.IsJumpingOnce()) {
 		player.ChangeState(new Jump);
 	}
 	else if (player.IsMoving()) {
 		move(player);
 	}
 	else player.ChangeState(new IdleState);
+	if (player.getEventVelocityX() != 0) {
+		deEventMove(player);
+	}
+
 }
 
 void Move::Render(PlayerObject& player)
@@ -108,7 +116,7 @@ void Jump::Update(PlayerObject& player)
 		player.ChangeState(new LightAttack);
 	}
 	else if(!player.IsJumping()) {
-		player.setVelocityY(0);
+		player.setMoveVelocityY(0);
 		player.ChangeState(new Fall);
 	}
 
@@ -117,6 +125,9 @@ void Jump::Update(PlayerObject& player)
 	}
 	else {
 		demove(player);
+	}
+	if (player.getEventVelocityX() != 0) {
+		deEventMove(player);
 	}
 	if (player.IsJumping()) {
 		fall(player);
@@ -162,6 +173,9 @@ void Fall::Update(PlayerObject& player)
 	}
 	else {
 		demove(player);
+	}
+	if (player.getEventVelocityX() != 0) {
+		deEventMove(player);
 	}
 	fall(player);
 }
@@ -221,9 +235,12 @@ void LightAttack::Update(PlayerObject& player)
 	else {
 		demove(player);
 	}
+	if (player.getEventVelocityX() != 0) {
+		deEventMove(player);
+	}
 	if(!player.IsGrounded()) {
 		if (!player.IsJumping() && player.getVelocityY() < 0) {
-			player.setVelocityY(0);
+			player.setMoveVelocityY(0);
 		}
 		fall(player);
 	}
@@ -255,22 +272,24 @@ std::string LightAttack::GetState()
 
 
 void move(PlayerObject& player) {
+	float MaxRunStrength = player.getMaxRunStrength();
 	int orientation = player.IsMovingLeft() ? -1 : 1;
-	if (orientation != player.getOrientation() || player.getVelocityX() == 0) {
+	if (orientation != player.getOrientation() || player.getMoveVelocityX() == 0) {
 		player.setOrientation(orientation);
-		player.setVelocityX(orientation * 1);
+		player.setMoveVelocityX(orientation * 1);
 	}
 	auto delta = Timer::Instance().getDeltaAdjustTime();
-	float MaxRunStrength = player.getMaxRunStrength();
-	float velocity = player.getVelocityX() + orientation * player.getAccelerationX() * delta;
+
+	float velocity = player.getMoveVelocityX() + orientation * player.getAccelerationX() * delta;
 	velocity = clamp(velocity, -MaxRunStrength, MaxRunStrength);
-	player.setVelocityX(velocity);
+	player.setMoveVelocityX(velocity);
 }
 
 void demove(PlayerObject& player) {
-	float velocity = player.getVelocityX();
+	//处理玩家移动
+	float velocity = player.getMoveVelocityX();
 	float delta = Timer::Instance().getDeltaAdjustTime();
-	float friction = player .getFriction();
+	float friction = player.getFriction();
 	if (velocity > 0) {
 		velocity *= exp(-friction * delta); // 指数衰减
 		if (velocity < 0.1) {	
@@ -279,23 +298,43 @@ void demove(PlayerObject& player) {
 	}
 	else if (velocity < 0) {
 		velocity *= exp(-friction * delta);
-		//velocity += friction * log(1 + delta) * delta;
 		if (velocity > 0.1) {
 			velocity = 0;
 		}
 	}
-	player.setVelocityX(velocity);
+	player.setMoveVelocityX(velocity);
+
+
+}
+void deEventMove(PlayerObject& player) {
+	////处理外部事件加速度
+	//float velocity = player.getEventVelocityX();
+	//float delta = Timer::Instance().getDeltaAdjustTime();
+	//float friction = player.getFriction();
+	//if (velocity > 0) {
+	//	velocity *= exp(-friction * delta); // 指数衰减
+	//	if (velocity < 0.1) {
+	//		velocity = 0;
+	//	}
+	//}
+	//else if (velocity < 0) {
+	//	velocity *= exp(-friction * delta);
+	//	if (velocity > 0.1) {
+	//		velocity = 0;
+	//	}
+	//}
+	//player.setEventVelocityX(velocity);
 }
 
 void fall(PlayerObject& player) {
 	float delta = Timer::Instance().getDeltaAdjustTime();
 	float velocity = player.getVelocityY() + player.getGravity() * delta;
 	velocity = min(velocity, 2000);
-	player.setVelocityY(velocity);
+	player.setMoveVelocityY(velocity);
 }
 
 void jump(PlayerObject& player,float strength) {
-	player.setVelocityY(-strength);
+	player.setMoveVelocityY(-strength);
 }
 
 

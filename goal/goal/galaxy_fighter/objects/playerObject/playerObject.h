@@ -3,6 +3,7 @@
 #include "../../BehaviorTree/BTNode.h"
 #include "../BaseObject.h"
 #include "../../FSM/Player/PlayerState.h"
+#include "../../FSM/Player/SubState.h"
 #include "../../../json.hpp"
 #include "../../core/physics/QuadTree.h"
 #include "SpritePlayer.h"
@@ -67,10 +68,15 @@ public:
 
 	float getMaxRunStrength();
 	float getPositionX();
-	float getPositionY();
 	float getVelocityX();
+	float getEventVelocityX();
+	float getEventVelocityY();
+	float getMoveVelocityX();
+
+	float getPositionY();
 	float getVelocityY();
 	float getAccelerationX();
+	float getMoveVelocityY();
 	float getAccelerationY();
 
 	int getOrientation();
@@ -83,14 +89,23 @@ public:
 
 	float getMaxLightAttackRange();
 
-	string getCurrentState();
+	string getCurrentStateName();
+	PlayerState* getCurrentState();
 
 	nlohmann::json& getConfig();
 
-	void setVelocityX(float val);
-	void setVelocityY(float val);
-	void setOrientation(float val);
+	void setPositionX(float val);
+	void setPositionY(float val);
+	void setEventVelocityX(float val);
 
+
+	void setMoveVelocityX(float val);
+	void setMoveVelocityY(float val);
+
+	void addVelocityX(float val);
+	void addVelocityY(float val);
+
+	void setOrientation(float val);
 	void on_collision(BaseObject* other);
 
 
@@ -99,9 +114,15 @@ public:
 	string printActionState();
 	void setHitBox(string action);
 
+	void setReflectHitX(bool val);
+
+	void setReflectHitY(bool val);
+
 	bool IsMovingLeft();
 	bool IsMovingRight();
 	bool IsMoving();
+	bool IsEventVelocityExistX();
+	bool IsJumpingOnce();
 	bool IsJumping();
 	bool IsCrouching();
 	bool IsFalling();
@@ -109,7 +130,11 @@ public:
 
 	bool IsLightAttack();
 
+	bool IsReflectHitX();
+	bool IsReflectHitY();
 	void ChangeState(PlayerState* newState);
+
+	void ChangeSubState(SubState* newState);
 
 	SDL_FRect* getActionFrameRect();
 
@@ -134,12 +159,23 @@ private:
 	shared_ptr<std::vector<string>> actionPriority;
 
 	PlayerState* currentState;
+	SubState* subState;
 
 	void loadActionFrame();
 
 	std::vector<SDL_FRect> frames;
 	float elapsed = 0;
 	int curFrame = 0;
+
+	float attackSuccess = 0;
+
+	bool isReflectHitX;
+	float moveVelocityX = 0.0f;
+	float eventVelocityX = 0.0f;
+
+	bool isReflectHitY;
+	float moveVelocityY = 0.0f;
+	float eventVelocityY = 0.0f;
 };
 
 

@@ -15,3 +15,23 @@
 #include <queue>
 #include "../json.hpp"
 #include <fstream>
+#include <stack>
+#include <chrono>
+#include <mmsystem.h>
+#include <thread>
+#include <cmath>
+
+
+#include "config.h"
+#include "game/GameWorld.h"
+#include "utils/Random_utils.h"
+#include "core/RendererManager.h"
+#include "core/ResourceManager.h"
+#include "core/timer.h"
+#include "core/Statistics.h"
+#include "core/InputManager.h"
+#include "core/TextRenderer.h"
+#include "core/Resolution.h"
+#include "./objects/camera/Camera.h"
+#include "core/ColorManager.h"
+

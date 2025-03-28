@@ -44,11 +44,14 @@ private:
 	GameWorld();
 	~GameWorld();
 	WorldAttrs worldAttrs;
-	float log_interval;
+	float log_interval;//ÐÐ¾à
+
 	Camera* camera;
 	PlayerObject* player;
 
 	float report_log_time;
+	float report_frame_time;
+	int delay_frame;
 	std::vector<string> errorList;
 	std::vector<BaseObject*> objects;
 	std::vector<BaseObject*> GroundObjects;

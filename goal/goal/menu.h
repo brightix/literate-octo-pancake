@@ -14,6 +14,7 @@ public:
 	~Menu();
 	void welcome();
 	void startGame();
+	void startMapCreator();
 private:
 	void init();
 	void loadResource();

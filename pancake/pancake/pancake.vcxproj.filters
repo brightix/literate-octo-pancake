@@ -33,6 +33,36 @@
     <ClCompile Include="game\Scene\MenuScene.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\goal\goal\galaxy_fighter\core\BlackBoard.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\goal\goal\galaxy_fighter\core\ColorManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\goal\goal\galaxy_fighter\core\Context.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\goal\goal\galaxy_fighter\core\InputManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\goal\goal\galaxy_fighter\core\RendererManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\goal\goal\galaxy_fighter\core\Resolution.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\goal\goal\galaxy_fighter\core\ResourceManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\goal\goal\galaxy_fighter\core\Statistics.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\goal\goal\galaxy_fighter\core\TextRenderer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\goal\goal\galaxy_fighter\core\Timer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -48,6 +78,36 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="game\Scene\MenuScene.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\goal\goal\galaxy_fighter\core\BlackBoard.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\goal\goal\galaxy_fighter\core\ColorManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\goal\goal\galaxy_fighter\core\Context.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\goal\goal\galaxy_fighter\core\InputManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\goal\goal\galaxy_fighter\core\RendererManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\goal\goal\galaxy_fighter\core\Resolution.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\goal\goal\galaxy_fighter\core\ResourceManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\goal\goal\galaxy_fighter\core\Statistics.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\goal\goal\galaxy_fighter\core\TextRenderer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\goal\goal\galaxy_fighter\core\Timer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

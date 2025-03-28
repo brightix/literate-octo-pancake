@@ -26,17 +26,36 @@ SDL_Texture* TextRenderer::getTextTexture(const string& str) {
 	return textTexture;
 }
 
-SDL_Texture* TextRenderer::getTextTexture(const string& str,const string& fontType,int size) {
-	font = ResourceManager::Instance().getFont(fontType,size);
-	TTF_FontHasGlyph(font,1);
+
+std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)>
+TextRenderer::getTextTexture(const string& str, const string& fontType, int size) {
+	font = ResourceManager::Instance().getFont(fontType, size);
+	TTF_FontHasGlyph(font, 1);
 	SDL_Surface* textSurface = TTF_RenderText_Blended(font, str.c_str(), 0, textColor);
 	if (!textSurface) {
 		std::cerr << "textSurface 创建失败" << std::endl;
 	}
 	SDL_Texture* textTexture = SDL_CreateTextureFromSurface(render, textSurface);
 	SDL_DestroySurface(textSurface);
-	return textTexture;
+	return std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)>(textTexture,SDL_DestroyTexture);
 }
+
+void TextRenderer::printText(const string& str,const string& fontType,SDL_FRect* showRect , int size) {
+	auto texture = getTextTexture(str,fontType,size);
+	SDL_RenderTexture(render,texture.get(),nullptr,showRect);
+}
+
+//SDL_Texture* TextRenderer::getTextTexture(const string& str,const string& fontType,int size) {
+//	font = ResourceManager::Instance().getFont(fontType,size);
+//	TTF_FontHasGlyph(font,1);
+//	SDL_Surface* textSurface = TTF_RenderText_Blended(font, str.c_str(), 0, textColor);
+//	if (!textSurface) {
+//		std::cerr << "textSurface 创建失败" << std::endl;
+//	}
+//	SDL_Texture* textTexture = SDL_CreateTextureFromSurface(render, textSurface);
+//	SDL_DestroySurface(textSurface);
+//	return textTexture;
+//}
 
 void TextRenderer::renderText(float x, float y, SDL_Texture* texture) {
 	float w, h;

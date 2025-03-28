@@ -16,7 +16,9 @@ UI_State UI::getState()
 void UI::update()
 {
 	for (auto component : components) {
-		component->update();
+		if (component->update()) {
+			return;
+		}
 	}
 }
 

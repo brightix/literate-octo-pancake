@@ -1,11 +1,11 @@
 #pragma once
 #include "../../objects/BaseObject.h"
-
+#include "../ColorManager.h"
 class Rect {
 public:
 	SDL_FRect rect;
 	SDL_Color color;
-	Rect() : color({ 255,255,0,255 }) { rect = { 100,100,100,100 }; }
+	Rect() : color(ColorManager::Instance().getColor(CollisionColor)) { rect = { 100,100,100,100 }; }
 	Rect(SDL_FRect rect) : rect(rect), color({ 255,255,0,255 }) {}
 	Rect(SDL_FRect rect, SDL_Color color) : rect(rect), color(color) {}
 	bool intersects(Rect& other) {

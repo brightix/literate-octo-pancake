@@ -13,7 +13,9 @@ public:
 
 	SDL_Texture* getTextTexture(const string& str);
 
-	SDL_Texture* getTextTexture(const string& str, const string& fontType, int size);
+	std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> getTextTexture(const string& str, const string& fontType, int size);
+
+	void printText(const string& str, const string& fontType, SDL_FRect* showRect, int size);
 
 	void renderText(float x, float y, SDL_Texture* texture);
 

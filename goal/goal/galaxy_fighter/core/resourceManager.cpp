@@ -35,7 +35,7 @@ TTF_Font* ResourceManager::getFont(const std::string& type, int size) {
 	}
 
 	// 加载新字体
-	std::string fontPath = ".\\galaxy_fighter\\assets\\font\\" + type + ".ttf";
+	std::string fontPath = basePath_font + "\\" + type + ".ttf";
 	TTF_Font* font = TTF_OpenFont(fontPath.c_str(), size);
 
 	// 确保字体加载成功
@@ -52,9 +52,11 @@ TTF_Font* ResourceManager::getFont(const std::string& type, int size) {
 
 ResourceManager::ResourceManager() {
 	this->renderer = RendererManager::Instance().getRenderer();
-	basePath_texture = ".\\galaxy_fighter\\assets\\img";
-	basePath_font = ".\\galaxy_fighter\\assets\\font";
-	basePath_music = ".\\galaxy_fighter\\assets\\music";
+	fs::path currentPath = fs::current_path();
+	basePath_texture = (currentPath / "galaxy_fighter" / "assets" / "img").string();
+	basePath_font = (currentPath / "galaxy_fighter" / "assets" / "font").string();
+	basePath_music = (currentPath / "galaxy_fighter" / "assets" / "music").string();
+	cout << currentPath << endl;
 }
 
 

@@ -2,6 +2,7 @@
 #include "menu.h"
 #include "galaxy_fighter/game/galaxy_fighter.h"
 #include "./galaxy_fighter/objects/MainMenuObject/MenuImage.h"
+#include "MapCreator/MapCreator.h"
 
 Menu::Menu() {
 	running = true;
@@ -67,7 +68,7 @@ void Menu::welcome() {
 				break;
 			}
 		}
-		input.postUpdate();
+		//input.postUpdate();
 		if (!running) {
 			//±£´æÊý¾Ý
 			break;
@@ -135,4 +136,10 @@ Menu::~Menu() {
 void Menu::startGame() {
 	playing_game = new Galaxy_fighter;
 	playing_game->play();
+}
+
+void Menu::startMapCreator()
+{
+	MapCreator mapCreator;
+	mapCreator.Update();
 }

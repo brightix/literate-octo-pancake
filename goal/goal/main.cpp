@@ -8,6 +8,7 @@ int main() {
 
 	Menu menu;
 	//menu.welcome();
-	menu.startGame();
+	//menu.startGame();
+	menu.startMapCreator();
 	return 0;
 }

@@ -1,9 +1,15 @@
 #include "pch.h"
-#include "game.h"
+#include "core/Timer.h"
+
 using namespace std;
 
 int main() {
-	cout << " " << endl;
-
+	Timer& timer = Timer::Instance();
+	while (true) {
+		timer.update();
+		//´¦ÀíÊäÈë
+		cout << timer.getRefreshTime() << endl;
+		timer.sleep(timer.getRefreshTime());
+	}
 	return 0;
 }

@@ -83,18 +83,17 @@ PlayerObject::PlayerObject(const json& config) : BaseObject(ObjectType::Object_P
 	//}
 	sprite = make_shared<SpritePlayer>(this);
 	currentState = new IdleState;
+	subState = new SubNone;
 	loadActionFrame();
 }
 
 void PlayerObject::update() {
-	//this->root->execute();
+
 	currentState->Update(*this);
-	//if (!IsGrounded()) {
-	//	attrs->playerY += 10;
-	//}
-	float delta = Timer::Instance().getDeltaAdjustTime();
-	this->attrs->playerX += attrs->velocityX * delta;
-	this->attrs->playerY += attrs->velocityY * delta;
+	subState->Update(*this);
+	double delta = Timer::Instance().getDeltaAdjustTime();
+	this->attrs->playerX += getVelocityX() * delta;
+	this->attrs->playerY += getVelocityY() * delta;
 	this->hitBox->rect.x = attrs->playerX;
 	this->hitBox->rect.y = attrs->playerY;
 }
@@ -121,15 +120,10 @@ void PlayerObject::resetActionState() {
 
 
 shared_ptr<PlayerAttrs> PlayerObject::getAttrs() { return attrs; }
-
 shared_ptr<SDL_Texture> PlayerObject::getTexture() { return texture; }
-
 unordered_map<string,bool>* PlayerObject::getActionState(){ return &actionState;}
-
 shared_ptr<vector<string>> PlayerObject::getActionPriority() { return actionPriority; }
-
 Rect* PlayerObject::getHitBox() { return hitBox.get(); }
-
 shared_ptr<SDL_FRect> PlayerObject::getRenderRect() {
 	auto& camera = Camera::Instance();
 	if (camera.isOnScreen(*renderRect)) {
@@ -193,21 +187,11 @@ void PlayerObject::on_collision(BaseObject* other) {
 					// 玩家从上方碰撞地面
 					attrs->playerY = groundBottom;
 				}
-				attrs->velocityY = 0; // 垂直速度归零
+				setMoveVelocityY(0); // 垂直速度归零
+				//setEventVelocityY();
 			}
 		}
 	}
-}
-
-string PlayerObject::printActionState() {
-	string res;
-	for (auto& [key, val] : actionState) {
-		if (val) {
-			res += key + "+";
-		}
-	}
-	if (!res.empty()) res.erase(res.end() - 1);
-	return res;
 }
 
 void PlayerObject::setHitBox(string action) {
@@ -229,8 +213,15 @@ float PlayerObject::getPositionX() { return attrs->playerX; }
 float PlayerObject::getPositionY() { return attrs->playerY; }
 
 
-float PlayerObject::getVelocityX() { return attrs->velocityX; }
-float PlayerObject::getVelocityY() { return attrs->velocityY; }
+float PlayerObject::getVelocityX() { return eventVelocityX + moveVelocityX; }
+float PlayerObject::getVelocityY() { return eventVelocityY + moveVelocityY; }
+
+float PlayerObject::getEventVelocityX() { return eventVelocityX; }
+float PlayerObject::getEventVelocityY() { return eventVelocityY; }
+
+float PlayerObject::getMoveVelocityX() { return moveVelocityX; }
+float PlayerObject::getMoveVelocityY() { return moveVelocityY; }
+
 float PlayerObject::getAccelerationX() { return attrs->accelerationX; }
 float PlayerObject::getAccelerationY() { return attrs->accelerationY; }
 
@@ -240,30 +231,45 @@ float PlayerObject::getMaxRunStrength() { return attrs->MaxRunStrength; }
 float PlayerObject::getMaxJumpStrength() { return attrs->MaxJumpStrength; }
 float PlayerObject::getFriction() { return attrs->friction; }
 float PlayerObject::getMaxLightAttackRange() { return 100; }
-
-string PlayerObject::getCurrentState()
-{
-	return currentState->GetState();
-}
+string PlayerObject::getCurrentStateName() { return currentState->GetState(); }
+PlayerState* PlayerObject::getCurrentState() { return currentState; }
+json& PlayerObject::getConfig() { return config; }
 
 
-json& PlayerObject::getConfig() {
-	return config;
-}
+
 //玩家数据计算
-void PlayerObject::setVelocityX(float val) { attrs->velocityX = val; }
-void PlayerObject::setVelocityY(float val) { attrs->velocityY = val; }
-void PlayerObject::setOrientation(float val) { attrs->player_orientation = val; }
+	//直接
+	void PlayerObject::setPositionX(float val) { attrs->playerX = val; }
+	void PlayerObject::setPositionY(float val) { attrs->playerY = val; }
 
-//检测输入
+	void PlayerObject::setEventVelocityX(float val) { eventVelocityX = val; }
+	//void PlayerObject::setEventVelocityY(float val) { attrs->velocityX = val; }
+
+	void PlayerObject::setMoveVelocityX(float val) { moveVelocityX = val; }
+	void PlayerObject::setMoveVelocityY(float val) { moveVelocityY = val; }
+
+	void PlayerObject::setOrientation(float val) { attrs->player_orientation = val; }
+	//间接
+	void PlayerObject::addVelocityX(float val) { attrs->velocityX += val; }
+	void PlayerObject::addVelocityY(float val) { attrs->velocityY += val; }
+
+	//玩家副状态赋值
+	void PlayerObject::setReflectHitX(bool val) { isReflectHitX = val; }
+	void PlayerObject::setReflectHitY(bool val) { isReflectHitY = val; }
+
+//检测状态
 bool PlayerObject::IsMovingLeft() { return InputManager::Instance().isKeyPressed(SDL_SCANCODE_A); }
 bool PlayerObject::IsMovingRight() { return InputManager::Instance().isKeyPressed(SDL_SCANCODE_D); }
 bool PlayerObject::IsMoving() { return InputManager::Instance().isKeyPressed(SDL_SCANCODE_A) || InputManager::Instance().isKeyPressed(SDL_SCANCODE_D); }
+bool PlayerObject::IsEventVelocityExistX() { return eventVelocityX != 0; }
+bool PlayerObject::IsJumpingOnce() { return InputManager::Instance().isKeyPressedBuffered(SDL_SCANCODE_W); }
 bool PlayerObject::IsJumping() { return InputManager::Instance().isKeyPressed(SDL_SCANCODE_W); }
 bool PlayerObject::IsCrouching() { return InputManager::Instance().isKeyPressed(SDL_SCANCODE_S); }
 bool PlayerObject::IsFalling() { return false; }
 bool PlayerObject::IsGrounded() { return actionState["OnGround"]; }
 bool PlayerObject::IsLightAttack() { return InputManager::Instance().isKeyPressed(SDL_SCANCODE_J); }
+bool PlayerObject::IsReflectHitX() { return isReflectHitX; }
+bool PlayerObject::IsReflectHitY() { return isReflectHitY; }
 
 
 //玩家状态切换
@@ -272,6 +278,13 @@ void PlayerObject::ChangeState(PlayerState* newState) {
 	delete currentState;
 	currentState = newState;
 	currentState->Enter(*this);
+}
+
+void PlayerObject::ChangeSubState(SubState* newState) {
+	subState->Exit(*this);
+	delete subState;
+	subState = newState;
+	subState->Enter(*this);
 }
 
 //渲染
@@ -310,14 +323,18 @@ void PlayerObject::setActionFrameStart() {
 	curFrame = (*spriteSheet)[currentState->GetState()].startFrame;
 }
 
-//void PlayerObject::Update() {
-//	currentState->Update(*this);
-//}
 
 
-
-
-
+string PlayerObject::printActionState() {
+	string res;
+	for (auto& [key, val] : actionState) {
+		if (val) {
+			res += key + "+";
+		}
+	}
+	if (!res.empty()) res.erase(res.end() - 1);
+	return res;
+}
 
 
 

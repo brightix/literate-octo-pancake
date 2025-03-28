@@ -11,10 +11,12 @@ public:
 	void play();
 	void update();
 
+
+
 private:
 	void loaaGameWorld();
 	void loadResource();
-
+	void checkDevelopmentMode();
 
 	unique_ptr<MapObject> background;
 	shared_ptr<PlayerObject> player;
