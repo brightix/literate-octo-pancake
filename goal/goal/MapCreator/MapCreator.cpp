@@ -27,12 +27,12 @@ void MapCreator::Update()
 		toolsWindow->Update();
 
 		assetsWindow->Update();
-		worldWindow->Update();
+		//worldWindow->Update();
 		timer.showFps();
 		SDL_RenderPresent(r);
 
 
-
+		//cout << timer.getDeltaAdjustTime() << endl;
 		timer.sleep(timer.getRefreshTime());
 	}
 }
@@ -42,7 +42,7 @@ void MapCreator::init()
 {
 	this->WindowRect = Resolution::Instance().getWindowRect();
 	SDL_FRect ToolsRect = { 0,0,300,WindowRect.h };
-	SDL_FRect WorldRect = { ToolsRect.w,0,WindowRect.w - ToolsRect.w,300 };
+	SDL_FRect WorldRect = { ToolsRect.w,0,WindowRect.w - ToolsRect.w,200 };
 	SDL_FRect AssetsRect = { ToolsRect.w,WorldRect.h,WorldRect.w,WindowRect.h - WorldRect.h };
 	worldWindow =  new WorldWindow(WorldRect);
 	assetsWindow = new AssetsWindow(AssetsRect);

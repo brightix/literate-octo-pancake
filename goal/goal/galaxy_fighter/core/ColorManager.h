@@ -15,6 +15,7 @@ enum ColorType {
 
 	//¸ß¼¶»Ò
 	System_Grey,
+	System_GreyWhite,
 	ColorCount
 };
 

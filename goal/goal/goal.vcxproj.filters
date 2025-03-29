@@ -416,6 +416,9 @@
     <ClInclude Include="MapCreator\CreatorElements\CreatorElements.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MapCreator\CreatorDebug\CreatorDebug.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="config.json" />

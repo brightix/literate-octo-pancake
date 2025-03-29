@@ -8,10 +8,10 @@ public:
     ToolsWindow() = default;
     ToolsWindow(SDL_FRect& rect) : CreatorComponent(rect) {
         float border = 25;
-        showRect.x += border;
-        showRect.y += border;
-        showRect.w -= 2 * border;
-        showRect.h -= 2 * border;
+        windowShowRect.x += border;
+        windowShowRect.y += border;
+        windowShowRect.w -= 2 * border;
+        windowShowRect.h -= 2 * border;
     }
     void Update();
 };

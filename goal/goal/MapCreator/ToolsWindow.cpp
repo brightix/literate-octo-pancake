@@ -5,5 +5,5 @@ void ToolsWindow::Update()
 {
 	DrawBackground();
 	DrawSubBorder(placeholderRect);
-	DrawSubBorder(showRect);
+	DrawSubBorder(windowShowRect);
 }

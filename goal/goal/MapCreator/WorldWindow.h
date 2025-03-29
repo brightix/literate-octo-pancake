@@ -10,8 +10,8 @@ typedef struct WorldTexture {
 class WorldWindow :
     public CreatorComponent
 {
-    float windowAreaScale = 1;
-    float scaleFactor = 1;
+    float windowAreaScale = 1.0f;
+    float scaleFactor = 1.0f;
     bool relativeMouseMode = false;
     SDL_FRect BaseViewport;
     SDL_FRect realMap;

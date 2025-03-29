@@ -3,12 +3,13 @@
 
 
 void ScrollBar_ver::Update() {
+
 	SDL_FRect contentRect = father->getContentRect();
 	float father_content_h = contentRect.h;
 	SDL_FRect viewport = father->getViewport();
 
 	verUpdate();
-	horUpdate();
+	//horUpdate();
 
 	DrawSubBorder(slider_ver);
 	DrawSubBorder(slider_hor);
@@ -17,12 +18,17 @@ void ScrollBar_ver::Update() {
 void ScrollBar_ver::verUpdate() {
 	SDL_FRect contentRect = father->getContentRect();
 	SDL_FRect viewport = father->getViewport();
+	SDL_FRect windowShowRect = father->getWindowShowRect();
 	if (contentRect.h > viewport.h) {
 		const float minSliderHeight = 20.0f;
-		slider_ver.h = max(showRect_ver.h * viewport.h / contentRect.h, minSliderHeight);
-		slider_ver.y = showRect_ver.y + showRect_ver.h * (viewport.y - contentRect.y) / (contentRect.h - viewport.h);
 
-		slider_ver.y = std::clamp(slider_ver.y, showRect_ver.y, showRect_ver.y + showRect_ver.h - slider_ver.h);
+		slider_ver.h = max(showRect_ver.h * viewport.h / contentRect.h, minSliderHeight);
+		
+		float scrollPresent = (viewport.y - contentRect.y) / (contentRect.h - viewport.h);
+		//scrollPresent = clamp(scrollPresent,0.f,1.f);
+		//滚动条的位置等于 = 滑轨最大可移动长度 / ( (当前视口坐标 - 内容起始坐标) / (视口最大可移动长度) )
+		slider_ver.y = showRect_ver.y + (showRect_ver.h - slider_ver.h) * scrollPresent;
+
 		showScroll(slider_ver);
 	}
 }
@@ -30,7 +36,7 @@ void ScrollBar_ver::verUpdate() {
 void ScrollBar_ver::horUpdate() {
 	SDL_FRect contentRect = father->getContentRect();
 	SDL_FRect viewport = father->getViewport();
-	if (contentRect.w > viewport.w) {
+	if (contentRect.w >= viewport.w) {
 		slider_hor.w = showRect_hor.w * viewport.w / contentRect.w;
 		slider_hor.y = showRect_hor.y + showRect_hor.w * (contentRect.x - viewport.x);
 		showScroll(slider_hor);
@@ -56,7 +62,7 @@ void ScrollBar_ver::init() {
 	triangleDown.h = 3 * border;
 }
 ScrollBar_ver::ScrollBar_ver(CreatorComponent* father) : father(father){
-	SDL_FRect fatherShowRect = father->getShowRect();
+	SDL_FRect fatherShowRect = father->getWindowShowRect();
 	placeholder = {
 		fatherShowRect.x+ fatherShowRect.w - 5*border,
 		fatherShowRect.y,
