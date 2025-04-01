@@ -53,7 +53,7 @@ MapCreator::MapCreator(SDL_FRect rect) {
 	auto& renderer = RendererManager::Instance();
 	auto& res = Resolution::Instance();
 	SDL_SetWindowBordered(renderer.getWindow(), true);
-	res.setResolution(3);
+	res.setResolution(2);
 	//SDL_SetWindowResizable(window,true);
 
 

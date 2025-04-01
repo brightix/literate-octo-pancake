@@ -11,12 +11,12 @@ void ScrollBar_ver::Update() {
 	verUpdate();
 	//horUpdate();
 
-	DrawSubBorder(slider_ver);
-	DrawSubBorder(slider_hor);
+	//DrawSubBorder(slider_ver);
+	//DrawSubBorder(slider_hor);
 }
 
 void ScrollBar_ver::verUpdate() {
-	SDL_FRect contentRect = father->GetPlaceholderRect();
+	SDL_FRect contentRect = father->GetContentRect();
 	SDL_FRect viewport = father->GetViewport();
 	SDL_FRect windowShowRect = father->GetWindowShowRect();
 	if (contentRect.h > viewport.h) {
@@ -24,8 +24,8 @@ void ScrollBar_ver::verUpdate() {
 
 		slider_ver.h = max(showRect_ver.h * viewport.h / contentRect.h, minSliderHeight);
 		
-		float scrollPresent = (viewport.y - contentRect.y) / (contentRect.h - viewport.h);
-		//scrollPresent = clamp(scrollPresent,0.f,1.f);
+		float scrollPresent = (viewport.y) / (contentRect.h - viewport.h);
+
 		//滚动条的位置等于 = 滑轨最大可移动长度 / ( (当前视口坐标 - 内容起始坐标) / (视口最大可移动长度) )
 		slider_ver.y = showRect_ver.y + (showRect_ver.h - slider_ver.h) * scrollPresent;
 
@@ -77,7 +77,5 @@ void ScrollBar_ver::refreshAttr() {
 
 ScrollBar_ver::ScrollBar_ver(CreatorComponent* father) : father(father){
 	refreshAttr();
-	//triangleUp = placeholder;
-	//triangleDown = placeholder;
 }
 
