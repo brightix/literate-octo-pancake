@@ -34,4 +34,4 @@
 #include "core/Resolution.h"
 #include "./objects/camera/Camera.h"
 #include "core/ColorManager.h"
-
+#include "../MapCreator/CreatorDebug/CreatorDebug.h"

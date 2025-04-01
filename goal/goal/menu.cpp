@@ -5,6 +5,7 @@
 #include "MapCreator/MapCreator.h"
 
 Menu::Menu() {
+	SDL_RaiseWindow(RendererManager::Instance().getWindow());
 	running = true;
 	SDL_Init(SDL_INIT_VIDEO);
 	playing_game = nullptr;
@@ -140,6 +141,6 @@ void Menu::startGame() {
 
 void Menu::startMapCreator()
 {
-	MapCreator mapCreator;
+	MapCreator mapCreator = MapCreator(Resolution::Instance().getWindowRect());
 	mapCreator.Update();
 }

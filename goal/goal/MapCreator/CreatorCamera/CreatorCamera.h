@@ -5,23 +5,25 @@ public:
 	CreatorCamera() = default;
 	~CreatorCamera() = default;
 	CreatorCamera(SDL_FRect viewport);
-	SDL_FRect getViewport();
+
+	const SDL_FRect& GetViewport();
 
 	void setCameraRange(SDL_FRect* rect);
-	void setViewport(float x, float y);
+	void setViewportXY(float x, float y);
+	void setViewportWH(float w, float h);
+	void addViewportXY(float x, float y);
+	void addViewportWH(float w, float h);
 
-	void addViewport(float x, float y);
 
+	const SDL_FRect& getCameraRange();
 
-	SDL_FRect& getCameraRange();
+	bool isOnScreen(SDL_FRect& worldRect);
 
-	bool isOnScreen(SDL_FRect& showRect,SDL_FRect& rect);
-
-	SDL_FRect worldToViewport_rect(SDL_FRect& relativeRect, SDL_FRect rect);
-
-	SDL_FRect worldToViewport_line(SDL_FRect& relativeRect, SDL_FRect line);
-
-	SDL_FPoint worldToViewport_dot(SDL_FRect& relativeRect, SDL_FPoint p);
+	SDL_FRect WorldToViewport_rect(SDL_FRect& relativeRect, SDL_FRect rect);
+	SDL_FRect WorldToViewport_line(SDL_FRect& relativeRect, SDL_FRect line);
+	SDL_FPoint WorldToViewport_dot(SDL_FRect& relativeRect, SDL_FPoint p);
+	SDL_FRect ScreenToWorld_rect(SDL_FRect& dstRect, SDL_FRect rect);
+	SDL_FPoint ScreenToWorld_dot(SDL_FRect& dstRect, SDL_FPoint);
 	SDL_FRect transformViewportArea(SDL_FRect worldRect);
 private:
 

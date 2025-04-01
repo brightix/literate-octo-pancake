@@ -10,17 +10,16 @@ typedef struct WorldTexture {
 class WorldWindow :
     public CreatorComponent
 {
-    float windowAreaScale = 1;
-    float scaleFactor = 1;
+    float windowAreaScale = 1.0f;
+    float scaleFactor = 1.0f;
     bool relativeMouseMode = false;
     SDL_FRect BaseViewport;
     SDL_FRect realMap;
-    std::unique_ptr<CreatorCamera> camera;
 
 public:
-    WorldWindow() = default;
-    WorldWindow(SDL_FRect& rect);
+    WorldWindow(SDL_FRect placeholder);
     void Update();
+    void UpdateAttr();
     void UpdateInput();
 private:
     void DrawSubLine();

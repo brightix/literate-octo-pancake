@@ -1,56 +1,76 @@
 #include "pch.h"
 #include "WorldWindow.h"
+#include "../galaxy_fighter/utils/Math.h"
 
 
 
 void WorldWindow::Update()
 {
-
     UpdateInput();
-    scaleFactor = showRect.h / camera->getViewport().h;
+    UpdateAttr();
+    scaleFactor = windowShowRect.w / camera->GetViewport().w;
 	DrawBackground();
-	DrawInfo();
+
     DrawSubLine();
     DrawTexture();
+    DrawInfo();
+}
 
-
-
+void WorldWindow::UpdateAttr() {
+    auto& viewport = camera->GetViewport();
+    BaseViewport.w = BaseViewport.h * (viewport.w / viewport.h);
 }
 
 void WorldWindow::UpdateInput() {
     InputManager& input = InputManager::Instance();
-    if (input.isCursorHovering(&showRect) || relativeMouseMode) {
+    if (input.isCursorHovering(&windowShowRect) || relativeMouseMode) {
+        /* ÖÐ¼üÍÏ¶¯ÆÁÄ» */
         if (input.isMouseButtonPressed(SDL_BUTTON_MIDDLE)) {
             input.setRelativeMouseMode(relativeMouseMode);
+            auto [x,y] = input.getRelativeMousexy();
             if (!relativeMouseMode) {
                 relativeMouseMode = true;
                 return;
-            } 
-            auto [x,y] = input.getRelativeMousexy();
-            camera->addViewport(-x * windowAreaScale,-y * windowAreaScale);
+            }
+
+            camera->addViewportXY(-x * 2 * windowAreaScale,-y * 2 * windowAreaScale);
         }
         else if (relativeMouseMode) {
             relativeMouseMode = false;
             input.setRelativeMouseMode(relativeMouseMode);
         }
         else if (int dir = input.isMouseWheelYScrolled()) {
-            windowAreaScale = clamp(windowAreaScale + -dir * 0.2, 0.1, 10.0);
-            camera->setViewport(BaseViewport.w * windowAreaScale,BaseViewport.h * windowAreaScale);
+            /* ¹öÂÖËõ·Å */
+            if (dir < 0) {
+                windowAreaScale = min(windowAreaScale * 1.1f, 100.0f);
+            }
+            else {
+                windowAreaScale = max(windowAreaScale / 1.1f, 0.01f);
+            }
+
+
+            auto [x, y] = input.getMousexy();
+            SDL_FPoint XY = {x,y};
+
+            SDL_FPoint prevMouseOnWorld = camera->ScreenToWorld_dot(windowShowRect,XY);
+            camera->setViewportWH(BaseViewport.w * windowAreaScale,BaseViewport.h * windowAreaScale);
+
+            SDL_FPoint afterMouseOnWorld = camera->ScreenToWorld_dot(windowShowRect, XY);
+            camera->addViewportXY(prevMouseOnWorld.x - afterMouseOnWorld.x, prevMouseOnWorld.y - afterMouseOnWorld.y);
         }
-
     }
 
-    if (input.isKeyPressed(SDL_SCANCODE_RIGHT)) {
-        camera->addViewport(5, 0);
+    if (input.isKeyPressed(SDL_SCANCODE_D)) {
+        camera->addViewportXY(10 * windowAreaScale, 0);
     }
-    if (input.isKeyPressed(SDL_SCANCODE_LEFT)) {
-        camera->addViewport(-5, 0);
+    if (input.isKeyPressed(SDL_SCANCODE_A)) {
+        camera->addViewportXY(-10 * windowAreaScale, 0);
     }
-    if (input.isKeyPressed(SDL_SCANCODE_DOWN)) {
-        camera->addViewport(0,5);
+    if (input.isKeyPressed(SDL_SCANCODE_S)) {
+        camera->addViewportXY(0, 10 * windowAreaScale);
     }
-    if (input.isKeyPressed(SDL_SCANCODE_UP)) {
-        camera->addViewport(0,-5);
+    if (input.isKeyPressed(SDL_SCANCODE_W)) {
+        camera->addViewportXY(0,-10 * windowAreaScale);
     }
 }
 
@@ -61,94 +81,84 @@ void WorldWindow::DrawSubLine() {
     SDL_SetRenderDrawColor(r, color.r, color.g, color.b, color.a);
 
     float gap;
-    if (windowAreaScale < 3.0f) {
-        gap = 300;
+    if (windowAreaScale < 1.0f) {
+        gap = 100.0f;
     }
-    else if (windowAreaScale < 6.0f) {
-        gap = 500;
+    else if (windowAreaScale < 5.0f) {
+        gap = 500.f;
+    }
+    else if (windowAreaScale < 10.0f) {
+        gap = 1000.f;
+    }
+    else if (windowAreaScale < 15.0f) {
+        gap = 1500.f;
     }
     else {
-        gap = 700;
+        gap = 2000.0f;
     }
-    SDL_FRect viewport = camera->getViewport();
-    int i = ceil(viewport.x / gap) * gap;
+    SDL_FRect viewport = camera->GetViewport();
+    float i = ceil(viewport.x / gap) * gap;
     float j = viewport.y + viewport.h;
-    int n =floor((viewport.x + viewport.w) / gap) * gap;
+    float n = floor((viewport.x + viewport.w) / gap) * gap;
     int textSize = 10;
     for (i;i <= n;i += gap) {
-        SDL_FPoint p1 = camera->worldToViewport_dot(showRect, { (float)i,viewport.y });
-        SDL_FPoint p2 = camera->worldToViewport_dot(showRect, { (float)i,j });
+        SDL_FPoint p1 = camera->WorldToViewport_dot(windowShowRect, { i,viewport.y });
+        SDL_FPoint p2 = camera->WorldToViewport_dot(windowShowRect, { i,j });
         SDL_RenderLine(r, p1.x, p1.y, p2.x, p2.y);
 
-        SDL_FPoint index = camera->worldToViewport_dot(showRect, { (float)i,viewport.y });
-        textRenderer.renderText(index.x, index.y, textRenderer.getTextTexture(to_string(i), "pingfang", 10).get());
+        SDL_FPoint index = camera->WorldToViewport_dot(windowShowRect, { i,viewport.y });
+        textRenderer.renderText(index.x, index.y, textRenderer.getTextTexture(to_string(static_cast<int>(i)), "pingfang", 10).get());
     }
     
     i = ceil(viewport.y / gap) * gap;
     j = viewport.x + viewport.w;
     n = floor((viewport.y + viewport.h) / gap) * gap;
     for (i;i <= n;i += gap) {
-        SDL_FPoint p1 = camera->worldToViewport_dot(showRect, { viewport.x,(float)i });
-        SDL_FPoint p2 = camera->worldToViewport_dot(showRect, { j,(float)i });
+        SDL_FPoint p1 = camera->WorldToViewport_dot(windowShowRect, { viewport.x,i });
+        SDL_FPoint p2 = camera->WorldToViewport_dot(windowShowRect, { j,i });
         SDL_RenderLine(r, p1.x, p1.y, p2.x, p2.y);
 
-        SDL_FPoint index = camera->worldToViewport_dot(showRect, { viewport.x,(float)i });
-        textRenderer.renderText(index.x, index.y, textRenderer.getTextTexture(to_string(i), "pingfang", 10).get());
+        SDL_FPoint index = camera->WorldToViewport_dot(windowShowRect, { viewport.x,i });
+        textRenderer.renderText(index.x, index.y, textRenderer.getTextTexture(to_string(static_cast<int>(i)), "pingfang", 10).get());
     }
 }
 
 void WorldWindow::DrawInfo() {
+    CreatorDebug debug;
     auto& textRenderer = TextRenderer::Instance();
-    SDL_FPoint p = { placeholderRect.x,placeholderRect.y };
-    auto texture = textRenderer.getTextTexture(TO_STRING_2(scaleFactor), "pingfang", 20);
-    textRenderer.renderText(p.x, p.y,texture.get());
-    
-    SDL_FRect viewport = camera->getViewport();
-    p.x = p.x + texture->w;
-    texture = textRenderer.getTextTexture(
-        "viewport = {" + 
-        to_string((int)viewport.x) + " " +
-        to_string((int)viewport.y) + " " +
-        to_string((int)viewport.w) + " " +
-        to_string((int)viewport.h) + " " + "}",
-        "pingfang", 20);
-    textRenderer.renderText(p.x, p.y, texture.get());
+    SDL_FPoint p = { windowShowRect.x,windowShowRect.y };
 
-    p.x = p.x + texture->w;
-    texture = textRenderer.getTextTexture(
-        "showRect = {" +
-        to_string((int)showRect.x) + " " +
-        to_string((int)showRect.y) + " " +
-        to_string((int)showRect.w) + " " +
-        to_string((int)showRect.h) + " " + "}",
-        "pingfang", 20);
-    textRenderer.renderText(p.x, p.y, texture.get());
+    debug.printText<float>("scaleFactor",scaleFactor, p);
+    SDL_FRect viewport = camera->GetViewport();
+    debug.printText<float>("viewportRatio", viewport.w / viewport.h, {p.x,p.y+20});
+    debug.printText<float>("windowShowRatio", windowShowRect.w / windowShowRect.h, { p.x,p.y + 40 });
+    debug.printRectInfo("placeholderRect", placeholderRect, GetPlaceholderRect(), 3);
+    debug.printRectInfo("viewport",viewport, GetPlaceholderRect(),4);
+    debug.printRectInfo("windowShowRect", windowShowRect, GetPlaceholderRect(),5);
+
 }
 
 void WorldWindow::DrawTexture() {
     for (auto t : textures) {
-        if (camera->isOnScreen(showRect,t.rect)) {
-            SDL_FRect texShowRect = camera->transformViewportArea(t.rect);
-            SDL_FRect texWorldRect = camera->worldToViewport_rect(showRect, texShowRect);
+        if (camera->isOnScreen(t.rect)) {
+            SDL_FRect texwindowShowRect = camera->transformViewportArea(t.rect);
+            SDL_FRect texWorldRect = camera->WorldToViewport_rect(windowShowRect, texwindowShowRect);
 
-            SDL_RenderTexture(r,t.texture.get(), &texShowRect, &texWorldRect);
+            SDL_RenderTexture(r,t.texture.get(), &texwindowShowRect, &texWorldRect);
         }
     }
 }
 
-WorldWindow::WorldWindow(SDL_FRect& rect) : CreatorComponent(rect) {
+WorldWindow::WorldWindow(SDL_FRect placeholder) : CreatorComponent(placeholder){
+    WindowId = WindowIdAdder++;
     float border = 25;
-    showRect.x += border;
-    showRect.y += border;
-    showRect.w -= 2 * border;
-    showRect.h -= 2 * border;
     realMap = { 0,0,1920,1080 };
-    camera = make_unique<CreatorCamera>(showRect);
-
-    BaseViewport = showRect;
+    camera = make_unique<CreatorCamera>(windowShowRect);
+    camera->setCameraRange(nullptr);
+    BaseViewport = realMap;
 
 
     ResourceManager& resource = ResourceManager::Instance();
     auto tex = resource.getTexture("bk", "bk_3.jpg");
-    textures.push_back({tex ,{0.0f,0.0f,(float)tex->w,(float)tex->h} });
+    //textures.push_back({tex ,{0.0f,0.0f,(float)tex->w,(float)tex->h} });
 }

@@ -221,6 +221,7 @@
     <ClCompile Include="MapCreator\CreatorElements\ScrollBar.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MapCreator\CreatorDebug\CreatorDebug.h" />
     <ClInclude Include="MapCreator\CreatorElements\CreatorElements.h" />
     <ClInclude Include="MapCreator\AssetsWindow.h" />
     <ClInclude Include="MapCreator\CreatorCamera\CreatorCamera.h" />

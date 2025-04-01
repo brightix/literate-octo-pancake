@@ -23,6 +23,7 @@ public:
     void horUpdate();
     void showScroll(SDL_FRect& slider);
     const SDL_FRect& getVerRect();
+    void refreshAttr();
     void init();
 };
 

@@ -25,6 +25,7 @@ public:
 	RendererManager(const RendererManager&) = delete;
 	RendererManager& operator=(const RendererManager&) = delete;
 private:
+	void changeScreenDisplayMode(bool b);
 	RendererManager();
 	~RendererManager();
 	SDL_Renderer* renderer;

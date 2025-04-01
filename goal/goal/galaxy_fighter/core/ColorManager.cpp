@@ -23,5 +23,6 @@ ColorManager::ColorManager() {
 	colorList[CollisionColor] = { 255,255,0,255 };
 	colorList[AttackColor] = { 255,0,0,255 };
 	colorList[SubLineColor] = { 0,191,255,50 };
-	colorList[System_Grey] = {127,127,127,100};
+	colorList[System_Grey] = {127,127,127,255};
+	colorList[System_GreyWhite] = { 200,200,200,255 };
 }

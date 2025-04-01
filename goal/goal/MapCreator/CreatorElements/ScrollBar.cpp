@@ -3,34 +3,40 @@
 
 
 void ScrollBar_ver::Update() {
-	SDL_FRect contentRect = father->getContentRect();
+	refreshAttr();
+	SDL_FRect contentRect = father->GetPlaceholderRect();
 	float father_content_h = contentRect.h;
-	SDL_FRect viewport = father->getViewport();
+	SDL_FRect viewport = father->GetViewport();
 
 	verUpdate();
-	horUpdate();
+	//horUpdate();
 
 	DrawSubBorder(slider_ver);
 	DrawSubBorder(slider_hor);
 }
 
 void ScrollBar_ver::verUpdate() {
-	SDL_FRect contentRect = father->getContentRect();
-	SDL_FRect viewport = father->getViewport();
+	SDL_FRect contentRect = father->GetPlaceholderRect();
+	SDL_FRect viewport = father->GetViewport();
+	SDL_FRect windowShowRect = father->GetWindowShowRect();
 	if (contentRect.h > viewport.h) {
 		const float minSliderHeight = 20.0f;
-		slider_ver.h = max(showRect_ver.h * viewport.h / contentRect.h, minSliderHeight);
-		slider_ver.y = showRect_ver.y + showRect_ver.h * (viewport.y - contentRect.y) / (contentRect.h - viewport.h);
 
-		slider_ver.y = std::clamp(slider_ver.y, showRect_ver.y, showRect_ver.y + showRect_ver.h - slider_ver.h);
+		slider_ver.h = max(showRect_ver.h * viewport.h / contentRect.h, minSliderHeight);
+		
+		float scrollPresent = (viewport.y - contentRect.y) / (contentRect.h - viewport.h);
+		//scrollPresent = clamp(scrollPresent,0.f,1.f);
+		//滚动条的位置等于 = 滑轨最大可移动长度 / ( (当前视口坐标 - 内容起始坐标) / (视口最大可移动长度) )
+		slider_ver.y = showRect_ver.y + (showRect_ver.h - slider_ver.h) * scrollPresent;
+
 		showScroll(slider_ver);
 	}
 }
 
 void ScrollBar_ver::horUpdate() {
-	SDL_FRect contentRect = father->getContentRect();
-	SDL_FRect viewport = father->getViewport();
-	if (contentRect.w > viewport.w) {
+	SDL_FRect contentRect = father->GetContentRect();
+	SDL_FRect viewport = father->GetViewport();
+	if (contentRect.w >= viewport.w) {
 		slider_hor.w = showRect_hor.w * viewport.w / contentRect.w;
 		slider_hor.y = showRect_hor.y + showRect_hor.w * (contentRect.x - viewport.x);
 		showScroll(slider_hor);
@@ -48,15 +54,8 @@ const SDL_FRect& ScrollBar_ver::getVerRect() {
 	return slider_ver;
 }
 
-void ScrollBar_ver::init() {
-	triangleUp.w = showRect_ver.w;
-	triangleUp.h = 3 * border;
-
-	triangleDown.w = showRect_ver.w;
-	triangleDown.h = 3 * border;
-}
-ScrollBar_ver::ScrollBar_ver(CreatorComponent* father) : father(father){
-	SDL_FRect fatherShowRect = father->getShowRect();
+void ScrollBar_ver::refreshAttr() {
+	SDL_FRect fatherShowRect = father->GetWindowShowRect();
 	placeholder = {
 		fatherShowRect.x+ fatherShowRect.w - 5*border,
 		fatherShowRect.y,
@@ -74,9 +73,11 @@ ScrollBar_ver::ScrollBar_ver(CreatorComponent* father) : father(father){
 	};
 	showRect_hor = { placeholder.x + border, placeholder.y + border ,placeholder.w - 2 * border ,placeholder.h - 2 * border };
 	slider_hor = showRect_hor;
+}
 
-
+ScrollBar_ver::ScrollBar_ver(CreatorComponent* father) : father(father){
+	refreshAttr();
 	//triangleUp = placeholder;
 	//triangleDown = placeholder;
-	init();
 }
+

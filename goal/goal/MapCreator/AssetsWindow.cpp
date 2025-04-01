@@ -1,79 +1,150 @@
 #include "pch.h"
 #include "AssetsWindow.h"
+#include "CreatorDebug/CreatorDebug.h"
 
 void AssetsWindow::Update()
 {
+	CreatorDebug debug;
 	UpdateInput();
 	DrawBackground();
 	DrawSubBorder(placeholderRect);
-	DrawSubBorder(showRect);
+	DrawSubBorder(windowShowRect);
 	scrollBar_ver->Update();
-	
 	UpdateAssets();
+	debug.printRectInfo("viewport",GetViewport(), GetPlaceholderRect(), 1);
 }
 
 void AssetsWindow::UpdateInput() {
+	bool isScrolling = false;
     InputManager& input = InputManager::Instance();
-    if (input.isCursorHovering(&showRect)) {
-        if (int dir = input.isMouseWheelYScrolled()) {
+    if (input.isCursorHovering(&windowShowRect)) {
+        if (int dir = -input.isMouseWheelYScrolled()) {
 			if (input.isKeyPressed(SDL_SCANCODE_LSHIFT)) {
-				camera->addViewport(dir * scrollSpeed, 0);
+				camera->addViewportXY(dir * scrollSpeed, 0);
 			}
 			else {
-				camera->addViewport(0, dir * scrollSpeed);
+				camera->addViewportXY(0, dir * scrollSpeed);
 			}
+			isScrolling = true;
         }
-
-
     }
 	SDL_FRect slider = scrollBar_ver->getVerRect();
 	if ((input.isCursorHovering(&slider) || isSliding) && input.isMouseButtonPressed(SDL_BUTTON_LEFT)) {//input.isMouseButtonPressed(SDL_BUTTON_LEFT)
 		auto [x, y] = input.getMousexy();
 		if (!isSliding) {
 			isSliding = true;
-			initialMouseY = y;
-			initialViewportY = camera->getViewport().y;
+			initialMouseY = static_cast<float>(y);
+			initialViewportY = camera->GetViewport().y;
 		}
 		float deltaY = y - initialMouseY;
-		camera->setViewport(0,initialViewportY + deltaY);
-		cout << camera->getViewport().y << endl;
+		camera->setViewportXY(0,initialViewportY + deltaY);
+		isScrolling = true;
 	}
 	else if (isSliding) {
 		isSliding = false;
 	}
+	if (input.isKeyPressedOnce(SDL_SCANCODE_L)) {
+		camera->setViewportXY(0,camera->GetViewport().h * 2);
+	}
+	if (input.isKeyPressedOnce(SDL_SCANCODE_K)) {
+		camera->setViewportXY(0, camera->GetViewport().h / 2);
+	}
+	if (isScrolling) {
+
+	}
+	reCalculateAsstesShowRect();
 }
 
 void AssetsWindow::UpdateAssets() {
-	for (auto asset : assets) {
-		asset.Update();
+	CreatorDebug debug;
+	for (auto& asset : assets) {
+		SDL_FRect showRect = asset.getShowRect();
+		SDL_FRect worldRect = asset.getWorldRect();
+		if (camera->isOnScreen(worldRect)) {
+			asset.Update();
+		}
 	}
 }
 
 void AssetsWindow::refreshAssets() {
-	assets.push_back(Asset(ResourceManager::Instance().getTexture("gameLogo","logo_2.jpg"),"miniWorld",cameraviewport));
+	assets.push_back(Asset(ResourceManager::Instance().getTexture("gameLogo","logo_2.jpg"),"miniWorld"));
+	assets.push_back(Asset(ResourceManager::Instance().getTexture("gameLogo", "logo_3.jpg"), "miniWorld"));
+	assets.push_back(Asset(ResourceManager::Instance().getTexture("bk", "bk_3.jpg"), "miniWorld"));
+	Reassign();
 }
-SDL_FRect AssetsWindow::getContentRect()
+
+void AssetsWindow::Reassign() {
+	float rowLength = windowShowRect.w;
+	float colItemGap = (rowLength - rowItemCount * ItemRect.w) / (rowItemCount + 1);
+	int totalCount = static_cast<int>(assets.size());
+
+	int n = (totalCount + rowItemCount - 1) / rowItemCount;
+
+	for (int i = 0;i < n;i++) {
+		ItemRect.y = padding + i * (ItemRect.h + padding);
+		for (int j = 0;j < rowItemCount;j++) {
+			int index = (i * rowItemCount) + j;
+			if (index >= totalCount) break;
+			ItemRect.x = colItemGap + j * (ItemRect.w + colItemGap);
+			SDL_GetTextureSize(assets[index].getTexture(),&ItemRect.w,&ItemRect.h);
+			float scale;
+			if (ItemRect.w > ItemRect.h) {
+				scale = ElementMaxWidth / ItemRect.w;
+			}
+			else {
+				scale = ElementMaxHeight / ItemRect.h;
+			}
+			ItemRect.w *= scale;
+			ItemRect.h *= scale;
+			assets[index].SetWorldRect(ItemRect);
+		}
+	}
+	contentRect = {0,0,windowShowRect.w, padding + n * (ItemRect.h + padding) };
+}
+
+void AssetsWindow::reCalculateAsstesShowRect() {
+	CreatorDebug debug;
+	for (auto& asset : assets) {
+		float texW, texH;
+		SDL_GetTextureSize(asset.getTexture(), &texW, &texH);
+		SDL_FRect worldRect = asset.getWorldRect();
+		SDL_FRect clipped = camera->transformViewportArea(worldRect);
+
+		SDL_FRect srcRect;
+		srcRect.x = (clipped.x - worldRect.x) / worldRect.w * texW;
+		srcRect.y = (clipped.y - worldRect.y) / worldRect.h * texH;
+		srcRect.w = (clipped.w / worldRect.w) * texW;
+		srcRect.h = (clipped.h / worldRect.h) * texH;
+
+		asset.SetClippedRect(srcRect);
+		asset.SetShowRect(camera->WorldToViewport_rect(windowShowRect, clipped));
+	}
+}
+
+const SDL_FRect& AssetsWindow::GetContentRect()
 {
 	return contentRect;
 }
 
-SDL_FRect AssetsWindow::getViewport() {
-	return camera->getViewport();
+const SDL_FRect& AssetsWindow::GetViewport() {
+
+	return camera->GetViewport();
+}
+
+AssetsWindow::AssetsWindow(SDL_FRect placeholder) : CreatorComponent(placeholder) {
+	WindowId = WindowIdAdder++;
+
+
+	SDL_FRect viewport = {0,0,windowShowRect.w,windowShowRect.h};
+	camera = make_unique<CreatorCamera>(viewport);
+	
+    camera->setCameraRange(&contentRect);
+	ItemRect = {0,0,ElementMaxWidth,ElementMaxHeight };
+	refreshAssets();
+	scrollBar_ver = make_unique<ScrollBar_ver>(this);
 }
 
 
-
-AssetsWindow::AssetsWindow(SDL_FRect& rect) : CreatorComponent(rect){
-	float border = 25;
-	showRect.x += border;
-	showRect.y += border;
-	showRect.w -= 2 * border;
-	showRect.h -= 2 * border;
-
-	contentRect = showRect;
-	contentRect.h *= 1.2;
-	contentRect.w *= 2;
-	scrollBar_ver = make_unique<ScrollBar_ver>(this);
-	camera = make_unique<CreatorCamera>(showRect);
-    camera->setCameraRange(&contentRect);
+void AssetsWindow::RefreshAttr() {
+	scrollBar_ver->refreshAttr();
 }

@@ -69,7 +69,6 @@ void RendererManager::switchScreenDisplayMove() {
 		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
 		SDL_SetRenderLogicalPresentation(renderer,1920,1080, SDL_LOGICAL_PRESENTATION_LETTERBOX);
 	}
-
 }
 
 
