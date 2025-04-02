@@ -1,6 +1,6 @@
 #pragma once
 #include "pch.h"
-
+#include "../EventSystem/EventSystem.h"
 class CreatorDebug
 {
 public:
@@ -20,10 +20,10 @@ public:
         textRenderer.renderText(showRect.x, showRect.h - no * size, texture.get());
     }
 
-    template<typename T>
-    inline void printText(const string& name,T val,SDL_FPoint pos) {
+    //template<typename T>
+    inline void printText(const string& name,string val,SDL_FPoint pos) {
         auto& tr = TextRenderer::Instance();
-        auto texture = tr.getTextTexture(name + to_string(val), "pingfang", 20);
+        auto texture = tr.getTextTexture(name + val, "pingfang", 20);
         tr.renderText(pos.x,pos.y, texture.get());
     }
 
@@ -31,6 +31,10 @@ public:
         auto& tr = TextRenderer::Instance();
         auto texture = tr.getTextTexture(to_string(pos.x) + " " + to_string(pos.x), "pingfang", 20);
         tr.renderText(pos.x+20, pos.y+20, texture.get());
+    }
+
+    inline void showEventInfo(EventSystem& eventSystem) {
+
     }
 };
 

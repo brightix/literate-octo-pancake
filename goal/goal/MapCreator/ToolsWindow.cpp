@@ -4,6 +4,7 @@
 
 ToolsWindow::ToolsWindow(SDL_FRect placeholder) : CreatorComponent(placeholder) {
 	WindowId = WindowIdAdder++;
+	name = "ToolsWindow";
 	UpdateShowRect();
 }
 void ToolsWindow::Update()

@@ -58,12 +58,12 @@ const SDL_FRect& CreatorCamera::getCameraRange() { return *world; }
 
 
 bool CreatorCamera::isOnScreen(SDL_FRect& worldRect) {
-    //SDL_FRect screenRect = WorldToViewport_rect(windowShowRect, worldRect);
     return !(
         worldRect.x + worldRect.w < viewport.x ||
         worldRect.x > viewport.x + viewport.w ||
         worldRect.y + worldRect.h < viewport.y ||
-        worldRect.y > viewport.y + viewport.h);
+        worldRect.y > viewport.y + viewport.h
+    );
 }
 
 

@@ -1,7 +1,7 @@
 #pragma once
 #include "CreatorElements.h"
 #include "../CreatorComponent.h"
-class ScrollBar_ver :
+class ScrollBar :
     public CreatorElements
 {
     CreatorComponent* father;
@@ -15,16 +15,27 @@ class ScrollBar_ver :
     SDL_FRect triangleDown;
     float border = 10;
 
+    bool isVerSliding = false;
+    bool isHorSliding = false;
+
+    float initialMouseY;
+    float initialViewportY; 
+
+    float initialMouseX;
+    float initialViewportX;
     SDL_Renderer* r = RendererManager::Instance().getRenderer();
 public:
-    ScrollBar_ver(CreatorComponent* father);
+    ScrollBar(CreatorComponent* father);
     void Update();
-    void verUpdate();
-    void horUpdate();
+    float verUpdate(SDL_FPoint mousePos, bool isClicked, float viewportY, bool& isChanged);
+    float horUpdate(SDL_FPoint mousePos, bool isClicked, float viewportY, bool& isChanged);
+    std::pair<bool, SDL_FPoint> CheckSliding(SDL_FPoint mousePos, bool isClicked, SDL_FPoint viewport);
+    void ShowVer();
+    void ShowHor();
     void showScroll(SDL_FRect& slider);
     const SDL_FRect& getVerRect();
+    const SDL_FRect& getHorRect();
     void refreshAttr();
-    void init();
 };
 
 

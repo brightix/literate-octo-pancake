@@ -1,12 +1,14 @@
 #pragma once
 #include "pch.h"
 #include "CreatorCamera/CreatorCamera.h"
+#include "EventSystem/Event.h"
 
 extern int WindowIdAdder;
 class CreatorComponent
 {
 protected:
 	int WindowId;
+	std::string name;
 	SDL_FRect placeholderRect = {0.0f, 0, 100,100};
 	SDL_FRect contentRect = { 0.0f, 0, 100,100 };
 	SDL_FRect windowShowRect = { 0.0f,0,100,100 };
@@ -121,9 +123,12 @@ public:
 	virtual int GetUIName() {
 		return WindowId;
 	}
-	//virtual const int& GetIncludeDivCount() {
-	//	return DivCount;
-	//}
+	const std::string& GetComponentName() {
+		return name;
+	}
+	virtual void onEvent(Event* e) {
+		cout << "'" +name + "' 没有onEvent方法" << endl;
+	}
 };
 
 class DefaultComponent : public CreatorComponent{

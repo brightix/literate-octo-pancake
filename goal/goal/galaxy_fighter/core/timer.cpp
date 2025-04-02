@@ -68,7 +68,6 @@ void Timer::selectFrame(int level) {
 	curFrameLevel = level;
 	if (0 <= level && level < frameTable.size()) {
 		refreshTime = 1.0/frameTable[curFrameLevel];
-		cout << refreshTime << endl;
 	}
 	else {
 		GameWorld::Instance().addError("设置帧率越界");

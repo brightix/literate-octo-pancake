@@ -3,6 +3,7 @@
 #include "WorldWindow.h"
 #include "ToolsWindow.h"
 #include "AssetsWindow.h"
+#include "EventSystem/EventSystem.h"
 
 extern int CheckBoxIdAdder;
 
@@ -161,6 +162,8 @@ public:
 class MapCreator :
 	public CreatorComponent
 {
+	SDL_Event event;
+	EventSystem publisher;
 	WorldWindow* worldWindow;
 	ToolsWindow* toolsWindow;
 	AssetsWindow* assetsWindow;
@@ -171,13 +174,14 @@ class MapCreator :
 
 public:
 	MapCreator();
+	void HandleEvent(InputManager& input, bool& running);
+	void checkCursorPos(CreatorComponent* component, SDL_FPoint pos);
+	void onEvent(Event* event);
 	MapCreator(SDL_FRect rect);
 	~MapCreator();
 
 	void Update();
 private:
-	void CheckResizing();
-	void init();
 };
 
 

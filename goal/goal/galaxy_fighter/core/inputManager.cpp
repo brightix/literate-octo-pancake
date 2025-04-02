@@ -138,7 +138,7 @@ bool InputManager::isMouseWheelYScrollUp() { return mouse.wheelY > 0; }
 bool InputManager::isMouseWheelYScrollDown() { return mouse.wheelY < 0; }
 int InputManager::isMouseWheelYScrolled() { return mouse.wheelY; }
 
-pair<int, int> InputManager::getMousexy() { return { mouse.x, mouse.y }; }
+pair<float, float> InputManager::getMousexy() { return { mouse.x, mouse.y }; }
 pair<float, float> InputManager::getRelativeMousexy() {
 	float x, y;
 	SDL_GetRelativeMouseState(&x,&y);

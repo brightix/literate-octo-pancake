@@ -147,6 +147,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="MapCreator\EventSystem\EventSystem.cpp" />
+    <ClCompile Include="galaxy_fighter\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="MapCreator\CreatorElements\CreatorAsset.cpp" />
     <ClCompile Include="MapCreator\CreatorElements\CreatorElements.cpp" />
     <ClCompile Include="MapCreator\AssetsWindow.cpp" />
     <ClCompile Include="MapCreator\CreatorCamera\CreatorCamera.cpp" />
@@ -185,10 +191,6 @@
     <ClCompile Include="galaxy_fighter\game\gameWorld.cpp" />
     <ClCompile Include="galaxy_fighter\core\TextRenderer.cpp" />
     <ClCompile Include="galaxy_fighter\objects\playerObject\playerObject.cpp" />
-    <ClCompile Include="galaxy_fighter\pch.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="galaxy_fighter\utils\random_utils.cpp" />
     <ClCompile Include="gameObject\gameObject.cpp" />
     <ClCompile Include="galaxy_fighter\BehaviorTree\InputBuffer.cpp" />
@@ -221,7 +223,12 @@
     <ClCompile Include="MapCreator\CreatorElements\ScrollBar.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MapCreator\EventSystem\Events\DragEvent.h" />
+    <ClInclude Include="MapCreator\EventSystem\Event.h" />
+    <ClInclude Include="MapCreator\EventSystem\EventSystem.h" />
+    <ClInclude Include="galaxy_fighter\pch.h" />
     <ClInclude Include="MapCreator\CreatorDebug\CreatorDebug.h" />
+    <ClInclude Include="MapCreator\CreatorElements\CreatorAsset.h" />
     <ClInclude Include="MapCreator\CreatorElements\CreatorElements.h" />
     <ClInclude Include="MapCreator\AssetsWindow.h" />
     <ClInclude Include="MapCreator\CreatorCamera\CreatorCamera.h" />
@@ -261,7 +268,6 @@
     <ClInclude Include="galaxy_fighter\game\gameWorld.h" />
     <ClInclude Include="galaxy_fighter\core\TextRenderer.h" />
     <ClInclude Include="galaxy_fighter\objects\playerObject\playerObject.h" />
-    <ClInclude Include="galaxy_fighter\pch.h" />
     <ClInclude Include="galaxy_fighter\utils\random_utils.h" />
     <ClInclude Include="gameObject\gameObject.h" />
     <ClInclude Include="galaxy_fighter\objects\environmentAssets\mapObject\MapObject.h" />
@@ -269,6 +275,8 @@
     <ClInclude Include="galaxy_fighter\objects\environmentAssets\groundObject\GroundObject.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="galaxy_fighter\BehaviorTree\BTAction_player\jump\JumpNode.h" />
+    <ClInclude Include="MapCreator\CreatorElements\MapTile.h" />
+    <ClInclude Include="MapCreator\EventSystem\Events\SwitchHoveringWindow.h" />
     <ClInclude Include="MapCreator\MapCreator.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="galaxy_fighter\objects\MainMenuObject\MenuText.h" />

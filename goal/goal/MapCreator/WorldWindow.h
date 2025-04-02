@@ -2,11 +2,14 @@
 #include "CreatorComponent.h"
 #include "CreatorCamera/CreatorCamera.h"
 
+
 typedef struct WorldTexture {
     WorldTexture(shared_ptr<SDL_Texture> texture,SDL_FRect rect) : texture(texture), rect(rect) {}
     shared_ptr<SDL_Texture> texture;
     SDL_FRect rect;
 }WorldTexture;
+
+
 class WorldWindow :
     public CreatorComponent
 {

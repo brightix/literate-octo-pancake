@@ -1,0 +1,23 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "x64\\Debug\\goal\\CreatorAsset.obj",
+            "outputs": [
+                "x64\\Debug\\goal\\CreatorAsset.h_3A823DD165F39434.ifc.dt.module.json",
+                "x64\\Debug\\goal\\CreatorAsset.h_3A823DD165F39434.ifc.dt.d.json",
+                "x64\\Debug\\goal\\CreatorAsset.h.ifc",
+                "x64\\Debug\\goal\\goal.pch"
+            ],
+            "provides": [
+                {
+                    "logical-name": "C:\\Users\\21811\\Desktop\\literate-octo-pancake\\goal\\goal\\MapCreator\\CreatorElements\\CreatorAsset.h",
+                    "source-path": "c:\\users\\21811\\desktop\\literate-octo-pancake\\goal\\goal\\mapcreator\\creatorelements\\creatorasset.h",
+                    "lookup-method": "absolute"
+                }
+            ],
+            "requires": []
+        }
+    ]
+}

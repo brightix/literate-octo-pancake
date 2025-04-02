@@ -4,19 +4,29 @@
 
 void AssetsWindow::Update()
 {
+
+	InputManager& input = InputManager::Instance();
+	RendererManager& renderer = RendererManager::Instance();
+	auto [x, y] = input.getMousexy();
 	CreatorDebug debug;
 	UpdateInput();
 	DrawBackground();
 	DrawSubBorder(placeholderRect);
 	DrawSubBorder(windowShowRect);
-	scrollBar_ver->Update();
 	UpdateAssets();
+	scrollBar->Update();
 	debug.printRectInfo("viewport",GetViewport(), GetPlaceholderRect(), 1);
+	//if (MapTile) {
+	//	MapTile->Drag({ x,y });
+	//}
 }
 
 void AssetsWindow::UpdateInput() {
 	bool isScrolling = false;
     InputManager& input = InputManager::Instance();
+	RendererManager& renderer = RendererManager::Instance();
+	auto [x, y] = input.getMousexy();
+	bool isLeftBottonPressed = input.isMouseButtonPressed(SDL_BUTTON_LEFT);
     if (input.isCursorHovering(&windowShowRect)) {
         if (int dir = -input.isMouseWheelYScrolled()) {
 			if (input.isKeyPressed(SDL_SCANCODE_LSHIFT)) {
@@ -28,20 +38,9 @@ void AssetsWindow::UpdateInput() {
 			isScrolling = true;
         }
     }
-	SDL_FRect slider = scrollBar_ver->getVerRect();
-	if ((input.isCursorHovering(&slider) || isSliding) && input.isMouseButtonPressed(SDL_BUTTON_LEFT)) {//input.isMouseButtonPressed(SDL_BUTTON_LEFT)
-		auto [x, y] = input.getMousexy();
-		if (!isSliding) {
-			isSliding = true;
-			initialMouseY = static_cast<float>(y);
-			initialViewportY = camera->GetViewport().y;
-		}
-		float deltaY = y - initialMouseY;
-		camera->setViewportXY(0,initialViewportY + deltaY);
-		isScrolling = true;
-	}
-	else if (isSliding) {
-		isSliding = false;
+	auto [isChanged, newViewportPos] = scrollBar->CheckSliding({ x,y }, isLeftBottonPressed, { camera->GetViewport().x ,camera->GetViewport().y });
+	if (isChanged) {
+		camera->setViewportXY(newViewportPos.x, newViewportPos.y);
 	}
 	if (input.isKeyPressedOnce(SDL_SCANCODE_L)) {
 		camera->setViewportXY(0,camera->GetViewport().h * 2);
@@ -49,14 +48,19 @@ void AssetsWindow::UpdateInput() {
 	if (input.isKeyPressedOnce(SDL_SCANCODE_K)) {
 		camera->setViewportXY(0, camera->GetViewport().h / 2);
 	}
-	if (isScrolling) {
-
+	//if (MapTile && !isLeftBottonPressed) {
+	//	delete MapTile;
+	//	MapTile = nullptr;
+	//}
+	if (isScrolling || isChanged) {
+		reCalculateAsstesShowRect();
 	}
-	reCalculateAsstesShowRect();
 }
 
 void AssetsWindow::UpdateAssets() {
 	CreatorDebug debug;
+
+	auto [x, y] = InputManager::Instance().getMousexy();
 	for (auto& asset : assets) {
 		SDL_FRect showRect = asset.getShowRect();
 		SDL_FRect worldRect = asset.getWorldRect();
@@ -99,7 +103,8 @@ void AssetsWindow::Reassign() {
 			assets[index].SetWorldRect(ItemRect);
 		}
 	}
-	contentRect = {0,0,windowShowRect.w, padding + n * (ItemRect.h + padding) };
+	reCalculateAsstesShowRect();
+	contentRect = {0,0,windowShowRect.w + 1000, padding + n * (ItemRect.h + padding) };
 }
 
 void AssetsWindow::reCalculateAsstesShowRect() {
@@ -133,7 +138,7 @@ const SDL_FRect& AssetsWindow::GetViewport() {
 
 AssetsWindow::AssetsWindow(SDL_FRect placeholder) : CreatorComponent(placeholder) {
 	WindowId = WindowIdAdder++;
-
+	name = "AssetsWindow";
 
 	SDL_FRect viewport = {0,0,windowShowRect.w,windowShowRect.h};
 	camera = make_unique<CreatorCamera>(viewport);
@@ -141,10 +146,9 @@ AssetsWindow::AssetsWindow(SDL_FRect placeholder) : CreatorComponent(placeholder
     camera->setCameraRange(&contentRect);
 	ItemRect = {0,0,ElementMaxWidth,ElementMaxHeight };
 	refreshAssets();
-	scrollBar_ver = make_unique<ScrollBar_ver>(this);
+	scrollBar = make_unique<ScrollBar>(this);
 }
 
-
 void AssetsWindow::RefreshAttr() {
-	scrollBar_ver->refreshAttr();
+	scrollBar->refreshAttr();
 }

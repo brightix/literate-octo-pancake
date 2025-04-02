@@ -128,10 +128,10 @@ void WorldWindow::DrawInfo() {
     auto& textRenderer = TextRenderer::Instance();
     SDL_FPoint p = { windowShowRect.x,windowShowRect.y };
 
-    debug.printText<float>("scaleFactor",scaleFactor, p);
+    debug.printText("scaleFactor",to_string(scaleFactor), p);
     SDL_FRect viewport = camera->GetViewport();
-    debug.printText<float>("viewportRatio", viewport.w / viewport.h, {p.x,p.y+20});
-    debug.printText<float>("windowShowRatio", windowShowRect.w / windowShowRect.h, { p.x,p.y + 40 });
+    debug.printText("viewportRatio", to_string(viewport.w / viewport.h), {p.x,p.y+20});
+    debug.printText("windowShowRatio", to_string(windowShowRect.w / windowShowRect.h), { p.x,p.y + 40 });
     debug.printRectInfo("placeholderRect", placeholderRect, GetPlaceholderRect(), 3);
     debug.printRectInfo("viewport",viewport, GetPlaceholderRect(),4);
     debug.printRectInfo("windowShowRect", windowShowRect, GetPlaceholderRect(),5);
@@ -151,6 +151,7 @@ void WorldWindow::DrawTexture() {
 
 WorldWindow::WorldWindow(SDL_FRect placeholder) : CreatorComponent(placeholder){
     WindowId = WindowIdAdder++;
+    name = "World";
     float border = 25;
     realMap = { 0,0,1920,1080 };
     camera = make_unique<CreatorCamera>(windowShowRect);

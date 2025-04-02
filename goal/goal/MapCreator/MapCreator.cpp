@@ -1,11 +1,11 @@
 #include "pch.h"
 #include "MapCreator.h"
 #include "CreatorDebug/CreatorDebug.h"
-
+#include "EventSystem/Events/SwitchHoveringWindow.h"
 int CheckBoxIdAdder = 0;
 
 
-
+static string CursorOnWindow = "";
 void MapCreator::Update()
 {
 	CreatorDebug debug;
@@ -16,26 +16,27 @@ void MapCreator::Update()
 	bool running = true;
 	while (running) {
 
+		/* 事件刷新 */
 		timer.update();
-		SDL_Event event;
-		input.postUpdate();
-		while (SDL_PollEvent(&event)) {
-			if (!input.update(event)) {
-				running = false;
-				break;
-			}
-		}
+		HandleEvent(input,running);
 		auto [mouseX, mouseY] = input.getMousexy();
+
+		/* 渲染 */
 		SDL_RenderClear(r);
 
 		for (auto component : components) {
 			component->Update();
+			checkCursorPos(component, { mouseX,mouseY });
 		}
 
 		timer.showFps();
 
-		debug.printMouseXY({ mouseX,mouseY });
+
+		debug.printText("CursorOnWindow", CursorOnWindow, {100.f,100.f});
+		debug.printMouseXY({ (int)mouseX,(int)mouseY });
 		SDL_RenderPresent(r);
+
+
 
 		timer.sleep(timer.getRefreshTime());
 	}
@@ -45,8 +46,34 @@ float getDimension(SDL_FRect& rect,const string& dimension) {
 	return float();
 }
 
+void MapCreator::HandleEvent(InputManager& input,bool& running) {
+	input.postUpdate();
+	while (SDL_PollEvent(&event)) {
+		if (!input.update(event)) {
+			running = false;
+			break;
+		}
+	}
+	publisher.processEvents();
+}
+
+void MapCreator::checkCursorPos(CreatorComponent* component,SDL_FPoint pos) {
+	if (SDL_PointInRectFloat(&pos,&component->GetWindowShowRect()) && component->GetComponentName()!= CursorOnWindow) {
+		publisher.queueEvent(new SwitchHoveringWindow(component->GetComponentName()));
+	}	
+}
+
+void MapCreator::onEvent(Event* event) {
+
+	if (auto* switchHoveringWindow = dynamic_cast<SwitchHoveringWindow*>(event)) {
+		CursorOnWindow = switchHoveringWindow->WindowName;
+	}
+}
+
 MapCreator::MapCreator(SDL_FRect rect) {
 	WindowId = WindowIdAdder++;
+
+	publisher.subscribe(typeid(SwitchHoveringWindow),this);
 
 	/* 全屏 */
 	//RendererManager::Instance().switchScreenDisplayMove();

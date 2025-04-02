@@ -7,6 +7,9 @@ protected:
 public:
 	CreatorElements() = default;
 	virtual void Update() = 0;
+	virtual SDL_Texture* GetTexture() {
+		return nullptr;
+	}
 	void DrawSubBorder(SDL_FRect& rect) {
 		auto color = ColorManager::Instance().getColor(DefaultColor);
 		SDL_SetRenderDrawColor(r, color.r, color.g, color.b, color.a);

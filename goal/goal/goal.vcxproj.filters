@@ -45,9 +45,6 @@
     <ClCompile Include="galaxy_fighter\utils\random_utils.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="galaxy_fighter\pch.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="gameObject\gameObject.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -213,6 +210,15 @@
     <ClCompile Include="MapCreator\CreatorElements\CreatorElements.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="galaxy_fighter\pch.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MapCreator\CreatorElements\CreatorAsset.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MapCreator\EventSystem\EventSystem.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="galaxy_fighter\core\InputManager.h">
@@ -246,9 +252,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="galaxy_fighter\config.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="galaxy_fighter\pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="gameObject\gameObject.h">
@@ -417,6 +420,27 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MapCreator\CreatorDebug\CreatorDebug.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MapCreator\CreatorElements\MapTile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="galaxy_fighter\pch.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MapCreator\CreatorElements\CreatorAsset.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MapCreator\EventSystem\EventSystem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MapCreator\EventSystem\Event.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MapCreator\EventSystem\Events\DragEvent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MapCreator\EventSystem\Events\SwitchHoveringWindow.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

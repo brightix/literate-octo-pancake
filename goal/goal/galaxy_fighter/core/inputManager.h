@@ -115,7 +115,7 @@ public:
 	bool isMouseWheelYScrollDown();
 
 	int isMouseWheelYScrolled();
-	pair<int, int> getMousexy();
+	pair<float, float> getMousexy();
 	pair<float,float> getRelativeMousexy();
 	void setRelativeMouseMode(bool b);
 	bool isPointInRect(SDL_FRect& rect);
